@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>FixMoc - Servicos Tecnicos em Mocambique</title>
+<title>FixMoç - Serviços Técnicos em Moçambique</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -63,7 +63,7 @@ textarea{resize:vertical;min-height:80px}
 .chat-in{display:flex;gap:8px;align-items:center}
 .chat-in input{flex:1;margin:0}
 .chat-in button{width:46px;min-width:46px;height:46px;padding:0;border-radius:10px;font-size:16px;margin:0;flex-shrink:0}
-#comissao{color:var(--v);font-weight:700}
+#comissão{color:var(--v);font-weight:700}
 </style>
 </head>
 <body>
@@ -73,12 +73,12 @@ textarea{resize:vertical;min-height:80px}
 
 <!-- INICIO -->
 <div class="tela" id="t-inicio">
-  <div class="logo">FixMoc</div>
+  <div class="logo">FixMoç</div>
   <div style="color:var(--v);font-size:12px;letter-spacing:2px;">MOCAMBIQUE 🇲🇿</div>
-  <p class="sub">Conectamos tecnicos e clientes<br>em todo o pais</p>
+  <p class="sub">Conectamos técnicos e clientes<br>em todo o país</p>
   <div class="bts">
     <button class="bc" onclick="escolher('cliente')">👤 Sou Cliente</button>
-    <button class="bt" onclick="escolher('tecnico')">🔧 Sou Tecnico</button>
+    <button class="bt" onclick="escolher('técnico')">🔧 Sou Técnico</button>
   </div>
   <p style="font-size:10px;margin-top:30px;"><a href="#" onclick="irAdmin()">v2.0</a></p>
 </div>
@@ -90,7 +90,7 @@ textarea{resize:vertical;min-height:80px}
   <input type="email" id="l-email" placeholder="O teu email" autocomplete="email">
   <input type="password" id="l-senha" placeholder="A tua senha" autocomplete="current-password">
   <button onclick="login()">Entrar</button>
-  <p style="text-align:center;margin-top:10px;">Nao tens conta? <a href="#" onclick="ir('t-registo')">Regista-te</a></p>
+  <p style="text-align:center;margin-top:10px;">Não tens conta? <a href="#" onclick="ir('t-registo')">Regista-te</a></p>
   <button class="bv" onclick="ir('t-inicio')">← Voltar</button>
 </div>
 
@@ -101,58 +101,58 @@ textarea{resize:vertical;min-height:80px}
   <input type="text" id="r-nome" placeholder="O teu nome completo">
   <input type="tel" id="r-tel" placeholder="Telefone (ex: 87 479 3972)">
   <input type="email" id="r-email" placeholder="O teu email" autocomplete="email">
-  <input type="password" id="r-senha" placeholder="Senha (minimo 6 caracteres)" autocomplete="new-password">
+  <input type="password" id="r-senha" placeholder="Senha (mínimo 6 caracteres)" autocomplete="new-password">
   <select id="r-prov">
-    <option value="">Selecciona a tua provincia</option>
-    <option>Maputo Cidade</option><option>Maputo Provincia</option><option>Matola</option>
+    <option value="">Selecciona a tua província</option>
+    <option>Maputo Cidade</option><option>Maputo Província</option><option>Matola</option>
     <option>Gaza</option><option>Inhambane</option><option>Sofala (Beira)</option>
-    <option>Manica</option><option>Tete</option><option>Zambezia (Quelimane)</option>
+    <option>Manica</option><option>Tete</option><option>Zambézia (Quelimane)</option>
     <option>Nampula</option><option>Cabo Delgado</option><option>Niassa</option>
   </select>
   <select id="r-tipo">
     <option value="cliente">Sou Cliente</option>
-    <option value="tecnico">Sou Tecnico</option>
+    <option value="tecnico">Sou Técnico</option>
   </select>
   <button onclick="registar()">✅ Criar conta</button>
-  <p style="text-align:center;margin-top:8px;">Ja tens conta? <a href="#" onclick="ir('t-login')">Entrar</a></p>
+  <p style="text-align:center;margin-top:8px;">Já tens conta? <a href="#" onclick="ir('t-login')">Entrar</a></p>
   <button class="bv" onclick="ir('t-inicio')">← Voltar</button>
 </div>
 
 <!-- HOME -->
 <div class="tela" id="t-home">
-  <h2 id="saudacao">Ola! Bem-vindo ao FixMoc 👋</h2>
+  <h2 id="saudacao">Ola! Bem-vindo ao FixMoç 👋</h2>
   <p style="margin-bottom:14px;">O que precisas hoje?</p>
   <div class="grid">
     <button onclick="pedido('⚡ Eletricista')">⚡ Eletricista</button>
     <button onclick="pedido('💧 Canalizador')">💧 Canalizador</button>
     <button onclick="pedido('🪚 Carpinteiro')">🪚 Carpinteiro</button>
-    <button onclick="pedido('💻 Informatica')">💻 Informatica</button>
+    <button onclick="pedido('💻 Informática')">💻 Informática</button>
     <button onclick="pedido('🧱 Pedreiro')">🧱 Pedreiro</button>
     <button onclick="pedido('🧹 Limpeza')">🧹 Limpeza</button>
     <button onclick="pedido('🎨 Pintor')">🎨 Pintor</button>
     <button onclick="pedido('❄️ Ar Condicionado')">❄️ Ar Condicionado</button>
-    <button onclick="pedido('🚗 Mecanico')">🚗 Mecanico</button>
-    <button onclick="pedido('📺 Eletrodomesticos')">📺 Eletrodomesticos</button>
+    <button onclick="pedido('🚗 Mecânico')">🚗 Mecânico</button>
+    <button onclick="pedido('📺 Eletrodomésticos')">📺 Eletrodomésticos</button>
     <button onclick="pedido('🔒 Serralheiro')">🔒 Serralheiro</button>
     <button onclick="pedido('🪟 Vidraceiro')">🪟 Vidraceiro</button>
-    <button onclick="pedido('🌿 Jardineiro')">🌿 Jardineiro</button>
+    <button onclick="pedido('🌿 Járdineiro')">🌿 Járdineiro</button>
     <button onclick="pedido('👶 Babysitter')">👶 Babysitter</button>
     <button onclick="pedido('🍳 Cozinheiro')">🍳 Cozinheiro</button>
-    <button onclick="pedido('📦 Mudancas')">📦 Mudancas</button>
+    <button onclick="pedido('📦 Mudanças')">📦 Mudanças</button>
   </div>
 </div>
 
 <!-- PEDIDO -->
 <div class="tela" id="t-pedido">
   <h2>📋 Fazer Pedido</h2>
-  <div class="card card-v"><h3 id="s-servico">Servico</h3></div>
+  <div class="card card-v"><h3 id="s-servico">Serviço</h3></div>
   <input type="text" id="p-nome" placeholder="O teu nome">
   <input type="tel" id="p-tel" placeholder="O teu telefone">
   <select id="p-prov">
-    <option value="">Selecciona a tua provincia</option>
-    <option>Maputo Cidade</option><option>Maputo Provincia</option><option>Matola</option>
+    <option value="">Selecciona a tua província</option>
+    <option>Maputo Cidade</option><option>Maputo Província</option><option>Matola</option>
     <option>Gaza</option><option>Inhambane</option><option>Sofala (Beira)</option>
-    <option>Manica</option><option>Tete</option><option>Zambezia (Quelimane)</option>
+    <option>Manica</option><option>Tete</option><option>Zambézia (Quelimane)</option>
     <option>Nampula</option><option>Cabo Delgado</option><option>Niassa</option>
   </select>
   <input type="text" id="p-bairro" placeholder="O teu bairro (opcional)">
@@ -171,17 +171,17 @@ textarea{resize:vertical;min-height:80px}
   <div class="centro">
     <div class="icone">✅</div>
     <h2>Pedido Enviado!</h2>
-    <p>Tecnicos da tua zona vao contactar-te em breve.</p><br>
+    <p>Técnicos da tua zona vao contactar-te em breve.</p><br>
     <button onclick="ir('t-agendar')">📅 Agendar data</button>
-    <button class="ba" onclick="irAvaliar(null)">⭐ Avaliar Tecnico</button>
+    <button class="ba" onclick="irAvaliar(null)">⭐ Avaliar Técnico</button>
     <button class="bv" onclick="ir('t-home')">🏠 Voltar ao inicio</button>
   </div>
 </div>
 
 <!-- AGENDAMENTO -->
 <div class="tela" id="t-agendar">
-  <h2>📅 Agendar Servico</h2>
-  <div class="card card-v"><h3 id="s-agendar">Servico</h3></div>
+  <h2>📅 Agendar Serviço</h2>
+  <div class="card card-v"><h3 id="s-agendar">Serviço</h3></div>
   <div class="card"><h3>📅 Data</h3><input type="date" id="a-data"></div>
   <div class="card">
     <h3>⏰ Hora</h3>
@@ -192,8 +192,8 @@ textarea{resize:vertical;min-height:80px}
     </select>
   </div>
   <div class="card">
-    <h3>🏠 Tipo de imovel</h3>
-    <select><option>🏠 Casa</option><option>🏢 Apartamento</option><option>🏪 Loja</option><option>💼 Escritorio</option></select>
+    <h3>🏠 Tipo de imóvel</h3>
+    <select><option>🏠 Casa</option><option>🏢 Apartamento</option><option>🏪 Lojá</option><option>💼 Escritorio</option></select>
   </div>
   <button onclick="confirmarAgendar()">✅ Confirmar</button>
   <button class="bv" onclick="ir('t-home')">← Voltar</button>
@@ -206,7 +206,7 @@ textarea{resize:vertical;min-height:80px}
     <h2>Agendamento Confirmado!</h2>
     <div class="card" style="width:100%;text-align:left;margin-top:16px;">
       <p id="resumo-agendar"></p>
-      <p>👷 Tecnicos notificados!</p>
+      <p>👷 Técnicos notificados!</p>
     </div>
     <button onclick="ir('t-home')" style="width:100%;margin-top:10px;">🏠 Voltar ao inicio</button>
   </div>
@@ -214,8 +214,8 @@ textarea{resize:vertical;min-height:80px}
 
 <!-- AREA TECNICO -->
 <div class="tela" id="t-tecnico">
-  <h2>🔧 Area do Tecnico</h2>
-  <button onclick="irPerfilTecnico()">👤 Ver meu perfil</button>
+  <h2>🔧 Area do Técnico</h2>
+  <button onclick="irPerfilTécnico()">👤 Ver meu perfil</button>
   <p style="margin:14px 0 8px;color:var(--t2);">Pedidos na tua zona:</p>
   <div id="lista-pedidos">
     <div class="card"><p style="text-align:center;">A carregar... ⏳</p></div>
@@ -233,7 +233,7 @@ textarea{resize:vertical;min-height:80px}
       <p>📞 <strong style="color:var(--v)" id="tel-aceite">—</strong></p>
       <p>📍 <span id="prov-aceite">—</span></p>
     </div>
-    <button onclick="irPagamento('Servico')" style="width:100%;margin-top:8px;">💰 Registar Pagamento</button>
+    <button onclick="irPagamento('Serviço')" style="width:100%;margin-top:8px;">💰 Registar Pagamento</button>
     <button onclick="ir('t-chat')" class="ba" style="width:100%;">💬 Chat</button>
     <button class="bv" onclick="ir('t-tecnico')" style="width:100%;">← Ver mais pedidos</button>
   </div>
@@ -245,8 +245,8 @@ textarea{resize:vertical;min-height:80px}
   <div style="text-align:center;padding:14px 0 18px;">
     <div class="avatar">👷</div>
     <h3 id="pf-nome" style="font-size:18px;color:#fff;">—</h3>
-    <div class="bv2" id="pf-ver">⏳ Aguarda verificacao</div>
-    <p style="margin-top:6px;" id="pf-aval">⭐ Sem avaliacoes</p>
+    <div class="bv2" id="pf-ver">⏳ Aguarda verificação</div>
+    <p style="margin-top:6px;" id="pf-aval">⭐ Sem avaliações</p>
   </div>
   <div class="card">
     <p id="pf-tel">📞 —</p>
@@ -254,8 +254,8 @@ textarea{resize:vertical;min-height:80px}
     <p id="pf-email">📧 —</p>
   </div>
   <div class="card">
-    <h3>📊 Estatisticas</h3>
-    <p id="pf-serv">✅ Servicos feitos: 0</p>
+    <h3>📊 Estatísticas</h3>
+    <p id="pf-serv">✅ Serviços feitos: 0</p>
     <p id="pf-desde">📅 Membro desde: 2026</p>
   </div>
   <button class="bp" onclick="eliminarConta()">🗑️ Eliminar Conta</button>
@@ -264,8 +264,8 @@ textarea{resize:vertical;min-height:80px}
 
 <!-- AVALIACAO -->
 <div class="tela" id="t-aval">
-  <h2>⭐ Avaliar Tecnico</h2>
-  <p>Como foi o servico?</p>
+  <h2>⭐ Avaliar Técnico</h2>
+  <p>Como foi o serviço?</p>
   <div class="estrelas" id="estrelas">
     <span class="estrela" onclick="aval(1)">⭐</span>
     <span class="estrela" onclick="aval(2)">⭐</span>
@@ -275,7 +275,7 @@ textarea{resize:vertical;min-height:80px}
   </div>
   <p id="nota-aval" style="text-align:center;font-size:13px;color:var(--t2);">Toca nas estrelas</p>
   <textarea id="comentario" placeholder="Deixa um comentario..." rows="3"></textarea>
-  <button onclick="enviarAval()">📨 Enviar Avaliacao</button>
+  <button onclick="enviarAval()">📨 Enviar Avaliação</button>
   <button class="bv" onclick="ir('t-home')">← Voltar</button>
 </div>
 
@@ -284,14 +284,14 @@ textarea{resize:vertical;min-height:80px}
   <div class="centro">
     <div class="icone">🎉</div>
     <h2>Obrigado!</h2>
-    <p>Avaliacao guardada com sucesso!</p>
+    <p>Avaliação guardada com sucesso!</p>
     <button onclick="ir('t-home')" style="margin-top:18px;">🏠 Voltar ao inicio</button>
   </div>
 </div>
 
 <!-- NOTIFICACOES -->
 <div class="tela" id="t-notif">
-  <h2>🔔 Notificacoes</h2>
+  <h2>🔔 Notificações</h2>
   <div class="card"><p>Vai a <strong>Pedidos</strong> para ver o estado em tempo real.</p></div>
   <button class="bv" onclick="ir('t-home')">← Voltar</button>
 </div>
@@ -301,7 +301,7 @@ textarea{resize:vertical;min-height:80px}
   <h2>💬 Chat</h2>
   <div class="card" style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
     <span style="font-size:34px;">👷</span>
-    <div><h3 style="margin:0;font-size:14px;">Tecnico FixMoc</h3><p style="margin:0;font-size:12px;">Online</p></div>
+    <div><h3 style="margin:0;font-size:14px;">Técnico FixMoç</h3><p style="margin:0;font-size:12px;">Online</p></div>
   </div>
   <div class="chat-m" id="chat-msgs">
     <div class="mt">Ola! Recebi o teu pedido. Posso ir amanha as 9h. Funciona?</div>
@@ -319,13 +319,13 @@ textarea{resize:vertical;min-height:80px}
   <div class="card card-v">
     <h3>Contacto</h3>
     <p>📞 87 479 3972</p>
-    <p>📧 isacjazznur1 arroba gmail.com</p>
+    <p>📧 isacjázznur1 @ gmail.com</p>
   </div>
   <div class="card">
-    <h3>📝 Enviar Reclamacao</h3>
+    <h3>📝 Enviar Reclamação</h3>
     <input type="text" id="sup-nome" placeholder="O teu nome">
     <select id="sup-tipo">
-      <option>Problema com tecnico</option>
+      <option>Problema com técnico</option>
       <option>Problema com pagamento</option>
       <option>Problema com app</option>
       <option>Outro</option>
@@ -340,7 +340,7 @@ textarea{resize:vertical;min-height:80px}
 <div class="tela" id="t-reclam-ok">
   <div class="centro">
     <div class="icone">✅</div>
-    <h2>Reclamacao Enviada!</h2>
+    <h2>Reclamação Enviada!</h2>
     <p>Respondemos em ate 24 horas.</p>
     <button onclick="ir('t-home')" style="margin-top:18px;">🏠 Voltar ao inicio</button>
   </div>
@@ -349,11 +349,11 @@ textarea{resize:vertical;min-height:80px}
 <!-- PAGAMENTO -->
 <div class="tela" id="t-pagar">
   <h2>💰 Pagamento</h2>
-  <div class="card card-v"><h3 id="s-pagar">Servico</h3></div>
+  <div class="card card-v"><h3 id="s-pagar">Serviço</h3></div>
   <div class="card">
-    <h3>💵 Valor do servico (MT)</h3>
+    <h3>💵 Valor do serviço (MT)</h3>
     <input type="number" id="valor" placeholder="Ex: 1500" oninput="calcComissao()">
-    <p style="font-size:12px;margin-top:4px;">Comissao FixMoc (10%): <span id="comissao">0 MT</span></p>
+    <p style="font-size:12px;margin-top:4px;">Comissão FixMoç (10%): <span id="comissao">0 MT</span></p>
   </div>
   <div class="card">
     <h3>💳 Metodo de pagamento</h3>
@@ -375,14 +375,14 @@ textarea{resize:vertical;min-height:80px}
       <div class="div"></div>
       <p>✅ Registado com sucesso!</p>
     </div>
-    <button onclick="irAvaliar(null)" style="width:100%;margin-top:8px;">⭐ Avaliar Tecnico</button>
+    <button onclick="irAvaliar(null)" style="width:100%;margin-top:8px;">⭐ Avaliar Técnico</button>
     <button class="bv" onclick="ir('t-home')" style="width:100%;">🏠 Voltar ao inicio</button>
   </div>
 </div>
 
 <!-- HISTORICO -->
 <div class="tela" id="t-hist">
-  <h2>📋 Historico de Pedidos</h2>
+  <h2>📋 Histórico de Pedidos</h2>
   <div id="lista-hist"><p style="color:var(--t2);text-align:center;">A carregar... ⏳</p></div>
   <button class="bv" onclick="ir('t-home')">← Voltar</button>
 </div>
@@ -392,14 +392,14 @@ textarea{resize:vertical;min-height:80px}
   <h2>⚙️ Painel Admin</h2>
   <div class="badge">⚡ Dados reais</div>
   <div class="card card-v">
-    <h3>📊 Estatisticas</h3>
+    <h3>📊 Estatísticas</h3>
     <p>👥 Utilizadores: <strong id="adm-u" style="color:var(--v)">—</strong></p>
-    <p>👷 Tecnicos: <strong id="adm-t" style="color:var(--v)">—</strong></p>
+    <p>👷 Técnicos: <strong id="adm-t" style="color:var(--v)">—</strong></p>
     <p>📋 Pedidos pendentes: <strong id="adm-p" style="color:var(--v)">—</strong></p>
     <p>📢 Reclamacoes: <strong id="adm-r" style="color:var(--v)">—</strong></p>
   </div>
   <div class="card">
-    <h3>👷 Tecnicos a aprovar</h3>
+    <h3>👷 Técnicos a aprovar</h3>
     <div id="adm-lista"><p style="color:var(--t2)">A carregar...</p></div>
   </div>
   <button class="bv" onclick="ir('t-home')">← Voltar</button>
@@ -407,7 +407,7 @@ textarea{resize:vertical;min-height:80px}
 
 <!-- DEFINICOES -->
 <div class="tela" id="t-def">
-  <h2>⚙️ Definicoes</h2>
+  <h2>⚙️ Definições</h2>
   <div class="card">
     <h3>👤 A minha conta</h3>
     <p id="def-email" style="color:var(--v);margin-bottom:10px;">—</p>
@@ -419,7 +419,7 @@ textarea{resize:vertical;min-height:80px}
     <h3>📄 Legal e Suporte</h3>
     <button onclick="ir('t-termos')">📜 Termos de Uso</button>
     <button onclick="ir('t-privac')">🔒 Privacidade</button>
-    <button onclick="ir('t-sobre')">ℹ️ Sobre o FixMoc</button>
+    <button onclick="ir('t-sobre')">ℹ️ Sobre o FixMoç</button>
     <button onclick="ir('t-suporte')">📢 Suporte</button>
   </div>
   <button class="bv" onclick="ir('t-home')">← Voltar</button>
@@ -450,11 +450,11 @@ textarea{resize:vertical;min-height:80px}
 <div class="tela" id="t-termos">
   <h2>📜 Termos de Uso</h2>
   <div class="card">
-    <p>1. O FixMoc conecta tecnicos e clientes em Mocambique.</p>
-    <p>2. Cobramos 10% de comissao por cada servico fechado.</p>
-    <p>3. Os tecnicos devem ser verificados antes de prestar servicos.</p>
-    <p>4. O FixMoc nao se responsabiliza por danos causados pelos tecnicos.</p>
-    <p>5. Contacto: isacjazznur1 arroba gmail.com</p>
+    <p>1. O FixMoç conecta técnicos e clientes em Moçambique.</p>
+    <p>2. Cobramos 10% de comissão por cada serviço fechado.</p>
+    <p>3. Os técnicos devem ser verificados antes de prestar serviços.</p>
+    <p>4. O FixMoç não se responsabiliza por danos causados pelos técnicos.</p>
+    <p>5. Contacto: isacjázznur1 @ gmail.com</p>
   </div>
   <button class="bv" onclick="ir('t-def')">← Voltar</button>
 </div>
@@ -463,27 +463,27 @@ textarea{resize:vertical;min-height:80px}
 <div class="tela" id="t-privac">
   <h2>🔒 Privacidade</h2>
   <div class="card">
-    <p>1. Dados recolhidos para melhorar os servicos.</p>
-    <p>2. Os teus dados nao sao vendidos a terceiros.</p>
+    <p>1. Dados recolhidos para melhorar os serviços.</p>
+    <p>2. Os teus dados não sao vendidos a terceiros.</p>
     <p>3. Protegidos pelo Supabase (SSL).</p>
     <p>4. Podes eliminar a conta a qualquer momento.</p>
-    <p>5. Contacto: isacjazznur1 arroba gmail.com</p>
+    <p>5. Contacto: isacjázznur1 @ gmail.com</p>
   </div>
   <button class="bv" onclick="ir('t-def')">← Voltar</button>
 </div>
 
 <!-- SOBRE -->
 <div class="tela" id="t-sobre">
-  <h2>ℹ️ Sobre o FixMoc</h2>
+  <h2>ℹ️ Sobre o FixMoç</h2>
   <div style="text-align:center;padding:14px 0;">
-    <div style="font-size:48px;font-weight:900;color:var(--v);">FixMoc</div>
+    <div style="font-size:48px;font-weight:900;color:var(--v);">FixMoç</div>
     <p>Versao 2.0 — Supabase Edition</p>
-    <p>🇲🇿 Feito em Mocambique</p>
+    <p>🇲🇿 Feito em Moçambique</p>
   </div>
   <div class="card">
-    <p>👷 Fundador: Isac Jazznur</p>
+    <p>👷 Fundador: Isac Jázznur</p>
     <p>📞 87 479 3972</p>
-    <p>📧 isacjazznur1 arroba gmail.com</p>
+    <p>📧 isacjázznur1 @ gmail.com</p>
     <p>🗄️ Backend: Supabase (PostgreSQL)</p>
   </div>
   <button class="bv" onclick="ir('t-def')">← Voltar</button>
@@ -499,7 +499,7 @@ textarea{resize:vertical;min-height:80px}
 </div>
 
 <script>
-// FixMoc v2.0 — Supabase
+// FixMoç v2.0 — Supabase
 const SB_URL = 'https://xlkkzdtitxiamttaqhfy.supabase.co';
 const SB_KEY = 'sb_publishable_XAvOrmQPHgSca8lXCjfhUg_squa2CSe';
 const db = supabase.createClient(SB_URL, SB_KEY);
@@ -508,7 +508,7 @@ const A = {
   user: null,
   perfil: null,
   tipo: 'cliente',
-  servico: '',
+  serviço: '',
   notaAval: 0,
   pedidoAval: null
 };
@@ -544,11 +544,11 @@ async function carregarPerfil() {
     const { data } = await db.from('utilizadores').select('*').eq('uid', A.user.id).single();
     if (data) {
       A.perfil = data;
-      if (data.tipo === 'tecnico') {
-        mostrar('t-tecnico');
+      if (data.tipo === 'técnico') {
+        mostrar('t-técnico');
         menuOn('m-home');
         menuShow();
-        carregarPedidosTecnico();
+        carregarPedidosTécnico();
       } else {
         irHome();
       }
@@ -589,7 +589,7 @@ function irHome() {
   menuOn('m-home');
   if (A.perfil && A.perfil.nome) {
     var n = A.perfil.nome.split(' ')[0];
-    document.getElementById('saudacao').textContent = 'Ola, ' + n + '! Bem-vindo ao FixMoc 👋';
+    document.getElementById('saudacao').textContent = 'Ola, ' + n + '! Bem-vindo ao FixMoç 👋';
   }
 }
 
@@ -600,17 +600,17 @@ function irDef() {
   if (A.user) document.getElementById('def-email').textContent = '📧 ' + A.user.email;
 }
 
-function irPerfilTecnico() {
+function irPerfilTécnico() {
   mostrar('t-perfil-t');
   if (A.perfil) {
     var p = A.perfil;
     document.getElementById('pf-nome').textContent = p.nome || '—';
     document.getElementById('pf-tel').textContent = '📞 ' + (p.tel || '—');
-    document.getElementById('pf-prov').textContent = '📍 ' + (p.provincia || '—');
+    document.getElementById('pf-prov').textContent = '📍 ' + (p.província || '—');
     document.getElementById('pf-email').textContent = '📧 ' + (p.email || '—');
-    document.getElementById('pf-ver').textContent = p.verificado ? '✅ Verificado' : '⏳ Aguarda verificacao';
-    document.getElementById('pf-aval').textContent = p.avaliacao > 0 ? '⭐ ' + Number(p.avaliacao).toFixed(1) : '⭐ Sem avaliacoes';
-    document.getElementById('pf-serv').textContent = '✅ Servicos feitos: ' + (p.total_servicos || 0);
+    document.getElementById('pf-ver').textContent = p.verificado ? '✅ Verificado' : '⏳ Aguarda verificação';
+    document.getElementById('pf-aval').textContent = p.avaliação > 0 ? '⭐ ' + Number(p.avaliação).toFixed(1) : '⭐ Sem avaliações';
+    document.getElementById('pf-serv').textContent = '✅ Serviços feitos: ' + (p.total_serviços || 0);
     var ano = p.criado_em ? new Date(p.criado_em).getFullYear() : 2026;
     document.getElementById('pf-desde').textContent = '📅 Membro desde: ' + ano;
   }
@@ -626,7 +626,7 @@ function irAvaliar(pedidoId) {
 }
 
 function irPagamento(s) {
-  document.getElementById('s-pagar').textContent = s || 'Servico';
+  document.getElementById('s-pagar').textContent = s || 'Serviço';
   document.getElementById('valor').value = '';
   document.getElementById('comissao').textContent = '0 MT';
   mostrar('t-pagar');
@@ -646,7 +646,7 @@ async function irHist() {
   c.innerHTML = '<p style="color:var(--t2);text-align:center;">A carregar... ⏳</p>';
   var { data } = await db.from('pedidos').select('*').eq('cliente_uid', A.user.id).order('criado_em', {ascending: false});
   if (!data || data.length === 0) {
-    c.innerHTML = '<div class="card"><p style="text-align:center;color:var(--t2);">Ainda nao fizeste nenhum pedido.</p></div>';
+    c.innerHTML = '<div class="card"><p style="text-align:center;color:var(--t2);">Ainda não fizeste nenhum pedido.</p></div>';
     return;
   }
   c.innerHTML = '';
@@ -657,7 +657,7 @@ async function irHist() {
     var extra = '';
     if (p.status === 'pendente') extra = '<button class="bp" onclick="cancelarPedido(\'' + p.id + '\')" style="margin-top:8px;width:100%;">❌ Cancelar</button>';
     if (p.status === 'aceite') extra = '<button onclick="irAvaliar(\'' + p.id + '\')" style="margin-top:8px;width:100%;">⭐ Avaliar</button>';
-    c.innerHTML += '<div class="card"><h3>' + p.servico + '</h3><p>📍 ' + p.provincia + '</p><p>📅 ' + df + (p.tecnico_nome ? ' · 👷 ' + p.tecnico_nome : '') + '</p><p style="color:' + cor + ';font-weight:600;">' + lbl + '</p>' + extra + '</div>';
+    c.innerHTML += '<div class="card"><h3>' + p.serviço + '</h3><p>📍 ' + p.província + '</p><p>📅 ' + df + (p.técnico_nome ? ' · 👷 ' + p.técnico_nome : '') + '</p><p style="color:' + cor + ';font-weight:600;">' + lbl + '</p>' + extra + '</div>';
   });
 }
 
@@ -681,15 +681,15 @@ async function registar() {
   var tipo = document.getElementById('r-tipo').value;
   var prov = document.getElementById('r-prov').value;
   if (!nome || !tel || !email || !senha) { toast('⚠️ Preenche todos os campos!', 1); return; }
-  if (senha.length < 6) { toast('⚠️ Senha com minimo 6 caracteres!', 1); return; }
+  if (senha.length < 6) { toast('⚠️ Senha com mínimo 6 caracteres!', 1); return; }
   loading(1);
   var { data, error } = await db.auth.signUp({ email: email, password: senha });
   if (error) { loading(0); toast(tradErr(error.message), 1); return; }
   if (data.user) {
     await db.from('utilizadores').insert({
       uid: data.user.id, nome: nome, tel: tel, email: email,
-      tipo: tipo, provincia: prov, verificado: false,
-      avaliacao: 0, total_servicos: 0, criado_em: new Date().toISOString()
+      tipo: tipo, província: prov, verificado: false,
+      avaliação: 0, total_serviços: 0, criado_em: new Date().toISOString()
     });
   }
   loading(0);
@@ -700,7 +700,7 @@ async function logout() {
   if (!confirm('Tens a certeza que queres sair?')) return;
   await db.auth.signOut();
   menuHide();
-  toast('👋 Sessao terminada.');
+  toast('👋 Sessão terminada.');
 }
 
 async function eliminarConta() {
@@ -717,8 +717,8 @@ async function mudarSenha() {
   var nova = document.getElementById('s-nova').value;
   var conf = document.getElementById('s-conf').value;
   if (!nova || !conf) { toast('⚠️ Preenche os campos!', 1); return; }
-  if (nova !== conf) { toast('⚠️ Senhas nao coincidem!', 1); return; }
-  if (nova.length < 6) { toast('⚠️ Minimo 6 caracteres!', 1); return; }
+  if (nova !== conf) { toast('⚠️ Senhas não coincidem!', 1); return; }
+  if (nova.length < 6) { toast('⚠️ Mínimo 6 caracteres!', 1); return; }
   loading(1);
   var { error } = await db.auth.updateUser({ password: nova });
   loading(0);
@@ -727,10 +727,10 @@ async function mudarSenha() {
 }
 
 // PEDIDOS
-function pedido(servico) {
+function pedido(serviço) {
   if (!A.user) { toast('⚠️ Faz login para pedir!', 1); mostrar('t-login'); return; }
-  A.servico = servico;
-  document.getElementById('s-servico').textContent = servico;
+  A.serviço = serviço;
+  document.getElementById('s-serviço').textContent = serviço;
   if (A.perfil) {
     document.getElementById('p-nome').value = A.perfil.nome || '';
     document.getElementById('p-tel').value = A.perfil.tel || '';
@@ -746,12 +746,12 @@ async function enviarPedido() {
   var bairro = document.getElementById('p-bairro').value.trim();
   var desc = document.getElementById('p-desc').value.trim();
   var urg = document.getElementById('p-urg').value;
-  if (!nome || !tel || !prov) { toast('⚠️ Preenche nome, telefone e provincia!', 1); return; }
+  if (!nome || !tel || !prov) { toast('⚠️ Preenche nome, telefone e província!', 1); return; }
   loading(1);
   var { error } = await db.from('pedidos').insert({
     cliente_uid: A.user.id, cliente_nome: nome, cliente_tel: tel,
-    provincia: prov, bairro: bairro, descricao: desc, urgencia: urg,
-    servico: A.servico, status: 'pendente', criado_em: new Date().toISOString()
+    província: prov, bairro: bairro, descricao: desc, urgencia: urg,
+    serviço: A.serviço, status: 'pendente', criado_em: new Date().toISOString()
   });
   loading(0);
   if (error) toast('Erro: ' + error.message, 1);
@@ -765,12 +765,12 @@ async function cancelarPedido(id) {
   irHist();
 }
 
-async function carregarPedidosTecnico() {
+async function carregarPedidosTécnico() {
   if (!A.perfil) return;
   var c = document.getElementById('lista-pedidos');
-  var prov = A.perfil.provincia;
+  var prov = A.perfil.província;
   var q = db.from('pedidos').select('*').eq('status', 'pendente').order('criado_em', {ascending: false});
-  if (prov) q = q.eq('provincia', prov);
+  if (prov) q = q.eq('província', prov);
   var { data } = await q;
   if (!data || data.length === 0) {
     c.innerHTML = '<div class="card"><p style="text-align:center;color:var(--t2);">Nenhum pedido na tua zona. 👍</p></div>';
@@ -780,7 +780,7 @@ async function carregarPedidosTecnico() {
   data.forEach(function(p) {
     var uc = p.urgencia === 'urgente' ? 'vu' : p.urgencia === 'sem-pressa' ? 'vs' : 'vn';
     var ul = p.urgencia === 'urgente' ? '🔴 Urgente' : p.urgencia === 'sem-pressa' ? '🟢 Sem pressa' : '🟡 Normal';
-    c.innerHTML += '<div class="card"><h3>' + p.servico + '</h3><p>📍 ' + p.provincia + (p.bairro ? ' · ' + p.bairro : '') + '</p><p>📝 ' + (p.descricao || 'Sem descricao') + '</p><p class="' + uc + '">' + ul + '</p><p>👤 ' + p.cliente_nome + '</p><div style="display:flex;gap:8px;margin-top:10px;"><button onclick="aceitarPedido(\'' + p.id + '\',\'' + p.cliente_tel + '\',\'' + p.provincia + '\')" style="margin:0;flex:1;">✅ Aceitar</button><button class="bv" style="margin:0;flex:1;">❌ Recusar</button></div></div>';
+    c.innerHTML += '<div class="card"><h3>' + p.serviço + '</h3><p>📍 ' + p.província + (p.bairro ? ' · ' + p.bairro : '') + '</p><p>📝 ' + (p.descricao || 'Sem descricao') + '</p><p class="' + uc + '">' + ul + '</p><p>👤 ' + p.cliente_nome + '</p><div style="display:flex;gap:8px;margin-top:10px;"><button onclick="aceitarPedido(\'' + p.id + '\',\'' + p.cliente_tel + '\',\'' + p.província + '\')" style="margin:0;flex:1;">✅ Aceitar</button><button class="bv" style="margin:0;flex:1;">❌ Recusar</button></div></div>';
   });
 }
 
@@ -788,8 +788,8 @@ async function aceitarPedido(id, tel, prov) {
   if (!A.user || !A.perfil) return;
   loading(1);
   var { error } = await db.from('pedidos').update({
-    status: 'aceite', tecnico_uid: A.user.id,
-    tecnico_nome: A.perfil.nome, tecnico_tel: A.perfil.tel,
+    status: 'aceite', técnico_uid: A.user.id,
+    técnico_nome: A.perfil.nome, técnico_tel: A.perfil.tel,
     aceito_em: new Date().toISOString()
   }).eq('id', id);
   loading(0);
@@ -808,12 +808,12 @@ async function confirmarAgendar() {
   if (!A.user) { toast('⚠️ Faz login primeiro!', 1); return; }
   loading(1);
   await db.from('agendamentos').insert({
-    cliente_uid: A.user.id, servico: A.servico,
+    cliente_uid: A.user.id, serviço: A.serviço,
     data: data, hora: hora, criado_em: new Date().toISOString()
   });
   loading(0);
   var df = new Date(data).toLocaleDateString('pt-PT');
-  document.getElementById('resumo-agendar').textContent = '✅ ' + A.servico + ' agendado para ' + df + ' as ' + hora;
+  document.getElementById('resumo-agendar').textContent = '✅ ' + A.serviço + ' agendado para ' + df + ' as ' + hora;
   toast('📅 Agendamento confirmado!');
   mostrar('t-agendar-ok');
 }
@@ -824,7 +824,7 @@ function aval(nota) {
   document.querySelectorAll('.estrela').forEach(function(e, i) {
     e.classList.toggle('on', i < nota);
   });
-  var msgs = ['', '😞 Pessimo', '😕 Mau', '😐 Razoavel', '😊 Bom', '🤩 Excelente!'];
+  var msgs = ['', '😞 Péssimo', '😕 Mau', '😐 Razoável', '😊 Bom', '🤩 Excelente!'];
   document.getElementById('nota-aval').textContent = msgs[nota];
 }
 
@@ -832,13 +832,13 @@ async function enviarAval() {
   if (A.notaAval === 0) { toast('⚠️ Selecciona pelo menos 1 estrela!', 1); return; }
   var com = document.getElementById('comentario').value;
   loading(1);
-  var { error } = await db.from('avaliacoes').insert({
+  var { error } = await db.from('avaliações').insert({
     pedido_id: A.pedidoAval, cliente_uid: A.user ? A.user.id : null,
     nota: A.notaAval, comentario: com, criado_em: new Date().toISOString()
   });
   loading(0);
-  if (error) toast('Erro ao enviar avaliacao.', 1);
-  else { toast('⭐ Avaliacao enviada!'); mostrar('t-aval-ok'); }
+  if (error) toast('Erro ao enviar avaliação.', 1);
+  else { toast('⭐ Avaliação enviada!'); mostrar('t-aval-ok'); }
 }
 
 // SUPORTE
@@ -854,7 +854,7 @@ async function enviarReclam() {
     status: 'pendente', criado_em: new Date().toISOString()
   });
   loading(0);
-  toast('✅ Reclamacao enviada!');
+  toast('✅ Reclamação enviada!');
   mostrar('t-reclam-ok');
 }
 
@@ -881,19 +881,19 @@ async function carregarAdmin() {
     db.from('pedidos').select('id').eq('status', 'pendente'),
     db.from('reclamacoes').select('id').eq('status', 'pendente')
   ]);
-  var tec = (us.data || []).filter(function(u) { return u.tipo === 'tecnico'; });
+  var tec = (us.data || []).filter(function(u) { return u.tipo === 'técnico'; });
   document.getElementById('adm-u').textContent = (us.data || []).length;
   document.getElementById('adm-t').textContent = tec.length;
   document.getElementById('adm-p').textContent = (ped.data || []).length;
   document.getElementById('adm-r').textContent = (rec.data || []).length;
-  var { data: apr } = await db.from('utilizadores').select('*').eq('tipo', 'tecnico').eq('verificado', false);
+  var { data: apr } = await db.from('utilizadores').select('*').eq('tipo', 'técnico').eq('verificado', false);
   var lista = document.getElementById('adm-lista');
   if (!apr || apr.length === 0) {
     lista.innerHTML = '<p style="color:var(--t2)">Nenhum pendente. ✅</p>';
   } else {
     lista.innerHTML = '';
     apr.forEach(function(t) {
-      lista.innerHTML += '<div class="card"><p>👤 ' + t.nome + '</p><p>📞 ' + t.tel + ' · 📍 ' + t.provincia + '</p><div style="display:flex;gap:8px;margin-top:8px;"><button onclick="aprovar(\'' + t.uid + '\')" style="margin:0;flex:1;background:linear-gradient(135deg,#009900,#006600);">✅ Aprovar</button><button class="bp" style="margin:0;flex:1;">❌ Rejeitar</button></div></div>';
+      lista.innerHTML += '<div class="card"><p>👤 ' + t.nome + '</p><p>📞 ' + t.tel + ' · 📍 ' + t.província + '</p><div style="display:flex;gap:8px;margin-top:8px;"><button onclick="aprovar(\'' + t.uid + '\')" style="margin:0;flex:1;background:linear-gradient(135deg,#009900,#006600);">✅ Aprovar</button><button class="bp" style="margin:0;flex:1;">❌ Rejeitar</button></div></div>';
     });
   }
   mostrar('t-admin');
@@ -902,7 +902,7 @@ async function carregarAdmin() {
 
 async function aprovar(uid) {
   await db.from('utilizadores').update({ verificado: true }).eq('uid', uid);
-  toast('✅ Tecnico aprovado!');
+  toast('✅ Técnico aprovado!');
   carregarAdmin();
 }
 
@@ -935,8 +935,8 @@ document.addEventListener('keydown', function(e) {
 // UTILS
 function tradErr(msg) {
   if (msg.indexOf('Invalid login') > -1) return '⚠️ Email ou senha incorrectos.';
-  if (msg.indexOf('already registered') > -1) return '⚠️ Email ja registado.';
-  if (msg.indexOf('Password') > -1) return '⚠️ Senha com minimo 6 caracteres.';
+  if (msg.indexOf('already registered') > -1) return '⚠️ Email já registado.';
+  if (msg.indexOf('Password') > -1) return '⚠️ Senha com mínimo 6 caracteres.';
   if (msg.indexOf('email') > -1) return '⚠️ Email invalido.';
   return '⚠️ ' + msg;
 }
