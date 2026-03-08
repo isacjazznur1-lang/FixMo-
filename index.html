@@ -215,7 +215,7 @@ textarea{resize:vertical;min-height:80px}
 <!-- AREA TECNICO -->
 <div class="tela" id="t-tecnico">
   <h2>🔧 Area do Técnico</h2>
-  <button onclick="irPerfilTécnico()">👤 Ver meu perfil</button>
+  <button onclick="irPerfilTecnico()">👤 Ver meu perfil</button>
   <p style="margin:14px 0 8px;color:var(--t2);">Pedidos na tua zona:</p>
   <div id="lista-pedidos">
     <div class="card"><p style="text-align:center;">A carregar... ⏳</p></div>
@@ -545,10 +545,10 @@ async function carregarPerfil() {
     if (data) {
       A.perfil = data;
       if (data.tipo === 'técnico') {
-        mostrar('t-técnico');
+        mostrar('t-tecnico');
         menuOn('m-home');
         menuShow();
-        carregarPedidosTécnico();
+        carregarPedidosTecnico();
       } else {
         irHome();
       }
@@ -600,7 +600,7 @@ function irDef() {
   if (A.user) document.getElementById('def-email').textContent = '📧 ' + A.user.email;
 }
 
-function irPerfilTécnico() {
+function irPerfilTecnico() {
   mostrar('t-perfil-t');
   if (A.perfil) {
     var p = A.perfil;
@@ -765,7 +765,7 @@ async function cancelarPedido(id) {
   irHist();
 }
 
-async function carregarPedidosTécnico() {
+async function carregarPedidosTecnico() {
   if (!A.perfil) return;
   var c = document.getElementById('lista-pedidos');
   var prov = A.perfil.província;
@@ -788,7 +788,7 @@ async function aceitarPedido(id, tel, prov) {
   if (!A.user || !A.perfil) return;
   loading(1);
   var { error } = await db.from('pedidos').update({
-    status: 'aceite', técnico_uid: A.user.id,
+    status: 'aceite', tecnico_uid: A.user.id,
     técnico_nome: A.perfil.nome, técnico_tel: A.perfil.tel,
     aceito_em: new Date().toISOString()
   }).eq('id', id);
