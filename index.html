@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>FixMoç - Serviços Técnicos em Moçambique</title>
+<title>FixMoç - Servicos Técnicos em Moçambique</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -78,7 +78,7 @@ textarea{resize:vertical;min-height:80px}
   <p class="sub">Conectamos técnicos e clientes<br>em todo o país</p>
   <div class="bts">
     <button class="bc" onclick="escolher('cliente')">👤 Sou Cliente</button>
-    <button class="bt" onclick="escolher('técnico')">🔧 Sou Técnico</button>
+    <button class="bt" onclick="escolher('tecnico')">🔧 Sou Técnico</button>
   </div>
   <p style="font-size:10px;margin-top:30px;"><a href="#" onclick="irAdmin()">v2.0</a></p>
 </div>
@@ -103,8 +103,8 @@ textarea{resize:vertical;min-height:80px}
   <input type="email" id="r-email" placeholder="O teu email" autocomplete="email">
   <input type="password" id="r-senha" placeholder="Senha (mínimo 6 caracteres)" autocomplete="new-password">
   <select id="r-prov">
-    <option value="">Selecciona a tua província</option>
-    <option>Maputo Cidade</option><option>Maputo Província</option><option>Matola</option>
+    <option value="">Selecciona a tua provincia</option>
+    <option>Maputo Cidade</option><option>Maputo Provincia</option><option>Matola</option>
     <option>Gaza</option><option>Inhambane</option><option>Sofala (Beira)</option>
     <option>Manica</option><option>Tete</option><option>Zambézia (Quelimane)</option>
     <option>Nampula</option><option>Cabo Delgado</option><option>Niassa</option>
@@ -145,12 +145,12 @@ textarea{resize:vertical;min-height:80px}
 <!-- PEDIDO -->
 <div class="tela" id="t-pedido">
   <h2>📋 Fazer Pedido</h2>
-  <div class="card card-v"><h3 id="s-servico">Serviço</h3></div>
+  <div class="card card-v"><h3 id="s-servico">Servico</h3></div>
   <input type="text" id="p-nome" placeholder="O teu nome">
   <input type="tel" id="p-tel" placeholder="O teu telefone">
   <select id="p-prov">
-    <option value="">Selecciona a tua província</option>
-    <option>Maputo Cidade</option><option>Maputo Província</option><option>Matola</option>
+    <option value="">Selecciona a tua provincia</option>
+    <option>Maputo Cidade</option><option>Maputo Provincia</option><option>Matola</option>
     <option>Gaza</option><option>Inhambane</option><option>Sofala (Beira)</option>
     <option>Manica</option><option>Tete</option><option>Zambézia (Quelimane)</option>
     <option>Nampula</option><option>Cabo Delgado</option><option>Niassa</option>
@@ -180,8 +180,8 @@ textarea{resize:vertical;min-height:80px}
 
 <!-- AGENDAMENTO -->
 <div class="tela" id="t-agendar">
-  <h2>📅 Agendar Serviço</h2>
-  <div class="card card-v"><h3 id="s-agendar">Serviço</h3></div>
+  <h2>📅 Agendar Servico</h2>
+  <div class="card card-v"><h3 id="s-agendar">Servico</h3></div>
   <div class="card"><h3>📅 Data</h3><input type="date" id="a-data"></div>
   <div class="card">
     <h3>⏰ Hora</h3>
@@ -233,7 +233,7 @@ textarea{resize:vertical;min-height:80px}
       <p>📞 <strong style="color:var(--v)" id="tel-aceite">—</strong></p>
       <p>📍 <span id="prov-aceite">—</span></p>
     </div>
-    <button onclick="irPagamento('Serviço')" style="width:100%;margin-top:8px;">💰 Registar Pagamento</button>
+    <button onclick="irPagamento('Servico')" style="width:100%;margin-top:8px;">💰 Registar Pagamento</button>
     <button onclick="ir('t-chat')" class="ba" style="width:100%;">💬 Chat</button>
     <button class="bv" onclick="ir('t-tecnico')" style="width:100%;">← Ver mais pedidos</button>
   </div>
@@ -246,7 +246,7 @@ textarea{resize:vertical;min-height:80px}
     <div class="avatar">👷</div>
     <h3 id="pf-nome" style="font-size:18px;color:#fff;">—</h3>
     <div class="bv2" id="pf-ver">⏳ Aguarda verificação</div>
-    <p style="margin-top:6px;" id="pf-aval">⭐ Sem avaliações</p>
+    <p style="margin-top:6px;" id="pf-aval">⭐ Sem avaliacoes</p>
   </div>
   <div class="card">
     <p id="pf-tel">📞 —</p>
@@ -255,7 +255,7 @@ textarea{resize:vertical;min-height:80px}
   </div>
   <div class="card">
     <h3>📊 Estatísticas</h3>
-    <p id="pf-serv">✅ Serviços feitos: 0</p>
+    <p id="pf-serv">✅ Servicos feitos: 0</p>
     <p id="pf-desde">📅 Membro desde: 2026</p>
   </div>
   <button class="bp" onclick="eliminarConta()">🗑️ Eliminar Conta</button>
@@ -265,7 +265,7 @@ textarea{resize:vertical;min-height:80px}
 <!-- AVALIACAO -->
 <div class="tela" id="t-aval">
   <h2>⭐ Avaliar Técnico</h2>
-  <p>Como foi o serviço?</p>
+  <p>Como foi o servico?</p>
   <div class="estrelas" id="estrelas">
     <span class="estrela" onclick="aval(1)">⭐</span>
     <span class="estrela" onclick="aval(2)">⭐</span>
@@ -275,7 +275,7 @@ textarea{resize:vertical;min-height:80px}
   </div>
   <p id="nota-aval" style="text-align:center;font-size:13px;color:var(--t2);">Toca nas estrelas</p>
   <textarea id="comentario" placeholder="Deixa um comentario..." rows="3"></textarea>
-  <button onclick="enviarAval()">📨 Enviar Avaliação</button>
+  <button onclick="enviarAval()">📨 Enviar Avaliacao</button>
   <button class="bv" onclick="ir('t-home')">← Voltar</button>
 </div>
 
@@ -284,7 +284,7 @@ textarea{resize:vertical;min-height:80px}
   <div class="centro">
     <div class="icone">🎉</div>
     <h2>Obrigado!</h2>
-    <p>Avaliação guardada com sucesso!</p>
+    <p>Avaliacao guardada com sucesso!</p>
     <button onclick="ir('t-home')" style="margin-top:18px;">🏠 Voltar ao inicio</button>
   </div>
 </div>
@@ -349,9 +349,9 @@ textarea{resize:vertical;min-height:80px}
 <!-- PAGAMENTO -->
 <div class="tela" id="t-pagar">
   <h2>💰 Pagamento</h2>
-  <div class="card card-v"><h3 id="s-pagar">Serviço</h3></div>
+  <div class="card card-v"><h3 id="s-pagar">Servico</h3></div>
   <div class="card">
-    <h3>💵 Valor do serviço (MT)</h3>
+    <h3>💵 Valor do servico (MT)</h3>
     <input type="number" id="valor" placeholder="Ex: 1500" oninput="calcComissao()">
     <p style="font-size:12px;margin-top:4px;">Comissão FixMoç (10%): <span id="comissao">0 MT</span></p>
   </div>
@@ -451,8 +451,8 @@ textarea{resize:vertical;min-height:80px}
   <h2>📜 Termos de Uso</h2>
   <div class="card">
     <p>1. O FixMoç conecta técnicos e clientes em Moçambique.</p>
-    <p>2. Cobramos 10% de comissão por cada serviço fechado.</p>
-    <p>3. Os técnicos devem ser verificados antes de prestar serviços.</p>
+    <p>2. Cobramos 10% de comissão por cada servico fechado.</p>
+    <p>3. Os técnicos devem ser verificados antes de prestar servicos.</p>
     <p>4. O FixMoç não se responsabiliza por danos causados pelos técnicos.</p>
     <p>5. Contacto: isacjázznur1 @ gmail.com</p>
   </div>
@@ -463,7 +463,7 @@ textarea{resize:vertical;min-height:80px}
 <div class="tela" id="t-privac">
   <h2>🔒 Privacidade</h2>
   <div class="card">
-    <p>1. Dados recolhidos para melhorar os serviços.</p>
+    <p>1. Dados recolhidos para melhorar os servicos.</p>
     <p>2. Os teus dados não sao vendidos a terceiros.</p>
     <p>3. Protegidos pelo Supabase (SSL).</p>
     <p>4. Podes eliminar a conta a qualquer momento.</p>
@@ -508,7 +508,7 @@ const A = {
   user: null,
   perfil: null,
   tipo: 'cliente',
-  serviço: '',
+  servico: '',
   notaAval: 0,
   pedidoAval: null
 };
@@ -544,7 +544,7 @@ async function carregarPerfil() {
     const { data } = await db.from('utilizadores').select('*').eq('uid', A.user.id).single();
     if (data) {
       A.perfil = data;
-      if (data.tipo === 'técnico') {
+      if (data.tipo === 'tecnico') {
         mostrar('t-tecnico');
         menuOn('m-home');
         menuShow();
@@ -606,11 +606,11 @@ function irPerfilTecnico() {
     var p = A.perfil;
     document.getElementById('pf-nome').textContent = p.nome || '—';
     document.getElementById('pf-tel').textContent = '📞 ' + (p.tel || '—');
-    document.getElementById('pf-prov').textContent = '📍 ' + (p.província || '—');
+    document.getElementById('pf-prov').textContent = '📍 ' + (p.provincia || '—');
     document.getElementById('pf-email').textContent = '📧 ' + (p.email || '—');
     document.getElementById('pf-ver').textContent = p.verificado ? '✅ Verificado' : '⏳ Aguarda verificação';
-    document.getElementById('pf-aval').textContent = p.avaliação > 0 ? '⭐ ' + Number(p.avaliação).toFixed(1) : '⭐ Sem avaliações';
-    document.getElementById('pf-serv').textContent = '✅ Serviços feitos: ' + (p.total_serviços || 0);
+    document.getElementById('pf-aval').textContent = p.avaliacao > 0 ? '⭐ ' + Number(p.avaliacao).toFixed(1) : '⭐ Sem avaliacoes';
+    document.getElementById('pf-serv').textContent = '✅ Servicos feitos: ' + (p.total_servicos || 0);
     var ano = p.criado_em ? new Date(p.criado_em).getFullYear() : 2026;
     document.getElementById('pf-desde').textContent = '📅 Membro desde: ' + ano;
   }
@@ -626,7 +626,7 @@ function irAvaliar(pedidoId) {
 }
 
 function irPagamento(s) {
-  document.getElementById('s-pagar').textContent = s || 'Serviço';
+  document.getElementById('s-pagar').textContent = s || 'Servico';
   document.getElementById('valor').value = '';
   document.getElementById('comissao').textContent = '0 MT';
   mostrar('t-pagar');
@@ -657,7 +657,7 @@ async function irHist() {
     var extra = '';
     if (p.status === 'pendente') extra = '<button class="bp" onclick="cancelarPedido(\'' + p.id + '\')" style="margin-top:8px;width:100%;">❌ Cancelar</button>';
     if (p.status === 'aceite') extra = '<button onclick="irAvaliar(\'' + p.id + '\')" style="margin-top:8px;width:100%;">⭐ Avaliar</button>';
-    c.innerHTML += '<div class="card"><h3>' + p.serviço + '</h3><p>📍 ' + p.província + '</p><p>📅 ' + df + (p.técnico_nome ? ' · 👷 ' + p.técnico_nome : '') + '</p><p style="color:' + cor + ';font-weight:600;">' + lbl + '</p>' + extra + '</div>';
+    c.innerHTML += '<div class="card"><h3>' + p.servico + '</h3><p>📍 ' + p.provincia + '</p><p>📅 ' + df + (p.tecnico_nome ? ' · 👷 ' + p.tecnico_nome : '') + '</p><p style="color:' + cor + ';font-weight:600;">' + lbl + '</p>' + extra + '</div>';
   });
 }
 
@@ -688,8 +688,8 @@ async function registar() {
   if (data.user) {
     await db.from('utilizadores').insert({
       uid: data.user.id, nome: nome, tel: tel, email: email,
-      tipo: tipo, província: prov, verificado: false,
-      avaliação: 0, total_serviços: 0, criado_em: new Date().toISOString()
+      tipo: tipo, provincia: prov, verificado: false,
+      avaliacao: 0, total_servicos: 0, criado_em: new Date().toISOString()
     });
   }
   loading(0);
@@ -727,10 +727,10 @@ async function mudarSenha() {
 }
 
 // PEDIDOS
-function pedido(serviço) {
+function pedido(servico) {
   if (!A.user) { toast('⚠️ Faz login para pedir!', 1); mostrar('t-login'); return; }
-  A.serviço = serviço;
-  document.getElementById('s-serviço').textContent = serviço;
+  A.servico = servico;
+  document.getElementById('s-servico').textContent = servico;
   if (A.perfil) {
     document.getElementById('p-nome').value = A.perfil.nome || '';
     document.getElementById('p-tel').value = A.perfil.tel || '';
@@ -746,12 +746,12 @@ async function enviarPedido() {
   var bairro = document.getElementById('p-bairro').value.trim();
   var desc = document.getElementById('p-desc').value.trim();
   var urg = document.getElementById('p-urg').value;
-  if (!nome || !tel || !prov) { toast('⚠️ Preenche nome, telefone e província!', 1); return; }
+  if (!nome || !tel || !prov) { toast('⚠️ Preenche nome, telefone e provincia!', 1); return; }
   loading(1);
   var { error } = await db.from('pedidos').insert({
     cliente_uid: A.user.id, cliente_nome: nome, cliente_tel: tel,
-    província: prov, bairro: bairro, descricao: desc, urgencia: urg,
-    serviço: A.serviço, status: 'pendente', criado_em: new Date().toISOString()
+    provincia: prov, bairro: bairro, descricao: desc, urgencia: urg,
+    servico: A.servico, status: 'pendente', criado_em: new Date().toISOString()
   });
   loading(0);
   if (error) toast('Erro: ' + error.message, 1);
@@ -768,9 +768,9 @@ async function cancelarPedido(id) {
 async function carregarPedidosTecnico() {
   if (!A.perfil) return;
   var c = document.getElementById('lista-pedidos');
-  var prov = A.perfil.província;
+  var prov = A.perfil.provincia;
   var q = db.from('pedidos').select('*').eq('status', 'pendente').order('criado_em', {ascending: false});
-  if (prov) q = q.eq('província', prov);
+  if (prov) q = q.eq('provincia', prov);
   var { data } = await q;
   if (!data || data.length === 0) {
     c.innerHTML = '<div class="card"><p style="text-align:center;color:var(--t2);">Nenhum pedido na tua zona. 👍</p></div>';
@@ -780,7 +780,7 @@ async function carregarPedidosTecnico() {
   data.forEach(function(p) {
     var uc = p.urgencia === 'urgente' ? 'vu' : p.urgencia === 'sem-pressa' ? 'vs' : 'vn';
     var ul = p.urgencia === 'urgente' ? '🔴 Urgente' : p.urgencia === 'sem-pressa' ? '🟢 Sem pressa' : '🟡 Normal';
-    c.innerHTML += '<div class="card"><h3>' + p.serviço + '</h3><p>📍 ' + p.província + (p.bairro ? ' · ' + p.bairro : '') + '</p><p>📝 ' + (p.descricao || 'Sem descricao') + '</p><p class="' + uc + '">' + ul + '</p><p>👤 ' + p.cliente_nome + '</p><div style="display:flex;gap:8px;margin-top:10px;"><button onclick="aceitarPedido(\'' + p.id + '\',\'' + p.cliente_tel + '\',\'' + p.província + '\')" style="margin:0;flex:1;">✅ Aceitar</button><button class="bv" style="margin:0;flex:1;">❌ Recusar</button></div></div>';
+    c.innerHTML += '<div class="card"><h3>' + p.servico + '</h3><p>📍 ' + p.provincia + (p.bairro ? ' · ' + p.bairro : '') + '</p><p>📝 ' + (p.descricao || 'Sem descricao') + '</p><p class="' + uc + '">' + ul + '</p><p>👤 ' + p.cliente_nome + '</p><div style="display:flex;gap:8px;margin-top:10px;"><button onclick="aceitarPedido(\'' + p.id + '\',\'' + p.cliente_tel + '\',\'' + p.provincia + '\')" style="margin:0;flex:1;">✅ Aceitar</button><button class="bv" style="margin:0;flex:1;">❌ Recusar</button></div></div>';
   });
 }
 
@@ -789,7 +789,7 @@ async function aceitarPedido(id, tel, prov) {
   loading(1);
   var { error } = await db.from('pedidos').update({
     status: 'aceite', tecnico_uid: A.user.id,
-    técnico_nome: A.perfil.nome, técnico_tel: A.perfil.tel,
+    tecnico_nome: A.perfil.nome, tecnico_tel: A.perfil.tel,
     aceito_em: new Date().toISOString()
   }).eq('id', id);
   loading(0);
@@ -808,12 +808,12 @@ async function confirmarAgendar() {
   if (!A.user) { toast('⚠️ Faz login primeiro!', 1); return; }
   loading(1);
   await db.from('agendamentos').insert({
-    cliente_uid: A.user.id, serviço: A.serviço,
+    cliente_uid: A.user.id, servico: A.servico,
     data: data, hora: hora, criado_em: new Date().toISOString()
   });
   loading(0);
   var df = new Date(data).toLocaleDateString('pt-PT');
-  document.getElementById('resumo-agendar').textContent = '✅ ' + A.serviço + ' agendado para ' + df + ' as ' + hora;
+  document.getElementById('resumo-agendar').textContent = '✅ ' + A.servico + ' agendado para ' + df + ' as ' + hora;
   toast('📅 Agendamento confirmado!');
   mostrar('t-agendar-ok');
 }
@@ -832,13 +832,13 @@ async function enviarAval() {
   if (A.notaAval === 0) { toast('⚠️ Selecciona pelo menos 1 estrela!', 1); return; }
   var com = document.getElementById('comentario').value;
   loading(1);
-  var { error } = await db.from('avaliações').insert({
+  var { error } = await db.from('avaliacoes').insert({
     pedido_id: A.pedidoAval, cliente_uid: A.user ? A.user.id : null,
     nota: A.notaAval, comentario: com, criado_em: new Date().toISOString()
   });
   loading(0);
-  if (error) toast('Erro ao enviar avaliação.', 1);
-  else { toast('⭐ Avaliação enviada!'); mostrar('t-aval-ok'); }
+  if (error) toast('Erro ao enviar avaliacao.', 1);
+  else { toast('⭐ Avaliacao enviada!'); mostrar('t-aval-ok'); }
 }
 
 // SUPORTE
@@ -881,19 +881,19 @@ async function carregarAdmin() {
     db.from('pedidos').select('id').eq('status', 'pendente'),
     db.from('reclamacoes').select('id').eq('status', 'pendente')
   ]);
-  var tec = (us.data || []).filter(function(u) { return u.tipo === 'técnico'; });
+  var tec = (us.data || []).filter(function(u) { return u.tipo === 'tecnico'; });
   document.getElementById('adm-u').textContent = (us.data || []).length;
   document.getElementById('adm-t').textContent = tec.length;
   document.getElementById('adm-p').textContent = (ped.data || []).length;
   document.getElementById('adm-r').textContent = (rec.data || []).length;
-  var { data: apr } = await db.from('utilizadores').select('*').eq('tipo', 'técnico').eq('verificado', false);
+  var { data: apr } = await db.from('utilizadores').select('*').eq('tipo', 'tecnico').eq('verificado', false);
   var lista = document.getElementById('adm-lista');
   if (!apr || apr.length === 0) {
     lista.innerHTML = '<p style="color:var(--t2)">Nenhum pendente. ✅</p>';
   } else {
     lista.innerHTML = '';
     apr.forEach(function(t) {
-      lista.innerHTML += '<div class="card"><p>👤 ' + t.nome + '</p><p>📞 ' + t.tel + ' · 📍 ' + t.província + '</p><div style="display:flex;gap:8px;margin-top:8px;"><button onclick="aprovar(\'' + t.uid + '\')" style="margin:0;flex:1;background:linear-gradient(135deg,#009900,#006600);">✅ Aprovar</button><button class="bp" style="margin:0;flex:1;">❌ Rejeitar</button></div></div>';
+      lista.innerHTML += '<div class="card"><p>👤 ' + t.nome + '</p><p>📞 ' + t.tel + ' · 📍 ' + t.provincia + '</p><div style="display:flex;gap:8px;margin-top:8px;"><button onclick="aprovar(\'' + t.uid + '\')" style="margin:0;flex:1;background:linear-gradient(135deg,#009900,#006600);">✅ Aprovar</button><button class="bp" style="margin:0;flex:1;">❌ Rejeitar</button></div></div>';
     });
   }
   mostrar('t-admin');
