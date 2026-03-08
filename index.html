@@ -94,8 +94,8 @@ select option{background:var(--fundo3)} textarea{resize:vertical;min-height:90px
     <p>Conectamos técnicos e clientes<br>em todo o país</p>
   </div>
   <div class="botoes-inicio">
-    <button class="btn-cliente" onclick="mostrarLogin()">👤 Sou Cliente</button>
-    <button class="btn-tecnico" onclick="mostrarLogin()">🔧 Sou Técnico</button>
+    <button class="btn-cliente" onclick="APP.tipoEscolhido='cliente'; mostrarLogin()">👤 Sou Cliente</button>
+    <button class="btn-tecnico" onclick="APP.tipoEscolhido='tecnico'; mostrarLogin()">🔧 Sou Técnico</button>
   </div>
   <p class="versao-link"><a href="#" onclick="verificarAdmin()">v2.0 Supabase</a></p>
 </div>
@@ -333,7 +333,7 @@ select option{background:var(--fundo3)} textarea{resize:vertical;min-height:90px
 <div id="tela-suporte">
   <h2>📢 Suporte</h2>
   <div class="pedido-card card-destaque">
-    <h3>Contacto</h3><p>📞 87 479 3972</p><p>📧 isacjazznur1@gmail.com</p>
+    <h3>Contacto</h3><p>📞 87 479 3972</p><p>📧 isacjazznur1&#64;gmail.com</p>
   </div>
   <div class="pedido-card">
     <h3>📝 Enviar Reclamação</h3>
@@ -464,7 +464,7 @@ select option{background:var(--fundo3)} textarea{resize:vertical;min-height:90px
     <p>2. O FixMoç cobra 10% de comissão por cada serviço fechado.</p>
     <p>3. Os técnicos devem ser verificados antes de prestar serviços.</p>
     <p>4. O FixMoç não se responsabiliza por danos causados pelos técnicos.</p>
-    <p>5. Contacto: isacjazznur1@gmail.com</p>
+    <p>5. Contacto: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d6bfa5b7b5bcb7acacb8a3a4e796b1bbb7bfbaf8b5b9bb">[email&#160;protected]</a></p>
   </div>
   <button class="btn-voltar" onclick="mostrarDefinicoes()">← Voltar</button>
 </div>
@@ -477,7 +477,7 @@ select option{background:var(--fundo3)} textarea{resize:vertical;min-height:90px
     <p>2. Os teus dados não são vendidos a terceiros.</p>
     <p>3. Protegidos pelo Supabase (encriptação SSL).</p>
     <p>4. Podes eliminar a conta a qualquer momento.</p>
-    <p>5. Contacto: isacjazznur1@gmail.com</p>
+    <p>5. Contacto: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a9c0dac8cac3c8d3d3c7dcdb98e9cec4c8c0c587cac6c4">[email&#160;protected]</a></p>
   </div>
   <button class="btn-voltar" onclick="mostrarDefinicoes()">← Voltar</button>
 </div>
@@ -492,7 +492,7 @@ select option{background:var(--fundo3)} textarea{resize:vertical;min-height:90px
   <div class="pedido-card">
     <p>👷 Fundador: Isac Jazznur</p>
     <p>📞 87 479 3972</p>
-    <p>📧 isacjazznur1@gmail.com</p>
+    <p>📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ef869c8e8c858e9595819a9ddeaf88828e8683c18c8082">[email&#160;protected]</a></p>
     <p>🗄️ Backend: Supabase (PostgreSQL)</p>
   </div>
   <button class="btn-voltar" onclick="mostrarDefinicoes()">← Voltar</button>
@@ -507,7 +507,7 @@ select option{background:var(--fundo3)} textarea{resize:vertical;min-height:90px
   <button onclick="mostrarDefinicoes()" id="menu-def"><span class="menu-icon">⚙️</span>Definições</button>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ============================================
 // FixMoç v2.0 — Backend Supabase Real
 // ============================================
@@ -515,7 +515,7 @@ const SUPABASE_URL = 'https://xlkkzdtitxiamttaqhfy.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_XAvOrmQPHgSca8lXCjfhUg_squa2CSe';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const APP = { user:null, perfil:null, servicoEscolhido:'', servicoAgendado:'', notaAvaliacao:0, pedidoAvaliar:null };
+const APP = { user:null, perfil:null, servicoEscolhido:'', servicoAgendado:'', notaAvaliacao:0, pedidoAvaliar:null, tipoEscolhido:'cliente' };
 
 // INIT
 window.addEventListener('load', async () => {
@@ -577,11 +577,13 @@ async function fazerLogout() {
 }
 
 async function eliminarPerfil() {
-  if (!confirm('🗑️ Eliminar conta? IRREVERSÍVEL.')) return;
+  if (!confirm('🗑️ Eliminar conta? Os teus dados serão apagados.')) return;
   mostrarLoading(true);
   await sb.from('utilizadores').delete().eq('uid', APP.user.id);
+  await sb.from('pedidos').delete().eq('cliente_uid', APP.user.id);
   await sb.auth.signOut();
   mostrarLoading(false);
+  mostrarToast('Conta eliminada com sucesso.');
 }
 
 async function confirmarMudarSenha() {
@@ -617,7 +619,12 @@ async function pedidoEnviado() {
 async function carregarPedidosTecnico() {
   if (!APP.perfil) return;
   const container=document.getElementById('lista-pedidos-tecnico');
-  const { data } = await sb.from('pedidos').select('*').eq('provincia',APP.perfil.provincia).eq('status','pendente').order('criado_em',{ascending:false});
+  const prov = APP.perfil.provincia;
+  
+  let query = sb.from('pedidos').select('*').eq('status','pendente').order('criado_em',{ascending:false});
+  if (prov) query = query.eq('provincia', prov);
+  
+  const { data } = await query;
   if (!data||data.length===0) { container.innerHTML='<div class="pedido-card"><p style="text-align:center;color:var(--texto2);">Nenhum pedido na tua zona. 👍</p></div>'; return; }
   container.innerHTML='';
   data.forEach(p => {
@@ -756,7 +763,11 @@ function mostrarMenu(ativoId) { document.getElementById('menu-nav').style.displa
 function esconderMenu() { document.getElementById('menu-nav').style.display='none'; }
 function mostrarInicio() { mostrarTela('tela-inicio'); esconderMenu(); }
 function mostrarLogin() { mostrarTela('tela-login'); esconderMenu(); }
-function mostrarRegisto() { mostrarTela('tela-registo'); esconderMenu(); }
+function mostrarRegisto() { 
+  mostrarTela('tela-registo'); esconderMenu(); 
+  const sel = document.getElementById('tipo-utilizador');
+  if (sel) sel.value = APP.tipoEscolhido || 'cliente';
+}
 function mostrarTermos() { mostrarTela('tela-termos'); }
 function mostrarPrivacidade() { mostrarTela('tela-privacidade'); }
 function mostrarSobre() { mostrarTela('tela-sobre'); }
@@ -787,8 +798,4 @@ var _sp='';
 function mostrarPagamento(s){_sp=s||'';document.getElementById('servico-pagar').textContent=_sp;document.getElementById('valor-servico').value='';document.getElementById('comissao').textContent='0 MT';mostrarTela('tela-pagamento');}
 function calcularComissao(){const v=parseFloat(document.getElementById('valor-servico').value)||0;document.getElementById('comissao').textContent=(v*0.1).toFixed(0)+' MT';}
 function pagarCom(m){const v=document.getElementById('valor-servico').value;if(!v||parseFloat(v)<=0){mostrarToast('⚠️ Introduz o valor!','erro');return;}const c=(parseFloat(v)*0.1).toFixed(0);document.getElementById('resumo-pagamento').textContent=`💳 ${m} · ${parseFloat(v).toLocaleString('pt-PT')} MT · Comissão: ${c} MT`;mostrarTela('tela-pagamento-confirmado');}
-function enviarMensagem(){const c=document.getElementById('campo-mensagem');const t=c.value.trim();if(!t)return;const cm=document.getElementById('chat-mensagens');const d=document.createElement('div');d.className='mensagem-cliente';d.innerHTML='<p>'+t+'</p>';cm.appendChild(d);c.value='';cm.scrollTop=cm.scrollHeight;setTimeout(()=>{const rs=['Ok, entendido! 👍','Perfeito, confirmo.','Sem problema!','Recebido!'];const r=document.createElement('div');r.className='mensagem-tecnico';r.innerHTML='<p>'+rs[Math.floor(Math.random()*rs.length)]+'</p>';cm.appendChild(r);cm.scrollTop=cm.scrollHeight;},1200);}
-document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('campo-mensagem')===document.activeElement)enviarMensagem();});
-</script>
-</body>
-</html>
+function enviarMensagem(){const c=document.getElementById('campo-mensagem');const t=c.value.trim();if(!t)return;const cm=document.getElementById('chat-mensagens');const d=do
