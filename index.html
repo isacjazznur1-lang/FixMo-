@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="FixMoç — Primeira plataforma moçambicana que conecta técnicos de confiança com clientes.">
+<meta name="theme-color" content="#00e676">
+<title>FixMoç — Serviços Técnicos em Moçambique</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --verde: #00e676; --verde-escuro: #00b050; --verde-dim: rgba(0,230,118,0.12);
+  --azul: #2979ff; --vermelho: #ff3d00;
+  --fundo: #080c0e; --fundo2: #0f1518; --fundo3: #161d21; --fundo4: #1e272d;
+  --borda: #1f2c33; --texto: #e8f0f4; --texto2: #8fa3ad; --texto3: #4d6672; --branco: #ffffff;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body { height:100%; background:var(--fundo); color:var(--texto); font-family:'DM Sans',sans-serif; font-size:15px; max-width:480px; margin:0 auto; overflow-x:hidden; }
+::-webkit-scrollbar{width:3px} ::-webkit-scrollbar-track{background:var(--fundo)} ::-webkit-scrollbar-thumb{background:var(--borda);border-radius:2px}
+[id^="tela-"]{display:none;padding:24px 18px 90px;min-height:100vh;animation:slideUp .28s cubic-bezier(.22,1,.36,1)}
+@keyframes slideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+#tela-inicio{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:100vh;padding:40px 24px;background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(0,230,118,0.08) 0%,transparent 70%),var(--fundo)}
+.logo-inicio h1{font-family:'Syne',sans-serif;font-size:64px;font-weight:800;color:var(--verde);letter-spacing:-2px;line-height:1;text-shadow:0 0 40px rgba(0,230,118,0.4)}
+.logo-inicio .badge{display:inline-block;background:var(--verde-dim);border:1px solid rgba(0,230,118,0.25);color:var(--verde);font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-top:8px}
+.logo-inicio p{color:var(--texto2);font-size:15px;margin-top:14px;margin-bottom:50px;line-height:1.5}
+.botoes-inicio{display:flex;flex-direction:column;gap:13px;width:100%;max-width:320px}
+.btn-cliente{background:linear-gradient(135deg,var(--verde),var(--verde-escuro))!important;color:#000!important;font-weight:700!important}
+.btn-tecnico{background:var(--fundo3)!important;border:1px solid var(--borda)!important;color:var(--texto)!important}
+.versao-link{font-size:10px;margin-top:36px} .versao-link a{color:var(--texto3);text-decoration:none}
+h2{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:20px;color:var(--branco)}
+h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:600;margin-bottom:10px;color:var(--texto)}
+p{font-size:14px;color:var(--texto2);line-height:1.6;margin-bottom:5px} a{color:var(--verde);text-decoration:none}
+button{display:block;width:100%;padding:14px 18px;margin:8px 0;background:linear-gradient(135deg,var(--verde),var(--verde-escuro));color:#000;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;border:none;border-radius:14px;cursor:pointer;transition:all .18s;letter-spacing:.3px}
+button:active{transform:scale(.97);opacity:.85}
+.btn-voltar{background:var(--fundo3)!important;border:1px solid var(--borda)!important;color:var(--texto2)!important;font-weight:500!important}
+.btn-perigo{background:linear-gradient(135deg,#ff3d00,#cc2200)!important;color:#fff!important}
+.btn-azul{background:linear-gradient(135deg,#2979ff,#1a56dd)!important;color:#fff!important}
+input[type="text"],input[type="email"],input[type="password"],input[type="tel"],input[type="date"],input[type="number"],textarea,select{width:100%;padding:14px 16px;margin:7px 0;background:var(--fundo3);border:1px solid var(--borda);border-radius:12px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none}
+input:focus,textarea:focus,select:focus{border-color:var(--verde);box-shadow:0 0 0 3px rgba(0,230,118,0.1)}
+select option{background:var(--fundo3)} textarea{resize:vertical;min-height:90px}
+.pedido-card{background:var(--fundo3);border:1px solid var(--borda);border-radius:16px;padding:16px;margin:12px 0}
+.card-destaque{border-color:rgba(0,230,118,0.3);background:linear-gradient(135deg,var(--fundo3),rgba(0,230,118,0.04))}
+.servicos{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:8px}
+.servicos button{background:var(--fundo3);border:1px solid var(--borda);border-radius:14px;padding:18px 10px;font-size:13px;color:var(--texto);font-weight:500;margin:0}
+.servicos button:hover,.servicos button:active{border-color:var(--verde);background:var(--verde-dim);color:var(--verde);transform:scale(.97)}
+.perfil-foto{text-align:center;padding:16px 0 20px} .perfil-foto h3{font-size:20px;color:var(--branco);margin-top:8px}
+.perfil-avatar{font-size:64px;line-height:1}
+.badge-verificado{display:inline-block;background:var(--verde-dim);border:1px solid rgba(0,230,118,0.3);color:var(--verde);font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;margin-top:6px}
+.estrelas{display:flex;justify-content:center;gap:12px;margin:16px 0}
+.estrela{font-size:38px;cursor:pointer;filter:grayscale(1) opacity(.4);transition:filter .15s,transform .15s;user-select:none}
+.estrela.ativa{filter:grayscale(0) opacity(1);transform:scale(1.15)}
+#nota-avaliacao{text-align:center;color:var(--texto2);font-size:13px;margin-bottom:8px}
+.chat-cabecalho{display:flex;align-items:center;gap:14px;background:var(--fundo3);border:1px solid var(--borda);border-radius:16px;padding:14px 16px;margin-bottom:16px}
+.chat-cabecalho .avatar{font-size:36px} .chat-cabecalho h3{margin-bottom:2px;font-size:15px} .chat-cabecalho p{font-size:12px;margin:0}
+#chat-mensagens{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;min-height:180px;max-height:320px;overflow-y:auto}
+.mensagem-tecnico,.mensagem-cliente{max-width:78%;padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.5;animation:fadeMsg .2s ease}
+@keyframes fadeMsg{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.mensagem-tecnico{background:var(--fundo4);border:1px solid var(--borda);color:var(--texto);align-self:flex-start;border-bottom-left-radius:4px}
+.mensagem-cliente{background:var(--verde-dim);border:1px solid rgba(0,230,118,0.2);color:var(--verde);align-self:flex-end;border-bottom-right-radius:4px}
+.mensagem-tecnico p,.mensagem-cliente p{color:inherit;margin:0}
+.chat-input{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+.chat-input input{flex:1;margin:0} .chat-input button{width:48px;min-width:48px;height:48px;padding:0;border-radius:12px;font-size:18px;margin:0;flex-shrink:0}
+.urgencia-urgente{color:#ff3d00;font-weight:600} .urgencia-normal{color:#ffab00;font-weight:600} .urgencia-sem-pressa{color:var(--verde);font-weight:600}
+.divisor{height:1px;background:var(--borda);margin:16px 0}
+.tela-central{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:80vh;padding-bottom:20px}
+.icone-grande{font-size:72px;margin-bottom:16px;animation:pop .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.tela-central h2{margin-bottom:10px} .tela-central p{max-width:280px;text-align:center}
+#menu-nav{display:none;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(8,12,14,0.96);backdrop-filter:blur(12px);border-top:1px solid var(--borda);justify-content:space-around;align-items:center;padding:8px 0 12px;z-index:1000}
+#menu-nav button{background:none!important;border:none!important;color:var(--texto3)!important;font-size:10px!important;font-weight:500!important;padding:6px 10px!important;width:auto!important;margin:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;gap:4px!important;transition:color .15s!important;border-radius:0!important}
+#menu-nav button .menu-icon{font-size:20px} #menu-nav button.ativo{color:var(--verde)!important}
+.sb-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(62,207,142,0.1);border:1px solid rgba(62,207,142,0.3);color:#3ecf8e;font-size:10px;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:16px;letter-spacing:1px;text-transform:uppercase}
+.notif-dot{display:inline-block;width:8px;height:8px;background:var(--verde);border-radius:50%;margin-right:6px;vertical-align:middle}
+#comissao{color:var(--verde);font-weight:700}
+#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--fundo4);border:1px solid var(--borda);color:var(--texto);padding:12px 20px;border-radius:12px;font-size:14px;font-weight:500;z-index:9999;opacity:0;transition:all .3s;pointer-events:none;max-width:320px;text-align:center}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)} #toast.erro{border-color:var(--vermelho);color:#ff8a80}
+#loading-overlay{display:none;position:fixed;inset:0;background:rgba(8,12,14,0.75);backdrop-filter:blur(4px);z-index:8888;align-items:center;justify-content:center}
+#loading-overlay.show{display:flex}
+.spinner{width:40px;height:40px;border:3px solid var(--borda);border-top-color:var(--verde);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:360px){h2{font-size:18px}.logo-inicio h1{font-size:52px}.servicos{gap:8px}button{font-size:13px}}
+</style>
+</head>
+<body>
+<div id="loading-overlay"><div class="spinner"></div></div>
+<div id="toast"></div>
+
+<!-- INÍCIO -->
+<div id="tela-inicio">
+  <div class="logo-inicio">
+    <h1>FixMoç</h1>
+    <span class="badge">🇲🇿 Moçambique</span>
+    <p>Conectamos técnicos e clientes<br>em todo o país</p>
+  </div>
+  <div class="botoes-inicio">
+    <button class="btn-cliente" onclick="mostrarLogin()">👤 Sou Cliente</button>
+    <button class="btn-tecnico" onclick="mostrarLogin()">🔧 Sou Técnico</button>
+  </div>
+  <p class="versao-link"><a href="#" onclick="verificarAdmin()">v2.0 Supabase</a></p>
+</div>
+
+<!-- LOGIN -->
+<div id="tela-login">
+  <h2>Entrar na conta</h2>
+  <div class="sb-badge">⚡ Supabase — Real</div>
+  <input type="email" id="login-email" placeholder="O teu email">
+  <input type="password" id="login-senha" placeholder="A tua senha">
+  <button onclick="fazerLogin()">Entrar</button>
+  <p style="text-align:center;margin-top:12px;">Não tens conta? <a href="#" onclick="mostrarRegisto()">Regista-te</a></p>
+  <button class="btn-voltar" onclick="mostrarInicio()">← Voltar</button>
+</div>
+
+<!-- REGISTO -->
+<div id="tela-registo">
+  <h2>Criar conta</h2>
+  <div class="sb-badge">⚡ Dados guardados na nuvem</div>
+  <input type="text"     id="reg-nome"  placeholder="O teu nome completo">
+  <input type="tel"      id="reg-tel"   placeholder="Telefone (ex: 87 479 3972)">
+  <input type="email"    id="reg-email" placeholder="O teu email">
+  <input type="password" id="reg-senha" placeholder="Senha (mínimo 6 caracteres)">
+  <select id="provincia-tecnico">
+    <option value="">Selecciona a tua província</option>
+    <option>Maputo Cidade</option><option>Maputo Província</option><option>Matola</option>
+    <option>Gaza</option><option>Inhambane</option><option>Sofala (Beira)</option>
+    <option>Manica</option><option>Tete</option><option>Zambézia (Quelimane)</option>
+    <option>Nampula</option><option>Cabo Delgado</option><option>Niassa</option>
+  </select>
+  <select id="tipo-utilizador">
+    <option value="cliente">Sou Cliente</option>
+    <option value="tecnico">Sou Técnico</option>
+  </select>
+  <button onclick="criarConta()">✅ Criar conta</button>
+  <p style="text-align:center;margin-top:8px;">Já tens conta? <a href="#" onclick="mostrarLogin()">Entrar</a></p>
+  <button class="btn-voltar" onclick="mostrarInicio()">← Voltar</button>
+</div>
+
+<!-- HOME -->
+<div id="tela-home">
+  <h2 id="saudacao-home">Olá! Bem-vindo ao FixMoç 👋</h2>
+  <p style="margin-bottom:16px;">O que precisas hoje?</p>
+  <div class="servicos">
+    <button onclick="mostrarPedido('⚡ Eletricista')">⚡ Eletricista</button>
+    <button onclick="mostrarPedido('💧 Canalizador')">💧 Canalizador</button>
+    <button onclick="mostrarPedido('🪚 Carpinteiro')">🪚 Carpinteiro</button>
+    <button onclick="mostrarPedido('💻 Informática')">💻 Informática</button>
+    <button onclick="mostrarPedido('🧱 Pedreiro')">🧱 Pedreiro</button>
+    <button onclick="mostrarPedido('🧹 Limpeza')">🧹 Limpeza</button>
+    <button onclick="mostrarPedido('🎨 Pintor')">🎨 Pintor</button>
+    <button onclick="mostrarPedido('❄️ Ar Condicionado')">❄️ Ar Condicionado</button>
+    <button onclick="mostrarPedido('🚗 Mecânico')">🚗 Mecânico</button>
+    <button onclick="mostrarPedido('📺 Eletrodomésticos')">📺 Eletrodomésticos</button>
+    <button onclick="mostrarPedido('🔒 Serralheiro')">🔒 Serralheiro</button>
+    <button onclick="mostrarPedido('🪟 Vidraceiro')">🪟 Vidraceiro</button>
+    <button onclick="mostrarPedido('🌿 Jardineiro')">🌿 Jardineiro</button>
+    <button onclick="mostrarPedido('👶 Babysitter')">👶 Babysitter</button>
+    <button onclick="mostrarPedido('🍳 Cozinheiro')">🍳 Cozinheiro</button>
+    <button onclick="mostrarPedido('📦 Mudanças')">📦 Mudanças</button>
+  </div>
+</div>
+
+<!-- PEDIDO -->
+<div id="tela-pedido">
+  <h2>📋 Fazer Pedido</h2>
+  <div class="pedido-card card-destaque"><h3 id="servico-escolhido">🔧 Serviço</h3></div>
+  <input type="text" id="pedido-nome" placeholder="O teu nome">
+  <input type="tel"  id="pedido-tel"  placeholder="O teu telefone">
+  <select id="provincia-pedido">
+    <option value="">Selecciona a tua província</option>
+    <option>Maputo Cidade</option><option>Maputo Província</option><option>Matola</option>
+    <option>Gaza</option><option>Inhambane</option><option>Sofala (Beira)</option>
+    <option>Manica</option><option>Tete</option><option>Zambézia (Quelimane)</option>
+    <option>Nampula</option><option>Cabo Delgado</option><option>Niassa</option>
+  </select>
+  <input type="text" id="pedido-bairro" placeholder="O teu bairro (opcional)">
+  <textarea id="pedido-descricao" placeholder="Descreve o problema..." rows="4"></textarea>
+  <select id="pedido-urgencia">
+    <option value="urgente">🔴 Urgente</option>
+    <option value="normal" selected>🟡 Normal</option>
+    <option value="sem-pressa">🟢 Sem pressa</option>
+  </select>
+  <button onclick="pedidoEnviado()">📨 Enviar Pedido</button>
+  <button class="btn-voltar" onclick="mostrarHome()">← Voltar</button>
+</div>
+
+<!-- SUCESSO -->
+<div id="tela-sucesso">
+  <div class="tela-central">
+    <div class="icone-grande">✅</div>
+    <h2>Pedido Enviado!</h2>
+    <p>Guardado! Técnicos da tua zona vão contactar-te em breve.</p><br>
+    <button onclick="mostrarAgendamento()">📅 Agendar data e hora</button>
+    <button class="btn-azul" onclick="mostrarAvaliacaoTela(null)">⭐ Avaliar Técnico</button>
+    <button class="btn-voltar" onclick="mostrarHome()">🏠 Voltar ao início</button>
+  </div>
+</div>
+
+<!-- AGENDAMENTO -->
+<div id="tela-agendamento">
+  <h2>📅 Agendar Serviço</h2>
+  <div class="pedido-card card-destaque"><h3 id="servico-agendado">🔧 Serviço</h3></div>
+  <div class="pedido-card"><h3>📅 Escolhe a data</h3><input type="date" id="data-servico"></div>
+  <div class="pedido-card">
+    <h3>⏰ Escolhe a hora</h3>
+    <select id="hora-servico">
+      <option>08:00</option><option>09:00</option><option>10:00</option><option>11:00</option>
+      <option>12:00</option><option>13:00</option><option>14:00</option><option>15:00</option>
+      <option>16:00</option><option>17:00</option><option>18:00</option>
+    </select>
+  </div>
+  <div class="pedido-card">
+    <h3>🏠 Tipo de imóvel</h3>
+    <select><option>🏠 Casa particular</option><option>🏢 Apartamento</option><option>🏪 Loja</option><option>🏭 Fábrica</option><option>💼 Escritório</option></select>
+  </div>
+  <button onclick="confirmarAgendamento()">✅ Confirmar Agendamento</button>
+  <button class="btn-voltar" onclick="mostrarHome()">← Voltar</button>
+</div>
+
+<!-- AGENDAMENTO CONFIRMADO -->
+<div id="tela-agendamento-confirmado">
+  <div class="tela-central">
+    <div class="icone-grande">📅</div>
+    <h2>Agendamento Confirmado!</h2>
+    <div class="pedido-card" style="width:100%;text-align:left;margin-top:20px;">
+      <p id="resumo-agendamento"></p><p>👷 Técnicos notificados!</p>
+    </div>
+    <button onclick="mostrarHome()" style="width:100%;margin-top:12px;">🏠 Voltar ao início</button>
+  </div>
+</div>
+
+<!-- ÁREA TÉCNICO -->
+<div id="tela-tecnico">
+  <h2>🔧 Área do Técnico</h2>
+  <button onclick="mostrarPerfilTecnico()">👤 Ver meu perfil</button>
+  <p style="margin:16px 0 8px;color:var(--texto2);">Pedidos disponíveis na tua zona:</p>
+  <div id="lista-pedidos-tecnico">
+    <div class="pedido-card"><p style="text-align:center;">A carregar... ⏳</p></div>
+  </div>
+</div>
+
+<!-- ACEITE -->
+<div id="tela-aceite">
+  <div class="tela-central">
+    <div class="icone-grande">🎉</div>
+    <h2>Pedido Aceite!</h2>
+    <div class="pedido-card" style="width:100%;text-align:left;margin-top:16px;">
+      <p>Contacta o cliente:</p>
+      <div class="divisor"></div>
+      <p>📞 <strong style="color:var(--verde)" id="tel-cliente-aceite">—</strong></p>
+      <p>📍 <span id="prov-cliente-aceite">—</span></p>
+    </div>
+    <button onclick="mostrarPagamento('Serviço aceite')" style="width:100%;margin-top:8px;">💰 Registar Pagamento</button>
+    <button onclick="mostrarChat()" class="btn-azul" style="width:100%;">💬 Chat</button>
+    <button class="btn-voltar" onclick="mostrarTecnico()" style="width:100%;">← Ver mais pedidos</button>
+  </div>
+</div>
+
+<!-- PERFIL TÉCNICO -->
+<div id="tela-perfil-tecnico">
+  <h2>👤 Meu Perfil</h2>
+  <div class="perfil-foto">
+    <div class="perfil-avatar">👷</div>
+    <h3 id="perfil-nome">—</h3>
+    <div class="badge-verificado" id="perfil-verificado">⏳ Aguarda verificação</div>
+    <p style="margin-top:8px;" id="perfil-avaliacao">⭐ Sem avaliações ainda</p>
+  </div>
+  <div class="pedido-card">
+    <p id="perfil-tel">📞 —</p>
+    <p id="perfil-prov">📍 —</p>
+    <p id="perfil-email">📧 —</p>
+  </div>
+  <div class="pedido-card">
+    <h3>📊 Estatísticas</h3>
+    <p id="perfil-servicos">✅ Serviços feitos: 0</p>
+    <p id="perfil-membro">📅 Membro desde: 2026</p>
+  </div>
+  <button class="btn-perigo" onclick="eliminarPerfil()">🗑️ Eliminar Conta</button>
+  <button class="btn-voltar" onclick="mostrarTecnico()">← Voltar aos pedidos</button>
+</div>
+
+<!-- AVALIAÇÃO -->
+<div id="tela-avaliacao">
+  <h2>⭐ Avaliar Técnico</h2>
+  <p>Como foi o serviço?</p>
+  <div class="estrelas" id="grupo-estrelas">
+    <span class="estrela" onclick="avaliar(1)">⭐</span>
+    <span class="estrela" onclick="avaliar(2)">⭐</span>
+    <span class="estrela" onclick="avaliar(3)">⭐</span>
+    <span class="estrela" onclick="avaliar(4)">⭐</span>
+    <span class="estrela" onclick="avaliar(5)">⭐</span>
+  </div>
+  <p id="nota-avaliacao">Toca nas estrelas para avaliar</p>
+  <textarea id="comentario-avaliacao" placeholder="Deixa um comentário..." rows="3"></textarea>
+  <button onclick="enviarAvaliacao()">📨 Enviar Avaliação</button>
+  <button class="btn-voltar" onclick="mostrarHome()">← Voltar</button>
+</div>
+
+<!-- AVALIAÇÃO ENVIADA -->
+<div id="tela-avaliacao-enviada">
+  <div class="tela-central">
+    <div class="icone-grande">🎉</div>
+    <h2>Obrigado pela avaliação!</h2>
+    <p>Guardada com sucesso! Ajuda outros clientes.</p>
+    <button onclick="mostrarHome()" style="margin-top:20px;">🏠 Voltar ao início</button>
+  </div>
+</div>
+
+<!-- NOTIFICAÇÕES -->
+<div id="tela-notificacoes">
+  <h2>🔔 Notificações</h2>
+  <div class="pedido-card"><p>Vai a <strong>Pedidos</strong> para ver o estado em tempo real.</p></div>
+  <button class="btn-voltar" onclick="mostrarHome()">← Voltar</button>
+</div>
+
+<!-- CHAT -->
+<div id="tela-chat">
+  <h2>💬 Chat</h2>
+  <div class="chat-cabecalho">
+    <div class="avatar">👷</div>
+    <div><h3>Técnico FixMoç</h3><p>Online</p></div>
+  </div>
+  <div id="chat-mensagens">
+    <div class="mensagem-tecnico"><p>Olá! Recebi o teu pedido. Posso ir amanhã às 9h. Funciona?</p></div>
+  </div>
+  <div class="chat-input">
+    <input type="text" id="campo-mensagem" placeholder="Escreve uma mensagem...">
+    <button onclick="enviarMensagem()">📨</button>
+  </div>
+  <button class="btn-voltar" onclick="mostrarHome()">← Voltar</button>
+</div>
+
+<!-- SUPORTE -->
+<div id="tela-suporte">
+  <h2>📢 Suporte</h2>
+  <div class="pedido-card card-destaque">
+    <h3>Contacto</h3><p>📞 87 479 3972</p><p>📧 isacjazznur1@gmail.com</p>
+  </div>
+  <div class="pedido-card">
+    <h3>📝 Enviar Reclamação</h3>
+    <input type="text" id="suporte-nome" placeholder="O teu nome">
+    <select id="suporte-tipo">
+      <option>Problema com técnico</option><option>Problema com pagamento</option>
+      <option>Problema com app</option><option>Outro</option>
+    </select>
+    <textarea id="suporte-mensagem" placeholder="Descreve o teu problema..." rows="4"></textarea>
+    <button onclick="enviarReclamacao()">📨 Enviar</button>
+  </div>
+  <button class="btn-voltar" onclick="mostrarHome()">← Voltar</button>
+</div>
+
+<!-- RECLAMAÇÃO ENVIADA -->
+<div id="tela-reclamacao-enviada">
+  <div class="tela-central">
+    <div class="icone-grande">✅</div>
+    <h2>Reclamação Enviada!</h2>
+    <p>Respondemos em até 24 horas.</p>
+    <button onclick="mostrarHome()" style="margin-top:20px;">🏠 Voltar ao início</button>
+  </div>
+</div>
+
+<!-- PAGAMENTO -->
+<div id="tela-pagamento">
+  <h2>💰 Pagamento</h2>
+  <div class="pedido-card card-destaque"><h3 id="servico-pagar">🔧 Serviço</h3></div>
+  <div class="pedido-card">
+    <h3>💵 Valor do serviço</h3>
+    <input type="number" id="valor-servico" placeholder="Ex: 1500" oninput="calcularComissao()">
+    <p style="font-size:12px;margin-top:6px;">💡 Comissão FixMoç (10%): <span id="comissao">0 MT</span></p>
+  </div>
+  <div class="pedido-card">
+    <h3>💳 Método</h3>
+    <button onclick="pagarCom('M-Pesa')">📱 M-Pesa</button>
+    <button onclick="pagarCom('e-Mola')">📱 e-Mola</button>
+    <button onclick="pagarCom('mKesh')">📱 mKesh</button>
+    <button onclick="pagarCom('Dinheiro')" style="background:linear-gradient(135deg,#009900,#006600);">💵 Dinheiro em mão</button>
+  </div>
+  <button class="btn-voltar" onclick="mostrarHome()">← Voltar</button>
+</div>
+
+<!-- PAGAMENTO CONFIRMADO -->
+<div id="tela-pagamento-confirmado">
+  <div class="tela-central">
+    <div class="icone-grande">💳</div>
+    <h2>Pagamento Registado!</h2>
+    <div class="pedido-card" style="width:100%;text-align:left;margin-top:16px;">
+      <p id="resumo-pagamento"></p><div class="divisor"></div><p>✅ Registado com sucesso!</p>
+    </div>
+    <button onclick="mostrarAvaliacaoTela(null)" style="width:100%;margin-top:8px;">⭐ Avaliar Técnico</button>
+    <button class="btn-voltar" onclick="mostrarHome()" style="width:100%;">🏠 Voltar ao início</button>
+  </div>
+</div>
+
+<!-- HISTÓRICO -->
+<div id="tela-historico">
+  <h2>📋 Histórico de Pedidos</h2>
+  <div id="lista-historico"><p style="color:var(--texto2);text-align:center;">A carregar... ⏳</p></div>
+  <button class="btn-voltar" onclick="mostrarHome()">← Voltar</button>
+</div>
+
+<!-- ADMIN -->
+<div id="tela-admin">
+  <h2>⚙️ Painel Admin</h2>
+  <div class="sb-badge">⚡ Dados em tempo real</div>
+  <div class="pedido-card card-destaque">
+    <h3>📊 Estatísticas</h3>
+    <p>👥 Utilizadores: <strong id="admin-users" style="color:var(--verde)">—</strong></p>
+    <p>👷 Técnicos: <strong id="admin-tecnicos" style="color:var(--verde)">—</strong></p>
+    <p>📋 Pedidos pendentes: <strong id="admin-pedidos" style="color:var(--verde)">—</strong></p>
+    <p>📢 Reclamações: <strong id="admin-reclamacoes" style="color:var(--verde)">—</strong></p>
+  </div>
+  <div class="pedido-card">
+    <h3>👷 Técnicos a aguardar aprovação</h3>
+    <div id="admin-lista-tecnicos"><p style="color:var(--texto2)">A carregar...</p></div>
+  </div>
+  <button class="btn-voltar" onclick="mostrarHome()">← Voltar</button>
+</div>
+
+<!-- DEFINIÇÕES -->
+<div id="tela-definicoes">
+  <h2>⚙️ Definições</h2>
+  <div class="pedido-card">
+    <h3>👤 A minha conta</h3>
+    <p id="def-email" style="color:var(--verde);margin-bottom:12px;">—</p>
+    <button onclick="mostrarMudarSenha()">🔑 Mudar Senha</button>
+    <button class="btn-perigo" onclick="eliminarPerfil()">🗑️ Eliminar Conta</button>
+    <button class="btn-voltar" onclick="fazerLogout()">🚪 Sair da conta</button>
+  </div>
+  <div class="pedido-card">
+    <h3>📄 Legal</h3>
+    <button onclick="mostrarTermos()">📜 Termos de Uso</button>
+    <button onclick="mostrarPrivacidade()">🔒 Política de Privacidade</button>
+    <button onclick="mostrarSobre()">ℹ️ Sobre o FixMoç</button>
+    <button onclick="mostrarSuporte()">📢 Suporte</button>
+  </div>
+  <button class="btn-voltar" onclick="mostrarHome()">← Voltar</button>
+</div>
+
+<!-- MUDAR SENHA -->
+<div id="tela-mudar-senha">
+  <h2>🔑 Mudar Senha</h2>
+  <div class="pedido-card">
+    <input type="password" id="senha-nova" placeholder="Nova senha (mín. 6 caracteres)">
+    <input type="password" id="senha-confirmar" placeholder="Confirmar nova senha">
+    <button onclick="confirmarMudarSenha()">✅ Confirmar</button>
+  </div>
+  <button class="btn-voltar" onclick="mostrarDefinicoes()">← Voltar</button>
+</div>
+
+<!-- SENHA ALTERADA -->
+<div id="tela-senha-alterada">
+  <div class="tela-central">
+    <div class="icone-grande">🔑</div>
+    <h2>Senha Alterada!</h2>
+    <p>Alterada com sucesso!</p>
+    <button onclick="mostrarHome()" style="margin-top:20px;">🏠 Voltar ao início</button>
+  </div>
+</div>
+
+<!-- TERMOS -->
+<div id="tela-termos">
+  <h2>📜 Termos de Uso</h2>
+  <div class="pedido-card">
+    <p>1. O FixMoç conecta técnicos e clientes em Moçambique.</p>
+    <p>2. O FixMoç cobra 10% de comissão por cada serviço fechado.</p>
+    <p>3. Os técnicos devem ser verificados antes de prestar serviços.</p>
+    <p>4. O FixMoç não se responsabiliza por danos causados pelos técnicos.</p>
+    <p>5. Contacto: isacjazznur1@gmail.com</p>
+  </div>
+  <button class="btn-voltar" onclick="mostrarDefinicoes()">← Voltar</button>
+</div>
+
+<!-- PRIVACIDADE -->
+<div id="tela-privacidade">
+  <h2>🔒 Política de Privacidade</h2>
+  <div class="pedido-card">
+    <p>1. Dados recolhidos para melhorar os serviços.</p>
+    <p>2. Os teus dados não são vendidos a terceiros.</p>
+    <p>3. Protegidos pelo Supabase (encriptação SSL).</p>
+    <p>4. Podes eliminar a conta a qualquer momento.</p>
+    <p>5. Contacto: isacjazznur1@gmail.com</p>
+  </div>
+  <button class="btn-voltar" onclick="mostrarDefinicoes()">← Voltar</button>
+</div>
+
+<!-- SOBRE -->
+<div id="tela-sobre">
+  <h2>ℹ️ Sobre o FixMoç</h2>
+  <div class="perfil-foto">
+    <h1 style="font-family:'Syne',sans-serif;font-size:48px;color:var(--verde);">FixMoç</h1>
+    <p>Versão 2.0 — Supabase Edition</p><p>🇲🇿 Feito em Moçambique</p>
+  </div>
+  <div class="pedido-card">
+    <p>👷 Fundador: Isac Jazznur</p>
+    <p>📞 87 479 3972</p>
+    <p>📧 isacjazznur1@gmail.com</p>
+    <p>🗄️ Backend: Supabase (PostgreSQL)</p>
+  </div>
+  <button class="btn-voltar" onclick="mostrarDefinicoes()">← Voltar</button>
+</div>
+
+<!-- MENU INFERIOR -->
+<div id="menu-nav">
+  <button onclick="mostrarHome()" id="menu-inicio"><span class="menu-icon">🏠</span>Início</button>
+  <button onclick="mostrarHistorico()" id="menu-pedidos"><span class="menu-icon">📋</span>Pedidos</button>
+  <button onclick="mostrarNotificacoes()" id="menu-notif"><span class="menu-icon">🔔</span>Alertas</button>
+  <button onclick="mostrarChat()" id="menu-chat"><span class="menu-icon">💬</span>Chat</button>
+  <button onclick="mostrarDefinicoes()" id="menu-def"><span class="menu-icon">⚙️</span>Definições</button>
+</div>
+
+<script>
+// ============================================
+// FixMoç v2.0 — Backend Supabase Real
+// ============================================
+const SUPABASE_URL = 'https://xlkkzdtitxiamttaqhfy.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_XAvOrmQPHgSca8lXCjfhUg_squa2CSe';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const APP = { user:null, perfil:null, servicoEscolhido:'', servicoAgendado:'', notaAvaliacao:0, pedidoAvaliar:null };
+
+// INIT
+window.addEventListener('load', async () => {
+  const { data:{ session } } = await sb.auth.getSession();
+  if (session) { APP.user = session.user; await carregarPerfil(); }
+  else mostrarInicio();
+
+  sb.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'SIGNED_IN' && session) { APP.user = session.user; await carregarPerfil(); }
+    else if (event === 'SIGNED_OUT') { APP.user=null; APP.perfil=null; mostrarInicio(); }
+  });
+});
+
+async function carregarPerfil() {
+  try {
+    const { data } = await sb.from('utilizadores').select('*').eq('uid', APP.user.id).single();
+    if (data) {
+      APP.perfil = data;
+      if (data.tipo === 'tecnico') { mostrarTecnico(); carregarPedidosTecnico(); }
+      else mostrarHome();
+      atualizarSaudacao();
+    } else mostrarHome();
+  } catch(e) { mostrarHome(); }
+}
+
+// AUTH
+async function fazerLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const senha = document.getElementById('login-senha').value;
+  if (!email||!senha) { mostrarToast('⚠️ Preenche email e senha!','erro'); return; }
+  mostrarLoading(true);
+  const { error } = await sb.auth.signInWithPassword({ email, password:senha });
+  mostrarLoading(false);
+  if (error) mostrarToast(traduzirErro(error.message),'erro');
+  else mostrarToast('✅ Bem-vindo de volta!');
+}
+
+async function criarConta() {
+  const nome=document.getElementById('reg-nome').value.trim();
+  const tel=document.getElementById('reg-tel').value.trim();
+  const email=document.getElementById('reg-email').value.trim();
+  const senha=document.getElementById('reg-senha').value;
+  const tipo=document.getElementById('tipo-utilizador').value;
+  const prov=document.getElementById('provincia-tecnico').value;
+  if (!nome||!tel||!email||!senha) { mostrarToast('⚠️ Preenche todos os campos!','erro'); return; }
+  if (senha.length<6) { mostrarToast('⚠️ Senha com mínimo 6 caracteres!','erro'); return; }
+  mostrarLoading(true);
+  const { data, error } = await sb.auth.signUp({ email, password:senha });
+  if (error) { mostrarLoading(false); mostrarToast(traduzirErro(error.message),'erro'); return; }
+  await sb.from('utilizadores').insert({ uid:data.user.id, nome, tel, email, tipo, provincia:prov, verificado:false, avaliacao:0, total_servicos:0, criado_em:new Date().toISOString() });
+  mostrarLoading(false);
+  mostrarToast('✅ Conta criada! Confirma o teu email se pedido.');
+}
+
+async function fazerLogout() {
+  if (!confirm('Tens a certeza que queres sair?')) return;
+  await sb.auth.signOut();
+  mostrarToast('👋 Sessão terminada.');
+}
+
+async function eliminarPerfil() {
+  if (!confirm('🗑️ Eliminar conta? IRREVERSÍVEL.')) return;
+  mostrarLoading(true);
+  await sb.from('utilizadores').delete().eq('uid', APP.user.id);
+  await sb.auth.signOut();
+  mostrarLoading(false);
+}
+
+async function confirmarMudarSenha() {
+  const nova=document.getElementById('senha-nova').value;
+  const conf=document.getElementById('senha-confirmar').value;
+  if (!nova||!conf) { mostrarToast('⚠️ Preenche os campos!','erro'); return; }
+  if (nova!==conf) { mostrarToast('⚠️ Senhas não coincidem!','erro'); return; }
+  if (nova.length<6) { mostrarToast('⚠️ Mínimo 6 caracteres!','erro'); return; }
+  mostrarLoading(true);
+  const { error } = await sb.auth.updateUser({ password:nova });
+  mostrarLoading(false);
+  if (error) mostrarToast('Erro ao mudar senha.','erro');
+  else { mostrarToast('✅ Senha alterada!'); mostrarTela('tela-senha-alterada'); }
+}
+
+// PEDIDOS
+async function pedidoEnviado() {
+  if (!APP.user) { mostrarToast('⚠️ Faz login primeiro!','erro'); mostrarLogin(); return; }
+  const nome=document.getElementById('pedido-nome').value.trim();
+  const tel=document.getElementById('pedido-tel').value.trim();
+  const prov=document.getElementById('provincia-pedido').value;
+  const bairro=document.getElementById('pedido-bairro').value.trim();
+  const desc=document.getElementById('pedido-descricao').value.trim();
+  const urg=document.getElementById('pedido-urgencia').value;
+  if (!nome||!tel||!prov) { mostrarToast('⚠️ Preenche nome, telefone e província!','erro'); return; }
+  mostrarLoading(true);
+  const { error } = await sb.from('pedidos').insert({ cliente_uid:APP.user.id, cliente_nome:nome, cliente_tel:tel, provincia:prov, bairro, descricao:desc, urgencia:urg, servico:APP.servicoEscolhido, status:'pendente', criado_em:new Date().toISOString() });
+  mostrarLoading(false);
+  if (error) mostrarToast('Erro: '+error.message,'erro');
+  else { mostrarToast('✅ Pedido enviado!'); mostrarTela('tela-sucesso'); }
+}
+
+async function carregarPedidosTecnico() {
+  if (!APP.perfil) return;
+  const container=document.getElementById('lista-pedidos-tecnico');
+  const { data } = await sb.from('pedidos').select('*').eq('provincia',APP.perfil.provincia).eq('status','pendente').order('criado_em',{ascending:false});
+  if (!data||data.length===0) { container.innerHTML='<div class="pedido-card"><p style="text-align:center;color:var(--texto2);">Nenhum pedido na tua zona. 👍</p></div>'; return; }
+  container.innerHTML='';
+  data.forEach(p => {
+    const uc=p.urgencia==='urgente'?'urgencia-urgente':p.urgencia==='sem-pressa'?'urgencia-sem-pressa':'urgencia-normal';
+    const ul=p.urgencia==='urgente'?'🔴 Urgente':p.urgencia==='sem-pressa'?'🟢 Sem pressa':'🟡 Normal';
+    container.innerHTML+=`<div class="pedido-card"><h3>${p.servico}</h3><p>📍 ${p.provincia}${p.bairro?' · '+p.bairro:''}</p><p>📝 ${p.descricao||'Sem descrição'}</p><p class="${uc}">${ul}</p><p>👤 ${p.cliente_nome}</p><div style="display:flex;gap:8px;margin-top:10px;"><button onclick="aceitarPedido('${p.id}','${p.cliente_tel}','${p.provincia}')" style="margin:0;flex:1;">✅ Aceitar</button><button class="btn-voltar" style="margin:0;flex:1;">❌ Recusar</button></div></div>`;
+  });
+}
+
+async function aceitarPedido(id,tel,prov) {
+  if (!APP.user||!APP.perfil) return;
+  mostrarLoading(true);
+  const { error } = await sb.from('pedidos').update({ status:'aceite', tecnico_uid:APP.user.id, tecnico_nome:APP.perfil.nome, tecnico_tel:APP.perfil.tel, aceito_em:new Date().toISOString() }).eq('id',id);
+  mostrarLoading(false);
+  if (error) { mostrarToast('Erro ao aceitar.','erro'); return; }
+  document.getElementById('tel-cliente-aceite').textContent=tel||'—';
+  document.getElementById('prov-cliente-aceite').textContent=prov||'—';
+  mostrarTela('tela-aceite'); mostrarToast('✅ Pedido aceite!');
+}
+
+async function mostrarHistorico() {
+  mostrarTela('tela-historico'); mostrarMenu('menu-pedidos');
+  if (!APP.user) return;
+  const container=document.getElementById('lista-historico');
+  container.innerHTML='<p style="color:var(--texto2);text-align:center;">A carregar... ⏳</p>';
+  const { data } = await sb.from('pedidos').select('*').eq('cliente_uid',APP.user.id).order('criado_em',{ascending:false});
+  if (!data||data.length===0) { container.innerHTML='<div class="pedido-card"><p style="text-align:center;color:var(--texto2);">Ainda não fizeste nenhum pedido.</p></div>'; return; }
+  container.innerHTML='';
+  data.forEach(p => {
+    const cor=p.status==='concluido'?'#00e676':p.status==='aceite'?'#2979ff':p.status==='cancelado'?'#ff3d00':'#ffab00';
+    const label=p.status==='concluido'?'🟢 Concluído':p.status==='aceite'?'🔵 Aceite':p.status==='cancelado'?'🔴 Cancelado':'🟡 Pendente';
+    const df=p.criado_em?new Date(p.criado_em).toLocaleDateString('pt-PT'):'—';
+    container.innerHTML+=`<div class="pedido-card"><h3>${p.servico}</h3><p>📍 ${p.provincia}</p><p>📅 ${df}${p.tecnico_nome?' · 👷 '+p.tecnico_nome:''}</p><p style="color:${cor};font-weight:600;">${label}</p>${p.status==='pendente'?`<button class="btn-perigo" onclick="cancelarPedidoId('${p.id}')" style="margin-top:10px;width:100%;">❌ Cancelar</button>`:''}${p.status==='aceite'?`<button onclick="mostrarAvaliacaoTela('${p.id}')" style="margin-top:10px;width:100%;">⭐ Avaliar</button>`:''}</div>`;
+  });
+}
+
+async function cancelarPedidoId(id) {
+  if (!confirm('Cancelar este pedido?')) return;
+  await sb.from('pedidos').update({status:'cancelado'}).eq('id',id);
+  mostrarToast('Pedido cancelado.'); mostrarHistorico();
+}
+
+async function confirmarAgendamento() {
+  const data=document.getElementById('data-servico').value;
+  const hora=document.getElementById('hora-servico').value;
+  if (!data) { mostrarToast('⚠️ Selecciona a data!','erro'); return; }
+  if (!APP.user) { mostrarToast('⚠️ Faz login primeiro!','erro'); return; }
+  mostrarLoading(true);
+  const { error } = await sb.from('agendamentos').insert({ cliente_uid:APP.user.id, servico:APP.servicoAgendado, data, hora, criado_em:new Date().toISOString() });
+  mostrarLoading(false);
+  if (error) { mostrarToast('Erro ao agendar.','erro'); return; }
+  const df=new Date(data).toLocaleDateString('pt-PT',{day:'2-digit',month:'2-digit',year:'numeric'});
+  document.getElementById('resumo-agendamento').textContent=`✅ ${APP.servicoAgendado} agendado para ${df} às ${hora}`;
+  mostrarToast('📅 Agendamento confirmado!'); mostrarTela('tela-agendamento-confirmado');
+}
+
+function mostrarAvaliacaoTela(pedidoId) {
+  APP.pedidoAvaliar=pedidoId; APP.notaAvaliacao=0;
+  document.querySelectorAll('#grupo-estrelas .estrela').forEach(e=>e.classList.remove('ativa'));
+  document.getElementById('nota-avaliacao').textContent='Toca nas estrelas para avaliar';
+  document.getElementById('comentario-avaliacao').value='';
+  mostrarTela('tela-avaliacao');
+}
+
+function avaliar(nota) {
+  APP.notaAvaliacao=nota;
+  document.querySelectorAll('#grupo-estrelas .estrela').forEach((e,i)=>e.classList.toggle('ativa',i<nota));
+  const msgs=['','😞 Péssimo','😕 Mau','😐 Razoável','😊 Bom','🤩 Excelente!'];
+  document.getElementById('nota-avaliacao').textContent=msgs[nota];
+}
+
+async function enviarAvaliacao() {
+  if (APP.notaAvaliacao===0) { mostrarToast('⚠️ Selecciona pelo menos 1 estrela!','erro'); return; }
+  const comentario=document.getElementById('comentario-avaliacao').value;
+  mostrarLoading(true);
+  const { error } = await sb.from('avaliacoes').insert({ pedido_id:APP.pedidoAvaliar, cliente_uid:APP.user?.id, nota:APP.notaAvaliacao, comentario, criado_em:new Date().toISOString() });
+  mostrarLoading(false);
+  if (error) mostrarToast('Erro ao enviar avaliação.','erro');
+  else { mostrarToast('⭐ Avaliação enviada!'); mostrarTela('tela-avaliacao-enviada'); }
+}
+
+async function enviarReclamacao() {
+  const nome=document.getElementById('suporte-nome').value.trim();
+  const msg=document.getElementById('suporte-mensagem').value.trim();
+  const tipo=document.getElementById('suporte-tipo').value;
+  if (!nome||!msg) { mostrarToast('⚠️ Preenche nome e mensagem!','erro'); return; }
+  mostrarLoading(true);
+  const { error } = await sb.from('reclamacoes').insert({ nome, tipo, mensagem:msg, cliente_uid:APP.user?.id||null, status:'pendente', criado_em:new Date().toISOString() });
+  mostrarLoading(false);
+  if (error) mostrarToast('Erro ao enviar.','erro');
+  else { mostrarToast('✅ Reclamação enviada!'); mostrarTela('tela-reclamacao-enviada'); }
+}
+
+async function verificarAdmin() {
+  if (!APP.user) { mostrarToast('⚠️ Faz login primeiro!','erro'); return; }
+  const { data } = await sb.from('admins').select('*').eq('uid',APP.user.id).single();
+  if (!data) { mostrarToast('⛔ Sem permissão de admin.','erro'); return; }
+  const [users,pedidos,reclam] = await Promise.all([
+    sb.from('utilizadores').select('tipo'),
+    sb.from('pedidos').select('id').eq('status','pendente'),
+    sb.from('reclamacoes').select('id').eq('status','pendente')
+  ]);
+  const tecnicos=(users.data||[]).filter(u=>u.tipo==='tecnico');
+  document.getElementById('admin-users').textContent=(users.data||[]).length;
+  document.getElementById('admin-tecnicos').textContent=tecnicos.length;
+  document.getElementById('admin-pedidos').textContent=(pedidos.data||[]).length;
+  document.getElementById('admin-reclamacoes').textContent=(reclam.data||[]).length;
+  const { data:porAprovar } = await sb.from('utilizadores').select('*').eq('tipo','tecnico').eq('verificado',false);
+  const lista=document.getElementById('admin-lista-tecnicos');
+  if (!porAprovar||porAprovar.length===0) { lista.innerHTML='<p style="color:var(--texto2)">Nenhum pendente. ✅</p>'; }
+  else { lista.innerHTML=''; porAprovar.forEach(t=>{ lista.innerHTML+=`<div class="pedido-card"><p>👤 ${t.nome}</p><p>📞 ${t.tel} · 📍 ${t.provincia}</p><div style="display:flex;gap:8px;margin-top:8px;"><button onclick="aprovarTecnico('${t.uid}')" style="margin:0;flex:1;background:linear-gradient(135deg,#009900,#006600);">✅ Aprovar</button><button class="btn-perigo" style="margin:0;flex:1;">❌ Rejeitar</button></div></div>`; }); }
+  mostrarTela('tela-admin'); esconderMenu();
+}
+
+async function aprovarTecnico(uid) {
+  await sb.from('utilizadores').update({verificado:true}).eq('uid',uid);
+  mostrarToast('✅ Técnico aprovado!'); verificarAdmin();
+}
+
+function traduzirErro(msg) {
+  if (msg.includes('Invalid login')) return '⚠️ Email ou senha incorrectos.';
+  if (msg.includes('already registered')) return '⚠️ Email já registado.';
+  if (msg.includes('Password')) return '⚠️ Senha com mínimo 6 caracteres.';
+  return '⚠️ '+msg;
+}
+
+// UI
+function mostrarToast(msg,tipo) {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='show'+(tipo==='erro'?' erro':'');
+  clearTimeout(window._tt); window._tt=setTimeout(()=>{t.className='';},3500);
+}
+function mostrarLoading(show) { document.getElementById('loading-overlay').classList.toggle('show',show); }
+function mostrarTela(id) { document.querySelectorAll('[id^="tela-"]').forEach(t=>t.style.display='none'); const el=document.getElementById(id); if(el){el.style.display='block';window.scrollTo(0,0);} }
+function mostrarMenu(ativoId) { document.getElementById('menu-nav').style.display='flex'; document.querySelectorAll('#menu-nav button').forEach(b=>b.classList.remove('ativo')); if(ativoId){const b=document.getElementById(ativoId);if(b)b.classList.add('ativo');} }
+function esconderMenu() { document.getElementById('menu-nav').style.display='none'; }
+function mostrarInicio() { mostrarTela('tela-inicio'); esconderMenu(); }
+function mostrarLogin() { mostrarTela('tela-login'); esconderMenu(); }
+function mostrarRegisto() { mostrarTela('tela-registo'); esconderMenu(); }
+function mostrarTermos() { mostrarTela('tela-termos'); }
+function mostrarPrivacidade() { mostrarTela('tela-privacidade'); }
+function mostrarSobre() { mostrarTela('tela-sobre'); }
+function mostrarMudarSenha() { mostrarTela('tela-mudar-senha'); }
+function mostrarNotificacoes() { mostrarTela('tela-notificacoes'); mostrarMenu('menu-notif'); }
+function mostrarSuporte() { mostrarTela('tela-suporte'); mostrarMenu('menu-pedidos'); }
+function mostrarChat() { mostrarTela('tela-chat'); mostrarMenu('menu-chat'); }
+function mostrarHome() { mostrarTela('tela-home'); mostrarMenu('menu-inicio'); atualizarSaudacao(); }
+function mostrarTecnico() { mostrarTela('tela-tecnico'); mostrarMenu('menu-inicio'); }
+function mostrarDefinicoes() { mostrarTela('tela-definicoes'); mostrarMenu('menu-def'); if(APP.user)document.getElementById('def-email').textContent='📧 '+APP.user.email; }
+function mostrarPerfilTecnico() {
+  mostrarTela('tela-perfil-tecnico');
+  if(APP.perfil){const p=APP.perfil;
+    document.getElementById('perfil-nome').textContent=p.nome||'—';
+    document.getElementById('perfil-tel').textContent='📞 '+(p.tel||'—');
+    document.getElementById('perfil-prov').textContent='📍 '+(p.provincia||'—');
+    document.getElementById('perfil-email').textContent='📧 '+(p.email||'—');
+    document.getElementById('perfil-verificado').textContent=p.verificado?'✅ Verificado pelo FixMoç':'⏳ Aguarda verificação';
+    document.getElementById('perfil-avaliacao').textContent=p.avaliacao>0?'⭐ '+Number(p.avaliacao).toFixed(1):'⭐ Sem avaliações ainda';
+    document.getElementById('perfil-servicos').textContent='✅ Serviços feitos: '+(p.total_servicos||0);
+    document.getElementById('perfil-membro').textContent='📅 Membro desde: '+(p.criado_em?new Date(p.criado_em).getFullYear():2026);
+  }
+}
+function atualizarSaudacao() { const el=document.getElementById('saudacao-home'); if(el&&APP.perfil?.nome){const n=APP.perfil.nome.split(' ')[0];el.textContent=`Olá, ${n}! Bem-vindo ao FixMoç 👋`;} }
+function mostrarPedido(servico) { if(!APP.user){mostrarToast('⚠️ Faz login para pedir!','erro');mostrarLogin();return;} APP.servicoEscolhido=servico; document.getElementById('servico-escolhido').textContent=servico; if(APP.perfil){document.getElementById('pedido-nome').value=APP.perfil.nome||'';document.getElementById('pedido-tel').value=APP.perfil.tel||'';} mostrarTela('tela-pedido'); }
+function mostrarAgendamento() { APP.servicoAgendado=APP.servicoEscolhido||'Serviço'; document.getElementById('servico-agendado').textContent=APP.servicoAgendado; mostrarTela('tela-agendamento'); }
+var _sp='';
+function mostrarPagamento(s){_sp=s||'';document.getElementById('servico-pagar').textContent=_sp;document.getElementById('valor-servico').value='';document.getElementById('comissao').textContent='0 MT';mostrarTela('tela-pagamento');}
+function calcularComissao(){const v=parseFloat(document.getElementById('valor-servico').value)||0;document.getElementById('comissao').textContent=(v*0.1).toFixed(0)+' MT';}
+function pagarCom(m){const v=document.getElementById('valor-servico').value;if(!v||parseFloat(v)<=0){mostrarToast('⚠️ Introduz o valor!','erro');return;}const c=(parseFloat(v)*0.1).toFixed(0);document.getElementById('resumo-pagamento').textContent=`💳 ${m} · ${parseFloat(v).toLocaleString('pt-PT')} MT · Comissão: ${c} MT`;mostrarTela('tela-pagamento-confirmado');}
+function enviarMensagem(){const c=document.getElementById('campo-mensagem');const t=c.value.trim();if(!t)return;const cm=document.getElementById('chat-mensagens');const d=document.createElement('div');d.className='mensagem-cliente';d.innerHTML='<p>'+t+'</p>';cm.appendChild(d);c.value='';cm.scrollTop=cm.scrollHeight;setTimeout(()=>{const rs=['Ok, entendido! 👍','Perfeito, confirmo.','Sem problema!','Recebido!'];const r=document.createElement('div');r.className='mensagem-tecnico';r.innerHTML='<p>'+rs[Math.floor(Math.random()*rs.length)]+'</p>';cm.appendChild(r);cm.scrollTop=cm.scrollHeight;},1200);}
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('campo-mensagem')===document.activeElement)enviarMensagem();});
+</script>
+</body>
+</html>
