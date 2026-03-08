@@ -94,28 +94,88 @@ textarea{resize:vertical;min-height:80px}
   <button class="bv" onclick="ir('t-inicio')">← Voltar</button>
 </div>
 
-<!-- REGISTO -->
+<!-- REGISTO CLIENTE -->
 <div class="tela" id="t-registo">
-  <h2>Criar conta</h2>
-  <div class="badge">⚡ Dados guardados</div>
+  <h2>👤 Criar conta Cliente</h2>
+  <div class="badge">⚡ Registo rápido</div>
   <input type="text" id="r-nome" placeholder="O teu nome completo">
   <input type="tel" id="r-tel" placeholder="Telefone (ex: 87 479 3972)">
   <input type="email" id="r-email" placeholder="O teu email" autocomplete="email">
   <input type="password" id="r-senha" placeholder="Senha (mínimo 6 caracteres)" autocomplete="new-password">
   <select id="r-prov">
-    <option value="">Selecciona a tua provincia</option>
-    <option>Maputo Cidade</option><option>Maputo Provincia</option><option>Matola</option>
+    <option value="">Selecciona a tua província</option>
+    <option>Maputo Cidade</option><option>Maputo Província</option><option>Matola</option>
     <option>Gaza</option><option>Inhambane</option><option>Sofala (Beira)</option>
     <option>Manica</option><option>Tete</option><option>Zambézia (Quelimane)</option>
     <option>Nampula</option><option>Cabo Delgado</option><option>Niassa</option>
   </select>
-  <select id="r-tipo">
-    <option value="cliente">Sou Cliente</option>
-    <option value="tecnico">Sou Técnico</option>
-  </select>
-  <button onclick="registar()">✅ Criar conta</button>
+  <button onclick="registar('cliente')">✅ Criar conta</button>
+  <p style="text-align:center;margin-top:8px;">És técnico? <a href="#" onclick="ir('t-registo-t')">Regista-te aqui</a></p>
+  <p style="text-align:center;">Já tens conta? <a href="#" onclick="ir('t-login')">Entrar</a></p>
+  <button class="bv" onclick="ir('t-inicio')">← Voltar</button>
+</div>
+
+<!-- REGISTO TECNICO -->
+<div class="tela" id="t-registo-t">
+  <h2>🔧 Registo de Técnico</h2>
+  <div class="badge">⚡ Sujeito a aprovação</div>
+  <div class="card">
+    <h3>📋 Dados pessoais</h3>
+    <input type="text" id="rt-nome" placeholder="Nome completo">
+    <input type="tel" id="rt-tel" placeholder="Telefone (ex: 87 479 3972)">
+    <input type="email" id="rt-email" placeholder="Email" autocomplete="email">
+    <input type="password" id="rt-senha" placeholder="Senha (mínimo 6 caracteres)" autocomplete="new-password">
+  </div>
+  <div class="card">
+    <h3>🔧 Dados profissionais</h3>
+    <select id="rt-espec">
+      <option value="">Selecciona a tua especialidade</option>
+      <option>Eletricista</option><option>Canalizador</option><option>Carpinteiro</option>
+      <option>Informatica</option><option>Pedreiro</option><option>Limpeza</option>
+      <option>Pintor</option><option>Ar Condicionado</option><option>Mecanico</option>
+      <option>Eletrodomesticos</option><option>Serralheiro</option><option>Vidraceiro</option>
+      <option>Jardineiro</option><option>Babysitter</option><option>Cozinheiro</option><option>Mudancas</option>
+    </select>
+    <select id="rt-exp">
+      <option value="">Anos de experiência</option>
+      <option value="menos1">Menos de 1 ano</option>
+      <option value="1-3">1 a 3 anos</option>
+      <option value="3-5">3 a 5 anos</option>
+      <option value="5-10">5 a 10 anos</option>
+      <option value="mais10">Mais de 10 anos</option>
+    </select>
+    <select id="rt-prov">
+      <option value="">Zona de actuação</option>
+      <option>Maputo Cidade</option><option>Maputo Província</option><option>Matola</option>
+      <option>Gaza</option><option>Inhambane</option><option>Sofala (Beira)</option>
+      <option>Manica</option><option>Tete</option><option>Zambézia (Quelimane)</option>
+      <option>Nampula</option><option>Cabo Delgado</option><option>Niassa</option>
+    </select>
+    <textarea id="rt-bio" placeholder="Descreve a tua experiência e serviços que ofereces..." rows="3"></textarea>
+  </div>
+  <div class="card" style="border-color:rgba(255,171,0,0.4);background:rgba(255,171,0,0.05);">
+    <h3>⚠️ Processo de aprovação</h3>
+    <p>Após o registo, a tua conta será analisada pelo FixMoç em até 48h.</p>
+  </div>
+  <button onclick="registarTecnico()">✅ Enviar candidatura</button>
   <p style="text-align:center;margin-top:8px;">Já tens conta? <a href="#" onclick="ir('t-login')">Entrar</a></p>
   <button class="bv" onclick="ir('t-inicio')">← Voltar</button>
+</div>
+
+<!-- CANDIDATURA OK -->
+<div class="tela" id="t-registo-t-ok">
+  <div class="centro">
+    <div class="icone">📋</div>
+    <h2>Candidatura Enviada!</h2>
+    <p>A tua candidatura foi recebida!</p><br>
+    <div class="card" style="width:100%;text-align:left;">
+      <p>⏳ Estado: <strong style="color:#ffab00;">A aguardar aprovação</strong></p>
+      <div class="div"></div>
+      <p>Serás contactado em até 48 horas:</p>
+      <p style="color:var(--v);font-weight:700;">📞 87 479 3972</p>
+    </div>
+    <button onclick="ir('t-inicio')" style="margin-top:14px;">🏠 Voltar ao início</button>
+  </div>
 </div>
 
 <!-- HOME -->
@@ -673,12 +733,11 @@ async function login() {
   else toast('✅ Bem-vindo de volta!');
 }
 
-async function registar() {
+async function registar(tipo) {
   var nome = document.getElementById('r-nome').value.trim();
   var tel = document.getElementById('r-tel').value.trim();
   var email = document.getElementById('r-email').value.trim();
   var senha = document.getElementById('r-senha').value;
-  var tipo = document.getElementById('r-tipo').value;
   var prov = document.getElementById('r-prov').value;
   if (!nome || !tel || !email || !senha) { toast('⚠️ Preenche todos os campos!', 1); return; }
   if (senha.length < 6) { toast('⚠️ Senha com mínimo 6 caracteres!', 1); return; }
@@ -688,12 +747,40 @@ async function registar() {
   if (data.user) {
     await db.from('utilizadores').insert({
       uid: data.user.id, nome: nome, tel: tel, email: email,
-      tipo: tipo, provincia: prov, verificado: false,
+      tipo: tipo || 'cliente', provincia: prov, verificado: false,
       avaliacao: 0, total_servicos: 0, criado_em: new Date().toISOString()
     });
   }
   loading(0);
   toast('✅ Conta criada! A entrar...');
+}
+
+async function registarTecnico() {
+  var nome = document.getElementById('rt-nome').value.trim();
+  var tel = document.getElementById('rt-tel').value.trim();
+  var email = document.getElementById('rt-email').value.trim();
+  var senha = document.getElementById('rt-senha').value;
+  var espec = document.getElementById('rt-espec').value;
+  var exp = document.getElementById('rt-exp').value;
+  var prov = document.getElementById('rt-prov').value;
+  var bio = document.getElementById('rt-bio').value.trim();
+  if (!nome || !tel || !email || !senha) { toast('⚠️ Preenche os dados pessoais!', 1); return; }
+  if (!espec || !prov) { toast('⚠️ Preenche a especialidade e zona!', 1); return; }
+  if (senha.length < 6) { toast('⚠️ Senha com mínimo 6 caracteres!', 1); return; }
+  loading(1);
+  var { data, error } = await db.auth.signUp({ email: email, password: senha });
+  if (error) { loading(0); toast(tradErr(error.message), 1); return; }
+  if (data.user) {
+    await db.from('utilizadores').insert({
+      uid: data.user.id, nome: nome, tel: tel, email: email,
+      tipo: 'tecnico', provincia: prov, verificado: false,
+      especialidade: espec, experiencia: exp, bio: bio,
+      avaliacao: 0, total_servicos: 0, criado_em: new Date().toISOString()
+    });
+  }
+  loading(0);
+  mostrar('t-registo-t-ok');
+  toast('📋 Candidatura enviada!');
 }
 
 async function logout() {
