@@ -94,8 +94,8 @@ select option{background:var(--fundo3)} textarea{resize:vertical;min-height:90px
     <p>Conectamos técnicos e clientes<br>em todo o país</p>
   </div>
   <div class="botoes-inicio">
-    <button class="btn-cliente" onclick="APP.tipoEscolhido='cliente'; mostrarLogin()">👤 Sou Cliente</button>
-    <button class="btn-tecnico" onclick="APP.tipoEscolhido='tecnico'; mostrarLogin()">🔧 Sou Técnico</button>
+    <button class="btn-cliente" onclick="escolherTipo('cliente')">👤 Sou Cliente</button>
+    <button class="btn-tecnico" onclick="escolherTipo('tecnico')">🔧 Sou Técnico</button>
   </div>
   <p class="versao-link"><a href="#" onclick="verificarAdmin()">v2.0 Supabase</a></p>
 </div>
@@ -762,6 +762,7 @@ function mostrarTela(id) { document.querySelectorAll('[id^="tela-"]').forEach(t=
 function mostrarMenu(ativoId) { document.getElementById('menu-nav').style.display='flex'; document.querySelectorAll('#menu-nav button').forEach(b=>b.classList.remove('ativo')); if(ativoId){const b=document.getElementById(ativoId);if(b)b.classList.add('ativo');} }
 function esconderMenu() { document.getElementById('menu-nav').style.display='none'; }
 function mostrarInicio() { mostrarTela('tela-inicio'); esconderMenu(); }
+function escolherTipo(tipo) { APP.tipoEscolhido = tipo; mostrarLogin(); }
 function mostrarLogin() { mostrarTela('tela-login'); esconderMenu(); }
 function mostrarRegisto() { 
   mostrarTela('tela-registo'); esconderMenu(); 
