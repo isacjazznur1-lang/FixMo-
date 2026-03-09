@@ -3,23 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>FixMoç - Servicos Técnicos em Moçambique</title>
+<title>FixMoc - Servicos Tecnicos em Mocambique</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{--v:#00e676;--ve:#00b050;--vd:rgba(0,230,118,0.12);--az:#2979ff;--vm:#ff3d00;--f:#080c0e;--f2:#0f1518;--f3:#161d21;--f4:#1e272d;--b:#1f2c33;--t:#e8f0f4;--t2:#8fa3ad;--t3:#4d6672}
+:root{--v:#00e676;--ve:#00b050;--vd:rgba(0,230,118,0.12);--f:#080c0e;--f3:#161d21;--f4:#1e272d;--b:#1f2c33;--t:#e8f0f4;--t2:#8fa3ad;--t3:#4d6672}
 html,body{height:100%;background:var(--f);color:var(--t);font-family:Arial,sans-serif;font-size:15px;max-width:480px;margin:0 auto;overflow-x:hidden}
 .tela{display:none;padding:20px 16px 100px;min-height:100vh}
 #t-inicio{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:100vh;padding:40px 20px}
-.logo{font-size:60px;font-weight:900;color:var(--v);margin-bottom:8px}
-.sub{color:var(--t2);font-size:14px;margin:10px 0 40px}
-.bts{display:flex;flex-direction:column;gap:12px;width:100%;max-width:300px}
 h2{font-size:20px;font-weight:700;margin-bottom:16px;color:#fff}
 h3{font-size:14px;font-weight:600;margin-bottom:8px;color:var(--t)}
 p{font-size:14px;color:var(--t2);line-height:1.6;margin-bottom:4px}
 a{color:var(--v);text-decoration:none}
 button{display:block;width:100%;padding:14px;margin:8px 0;background:linear-gradient(135deg,var(--v),var(--ve));color:#000;font-size:14px;font-weight:700;border:none;border-radius:12px;cursor:pointer;touch-action:manipulation}
-button:active{opacity:.8;transform:scale(.98)}
+button:active{opacity:.8}
 .bv{background:var(--f3)!important;border:1px solid var(--b)!important;color:var(--t2)!important}
 .bp{background:linear-gradient(135deg,#ff3d00,#cc2200)!important;color:#fff!important}
 .ba{background:linear-gradient(135deg,#2979ff,#1a56dd)!important;color:#fff!important}
@@ -30,7 +27,8 @@ input:focus,textarea:focus,select:focus{border-color:var(--v)}
 select option{background:var(--f3)}
 textarea{resize:vertical;min-height:80px}
 .card{background:var(--f3);border:1px solid var(--b);border-radius:14px;padding:14px;margin:10px 0}
-.card-v{border-color:rgba(0,230,118,0.3);background:linear-gradient(135deg,var(--f3),rgba(0,230,118,0.04))}
+.cardv{border-color:rgba(0,230,118,0.3);background:linear-gradient(135deg,var(--f3),rgba(0,230,118,0.04))}
+.carda{border-color:rgba(255,171,0,0.4);background:rgba(255,171,0,0.04)}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}
 .grid button{background:var(--f3);border:1px solid var(--b);border-radius:12px;padding:16px 8px;font-size:13px;color:var(--t);font-weight:500;margin:0}
 .grid button:active{border-color:var(--v);color:var(--v)}
@@ -44,41 +42,55 @@ textarea{resize:vertical;min-height:80px}
 #menu button{background:none!important;border:none!important;color:var(--t3)!important;font-size:10px!important;font-weight:500!important;padding:6px 8px!important;width:auto!important;margin:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;gap:3px!important;border-radius:0!important}
 #menu button span{font-size:20px}
 #menu button.on{color:var(--v)!important}
-#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--f4);border:1px solid var(--b);color:var(--t);padding:11px 18px;border-radius:10px;font-size:13px;font-weight:500;z-index:9999;opacity:0;transition:all .25s;pointer-events:none;max-width:300px;text-align:center;white-space:pre-line}
+#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--f4);border:1px solid var(--b);color:var(--t);padding:11px 18px;border-radius:10px;font-size:13px;font-weight:500;z-index:9999;opacity:0;transition:all .25s;pointer-events:none;max-width:300px;text-align:center}
 #toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
-#toast.err{border-color:var(--vm);color:#ff8a80}
-#ov{display:none;position:fixed;inset:0;background:rgba(8,12,14,0.8);z-index:8888;align-items:center;justify-content:center;pointer-events:none}
-#ov.on{display:flex;pointer-events:all}
+#toast.err{border-color:#ff3d00;color:#ff8a80}
+#ov{display:none;position:fixed;inset:0;background:rgba(8,12,14,0.8);z-index:8888;align-items:center;justify-content:center}
+#ov.on{display:flex}
 .spin{width:38px;height:38px;border:3px solid var(--b);border-top-color:var(--v);border-radius:50%;animation:sp .7s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
 .badge{display:inline-block;background:var(--vd);border:1px solid rgba(0,230,118,.25);color:var(--v);font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:14px;letter-spacing:1px;text-transform:uppercase}
-.vu{color:#ff3d00;font-weight:600}
-.vn{color:#ffab00;font-weight:600}
-.vs{color:var(--v);font-weight:600}
-.avatar{font-size:60px;text-align:center;margin:10px 0}
-.bv2{display:inline-block;background:var(--vd);border:1px solid rgba(0,230,118,.3);color:var(--v);font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;margin-top:4px}
+.vu{color:#ff3d00;font-weight:600}.vn{color:#ffab00;font-weight:600}.vs{color:var(--v);font-weight:600}
+.bver{display:inline-block;background:var(--vd);border:1px solid rgba(0,230,118,.3);color:var(--v);font-size:10px;padding:3px 10px;border-radius:20px;margin-top:4px}
 .chat-m{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;min-height:160px;max-height:300px;overflow-y:auto}
-.mt{max-width:78%;padding:9px 13px;border-radius:14px;font-size:14px;background:var(--f4);border:1px solid var(--b);align-self:flex-start;border-bottom-left-radius:3px}
-.mc{max-width:78%;padding:9px 13px;border-radius:14px;font-size:14px;background:var(--vd);border:1px solid rgba(0,230,118,.2);color:var(--v);align-self:flex-end;border-bottom-right-radius:3px}
+.mt{max-width:78%;padding:9px 13px;border-radius:14px;font-size:14px;background:var(--f4);border:1px solid var(--b);align-self:flex-start}
+.mc{max-width:78%;padding:9px 13px;border-radius:14px;font-size:14px;background:var(--vd);border:1px solid rgba(0,230,118,.2);color:var(--v);align-self:flex-end}
 .chat-in{display:flex;gap:8px;align-items:center}
 .chat-in input{flex:1;margin:0}
 .chat-in button{width:46px;min-width:46px;height:46px;padding:0;border-radius:10px;font-size:16px;margin:0;flex-shrink:0}
-#comissão{color:var(--v);font-weight:700}
+.serv-chip{background:var(--f3);border:1.5px solid var(--b);border-radius:12px;padding:13px 10px;font-size:13px;color:var(--t);font-weight:500;text-align:center;cursor:pointer;touch-action:manipulation;transition:all .18s;user-select:none}
+.serv-chip.sel{background:var(--vd);border-color:var(--v);color:var(--v);font-weight:700}
+.wiz-dot{width:32px;height:32px;border-radius:50%;background:var(--f3);border:2px solid var(--b);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--t3);transition:all .3s}
+.wiz-dot.on{background:var(--vd);border-color:var(--v);color:var(--v)}
+.wstep{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0}
+.wstep span{width:28px;height:28px;border-radius:50%;background:var(--f3);border:2px solid var(--b);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--t3);transition:all .3s}
+.wstep small{font-size:9px;color:var(--t3);white-space:nowrap;transition:color .3s}
+.wstep.on span{background:var(--vd);border-color:var(--v);color:var(--v)}
+.wstep.on small{color:var(--v)}
+.wstep.done span{background:var(--ve);border-color:var(--ve);color:#000;}
+.wline{flex:1;height:2px;background:var(--b);margin:0 3px;margin-bottom:14px;transition:background .3s}
+.wline.done{background:var(--ve)}
+.req-item{padding:8px 0;border-bottom:1px solid var(--b);font-size:13px;color:var(--t);display:flex;align-items:center;gap:8px}
+.req-item:last-child{border-bottom:none;padding-bottom:0}
+.req-doc{color:var(--t2)}
+.field-label{font-size:12px;font-weight:600;color:var(--t2);margin-bottom:2px;margin-top:4px;letter-spacing:.3px}
+.timeline-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--b)}
+.timeline-item:last-child{border-bottom:none}
+.tl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:5px}
 </style>
 </head>
 <body>
-
 <div id="ov"><div class="spin"></div></div>
 <div id="toast"></div>
 
 <!-- INICIO -->
 <div class="tela" id="t-inicio">
-  <div class="logo">FixMoç</div>
-  <div style="color:var(--v);font-size:12px;letter-spacing:2px;">MOCAMBIQUE 🇲🇿</div>
-  <p class="sub">Conectamos técnicos e clientes<br>em todo o país</p>
-  <div class="bts">
+  <div style="font-size:58px;font-weight:900;color:var(--v);margin-bottom:6px;">FixMoc</div>
+  <div style="color:var(--v);font-size:11px;letter-spacing:2px;margin-bottom:10px;">MOCAMBIQUE</div>
+  <p style="margin-bottom:40px;color:var(--t2);">Conectamos tecnicos e clientes<br>em todo o pais</p>
+  <div style="width:100%;max-width:300px;">
     <button class="bc" onclick="escolher('cliente')">👤 Sou Cliente</button>
-    <button class="bt" onclick="escolher('tecnico')">🔧 Sou Técnico</button>
+    <button class="bt" onclick="escolher('tecnico')">🔧 Sou Tecnico</button>
   </div>
   <p style="font-size:10px;margin-top:30px;"><a href="#" onclick="irAdmin()">v2.0</a></p>
 </div>
@@ -86,165 +98,385 @@ textarea{resize:vertical;min-height:80px}
 <!-- LOGIN -->
 <div class="tela" id="t-login">
   <h2>Entrar na conta</h2>
-  <div class="badge">⚡ Supabase Real</div>
-  <input type="email" id="l-email" placeholder="O teu email" autocomplete="email">
-  <input type="password" id="l-senha" placeholder="A tua senha" autocomplete="current-password">
+  <div class="badge">SUPABASE REAL</div>
+  <input type="email" id="l-email" placeholder="O teu email">
+  <input type="password" id="l-senha" placeholder="A tua senha">
   <button onclick="login()">Entrar</button>
-  <p style="text-align:center;margin-top:10px;">Não tens conta? <a href="#" onclick="ir('t-registo')">Regista-te</a></p>
-  <button class="bv" onclick="ir('t-inicio')">← Voltar</button>
+  <p style="text-align:center;margin-top:10px;">Nao tens conta? <a href="#" onclick="irRegisto()">Regista-te</a></p>
+  <button class="bv" onclick="ir('t-inicio')">Voltar</button>
 </div>
 
 <!-- REGISTO CLIENTE -->
 <div class="tela" id="t-registo">
-  <h2>👤 Criar conta Cliente</h2>
-  <div class="badge">⚡ Registo rápido</div>
-  <input type="text" id="r-nome" placeholder="O teu nome completo">
+  <h2>Criar conta Cliente</h2>
+  <div class="badge">REGISTO RAPIDO</div>
+  <input type="text" id="r-nome" placeholder="Nome completo">
   <input type="tel" id="r-tel" placeholder="Telefone (ex: 87 479 3972)">
-  <input type="email" id="r-email" placeholder="O teu email" autocomplete="email">
-  <input type="password" id="r-senha" placeholder="Senha (mínimo 6 caracteres)" autocomplete="new-password">
+  <input type="email" id="r-email" placeholder="Email">
+  <input type="password" id="r-senha" placeholder="Senha (minimo 6 caracteres)">
   <select id="r-prov">
-    <option value="">Selecciona a tua província</option>
-    <option>Maputo Cidade</option><option>Maputo Província</option><option>Matola</option>
+    <option value="">Selecciona a tua provincia</option>
+    <option>Maputo Cidade</option><option>Maputo Provincia</option><option>Matola</option>
     <option>Gaza</option><option>Inhambane</option><option>Sofala (Beira)</option>
-    <option>Manica</option><option>Tete</option><option>Zambézia (Quelimane)</option>
+    <option>Manica</option><option>Tete</option><option>Zambezia (Quelimane)</option>
     <option>Nampula</option><option>Cabo Delgado</option><option>Niassa</option>
   </select>
-  <button onclick="registar('cliente')">✅ Criar conta</button>
-  <p style="text-align:center;margin-top:8px;">És técnico? <a href="#" onclick="ir('t-registo-t')">Regista-te aqui</a></p>
-  <p style="text-align:center;">Já tens conta? <a href="#" onclick="ir('t-login')">Entrar</a></p>
-  <button class="bv" onclick="ir('t-inicio')">← Voltar</button>
+  <button onclick="registar()">Criar conta</button>
+  <p style="text-align:center;margin-top:8px;">Es tecnico? <a href="#" onclick="ir('t-reg-t')">Regista-te aqui</a></p>
+  <p style="text-align:center;">Ja tens conta? <a href="#" onclick="ir('t-login')">Entrar</a></p>
+  <button class="bv" onclick="ir('t-inicio')">Voltar</button>
 </div>
 
-<!-- REGISTO TECNICO -->
-<div class="tela" id="t-registo-t">
-  <h2>🔧 Registo de Técnico</h2>
-  <div class="badge">⚡ Sujeito a aprovação</div>
-  <div class="card">
-    <h3>📋 Dados pessoais</h3>
-    <input type="text" id="rt-nome" placeholder="Nome completo">
-    <input type="tel" id="rt-tel" placeholder="Telefone (ex: 87 479 3972)">
-    <input type="email" id="rt-email" placeholder="Email" autocomplete="email">
-    <input type="password" id="rt-senha" placeholder="Senha (mínimo 6 caracteres)" autocomplete="new-password">
+<!-- CANDIDATURA TECNICO — 5 PASSOS -->
+<div class="tela" id="t-reg-t" style="padding-top:16px;">
+
+  <!-- Header fixo do wizard -->
+  <div style="margin-bottom:22px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+      <button class="bv" onclick="wizVoltarOuSair()" style="width:36px;height:36px;padding:0;margin:0;font-size:18px;border-radius:10px;flex-shrink:0;">←</button>
+      <div style="flex:1;">
+        <div style="font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;">Vaga de Tecnico — FixMoc</div>
+        <div style="font-size:13px;color:var(--t2);" id="wiz-label">Passo 1 de 5</div>
+      </div>
+    </div>
+    <!-- Steps visuais -->
+    <div style="display:flex;align-items:center;gap:0;margin-bottom:0;">
+      <div class="wstep on" id="ws1"><span>1</span><small>Requisitos</small></div>
+      <div class="wline" id="wl1"></div>
+      <div class="wstep" id="ws2"><span>2</span><small>Dados</small></div>
+      <div class="wline" id="wl2"></div>
+      <div class="wstep" id="ws3"><span>3</span><small>Experiencia</small></div>
+      <div class="wline" id="wl3"></div>
+      <div class="wstep" id="ws4"><span>4</span><small>Documentos</small></div>
+      <div class="wline" id="wl4"></div>
+      <div class="wstep" id="ws5"><span>5</span><small>Enviar</small></div>
+    </div>
   </div>
-  <div class="card">
-    <h3>🔧 Dados profissionais</h3>
-    <select id="rt-espec">
-      <option value="">Selecciona a tua especialidade</option>
-      <option>Eletricista</option><option>Canalizador</option><option>Carpinteiro</option>
-      <option>Informatica</option><option>Pedreiro</option><option>Limpeza</option>
-      <option>Pintor</option><option>Ar Condicionado</option><option>Mecanico</option>
-      <option>Eletrodomesticos</option><option>Serralheiro</option><option>Vidraceiro</option>
-      <option>Jardineiro</option><option>Babysitter</option><option>Cozinheiro</option><option>Mudancas</option>
+
+  <!-- ═══ PASSO 1 — Requisitos e area de actuacao ═══ -->
+  <div id="wiz-p1">
+    <div style="text-align:center;padding:10px 0 18px;">
+      <div style="font-size:44px;margin-bottom:8px;">🔧</div>
+      <h2 style="margin-bottom:6px;">Vaga de Tecnico</h2>
+      <p>Preenche a candidatura completa.<br>O FixMoc analisa e aprova em ate 48h.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:12px;">
+      <div style="font-size:11px;color:var(--v);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">📋 Requisitos obrigatorios</div>
+      <div class="req-item">✅ Ter mais de 18 anos</div>
+      <div class="req-item">✅ Bilhete de Identidade (BI) valido</div>
+      <div class="req-item">✅ Minimo 1 ano de experiencia comprovada</div>
+      <div class="req-item">✅ Telefone activo (sera o teu contacto)</div>
+      <div class="req-item">✅ Comprometer-se com as regras do FixMoc</div>
+    </div>
+
+    <div class="card" style="margin-bottom:12px;">
+      <div style="font-size:11px;color:var(--t2);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">📄 Documentos necessarios</div>
+      <div class="req-item req-doc">📎 Copia do BI (numero obrigatorio)</div>
+      <div class="req-item req-doc">📎 Comprovativo de experiencia ou formacao</div>
+      <div class="req-item req-doc" style="opacity:.7;">📎 Carta de referencia (opcional mas valorizada)</div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <div style="font-size:11px;color:var(--t2);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">🔧 Qual e a tua area de trabalho?</div>
+      <p style="margin-bottom:10px;font-size:13px;">Escolhe os servicos que ofereces:</p>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:7px;">
+        <div class="serv-chip" data-v="Eletricista" onclick="toggleServ(this)">⚡ Eletricista</div>
+        <div class="serv-chip" data-v="Canalizador" onclick="toggleServ(this)">🚿 Canalizador</div>
+        <div class="serv-chip" data-v="Carpinteiro" onclick="toggleServ(this)">🪚 Carpinteiro</div>
+        <div class="serv-chip" data-v="Informatica" onclick="toggleServ(this)">💻 Informatica</div>
+        <div class="serv-chip" data-v="Pedreiro" onclick="toggleServ(this)">🧱 Pedreiro</div>
+        <div class="serv-chip" data-v="Limpeza" onclick="toggleServ(this)">🧹 Limpeza</div>
+        <div class="serv-chip" data-v="Pintor" onclick="toggleServ(this)">🖌️ Pintor</div>
+        <div class="serv-chip" data-v="Ar Condicionado" onclick="toggleServ(this)">❄️ Ar Condicionado</div>
+        <div class="serv-chip" data-v="Mecanico" onclick="toggleServ(this)">🔩 Mecanico</div>
+        <div class="serv-chip" data-v="Eletrodomesticos" onclick="toggleServ(this)">🔌 Eletrodomesticos</div>
+        <div class="serv-chip" data-v="Serralheiro" onclick="toggleServ(this)">🔐 Serralheiro</div>
+        <div class="serv-chip" data-v="Vidraceiro" onclick="toggleServ(this)">🪟 Vidraceiro</div>
+        <div class="serv-chip" data-v="Jardineiro" onclick="toggleServ(this)">🌿 Jardineiro</div>
+        <div class="serv-chip" data-v="Babysitter" onclick="toggleServ(this)">👶 Babysitter</div>
+        <div class="serv-chip" data-v="Cozinheiro" onclick="toggleServ(this)">👨‍🍳 Cozinheiro</div>
+        <div class="serv-chip" data-v="Mudancas" onclick="toggleServ(this)">📦 Mudancas</div>
+      </div>
+      <select id="rt-prov" style="margin-top:12px;">
+        <option value="">📍 Provincia de actuacao *</option>
+        <option>Maputo Cidade</option><option>Maputo Provincia</option><option>Matola</option>
+        <option>Gaza</option><option>Inhambane</option><option>Sofala (Beira)</option>
+        <option>Manica</option><option>Tete</option><option>Zambezia (Quelimane)</option>
+        <option>Nampula</option><option>Cabo Delgado</option><option>Niassa</option>
+      </select>
+    </div>
+
+    <div class="card carda" style="margin-bottom:16px;">
+      <p style="font-size:12px;">⚠️ Ao continuar confirms que tens mais de 18 anos e aceitas os <a href="#" onclick="ir('t-termos')">Termos de Uso</a> do FixMoc.</p>
+    </div>
+    <button onclick="wizNext(2)">Continuar para os dados pessoais →</button>
+    <p style="text-align:center;margin-top:10px;font-size:13px;">Ja tens conta? <a href="#" onclick="ir('t-login')">Entrar aqui</a></p>
+  </div>
+
+  <!-- ═══ PASSO 2 — Dados pessoais ═══ -->
+  <div id="wiz-p2" style="display:none;">
+    <h2 style="margin-bottom:4px;">Dados pessoais</h2>
+    <p style="margin-bottom:18px;">Informacao basica da tua conta no FixMoc.</p>
+
+    <div class="field-label">Nome completo *</div>
+    <input type="text" id="rt-nome" placeholder="Ex: Joao Manuel Nhantumbo">
+
+    <div class="field-label" style="margin-top:10px;">Numero de telefone *</div>
+    <input type="tel" id="rt-tel" placeholder="Ex: 87 479 3972">
+    <p style="font-size:11px;color:var(--t3);margin-top:2px;">Este numero sera o teu contacto principal com os clientes.</p>
+
+    <div class="field-label" style="margin-top:10px;">Email *</div>
+    <input type="email" id="rt-email" placeholder="Ex: joao@gmail.com">
+
+    <div class="field-label" style="margin-top:10px;">Senha *</div>
+    <input type="password" id="rt-senha" placeholder="Minimo 6 caracteres">
+
+    <div class="field-label" style="margin-top:10px;">Data de nascimento *</div>
+    <input type="date" id="rt-nasc" max="2007-01-01">
+    <p style="font-size:11px;color:var(--t3);margin-top:2px;">Tens de ter mais de 18 anos.</p>
+
+    <div class="field-label" style="margin-top:10px;">Genero</div>
+    <select id="rt-genero">
+      <option value="">Selecciona (opcional)</option>
+      <option value="M">Masculino</option>
+      <option value="F">Feminino</option>
+      <option value="O">Prefiro nao dizer</option>
     </select>
+
+    <div style="display:flex;gap:8px;margin-top:16px;">
+      <button class="bv" onclick="wizBack(1)" style="flex:1;margin:0;">← Voltar</button>
+      <button onclick="wizNext(3)" style="flex:2;margin:0;">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ═══ PASSO 3 — Experiencia profissional ═══ -->
+  <div id="wiz-p3" style="display:none;">
+    <h2 style="margin-bottom:4px;">Experiencia profissional</h2>
+    <p style="margin-bottom:18px;">Conta-nos sobre o teu trabalho. Quanto mais completo, melhor a tua candidatura.</p>
+
+    <div class="field-label">Anos de experiencia na area *</div>
     <select id="rt-exp">
-      <option value="">Anos de experiência</option>
-      <option value="menos1">Menos de 1 ano</option>
-      <option value="1-3">1 a 3 anos</option>
+      <option value="">Selecciona</option>
+      <option value="1-2">1 a 2 anos</option>
       <option value="3-5">3 a 5 anos</option>
       <option value="5-10">5 a 10 anos</option>
       <option value="mais10">Mais de 10 anos</option>
     </select>
-    <select id="rt-prov">
-      <option value="">Zona de actuação</option>
-      <option>Maputo Cidade</option><option>Maputo Província</option><option>Matola</option>
-      <option>Gaza</option><option>Inhambane</option><option>Sofala (Beira)</option>
-      <option>Manica</option><option>Tete</option><option>Zambézia (Quelimane)</option>
-      <option>Nampula</option><option>Cabo Delgado</option><option>Niassa</option>
+
+    <div class="field-label" style="margin-top:10px;">Onde ja trabalhou? *</div>
+    <textarea id="rt-historial" placeholder="Descreve os teus empregos ou projectos anteriores. Ex: Trabalhei 3 anos como eletricista na empresa XYZ. Fiz instalacoes em casas e predios em Maputo..." rows="4"></textarea>
+
+    <div class="field-label" style="margin-top:10px;">Formacao ou certificados</div>
+    <textarea id="rt-cert" placeholder="Ex: Curso de Eletricidade — Centro de Formacao ABC (2021)&#10;Certificado de Seguranca no Trabalho — IEFP (2022)" rows="3"></textarea>
+    <p style="font-size:11px;color:var(--t3);margin-top:2px;">Nao e obrigatorio, mas aumenta as tuas hipoteses de aprovacao.</p>
+
+    <div class="field-label" style="margin-top:10px;">Disponibilidade de horario *</div>
+    <select id="rt-disp">
+      <option value="">Selecciona</option>
+      <option value="tempo-inteiro">Tempo inteiro (todos os dias)</option>
+      <option value="manha">So de manha (7h — 12h)</option>
+      <option value="tarde">So de tarde (13h — 18h)</option>
+      <option value="fins-semana">Fins de semana</option>
+      <option value="flexivel">Horario flexivel (combinamos)</option>
     </select>
-    <textarea id="rt-bio" placeholder="Descreve a tua experiência e serviços que ofereces..." rows="3"></textarea>
-  </div>
-  <div class="card" style="border-color:rgba(255,171,0,0.4);background:rgba(255,171,0,0.05);">
-    <h3>⚠️ Processo de aprovação</h3>
-    <p>Após o registo, a tua conta será analisada pelo FixMoç em até 48h.</p>
-  </div>
-  <button onclick="registarTecnico()">✅ Enviar candidatura</button>
-  <p style="text-align:center;margin-top:8px;">Já tens conta? <a href="#" onclick="ir('t-login')">Entrar</a></p>
-  <button class="bv" onclick="ir('t-inicio')">← Voltar</button>
-</div>
 
-<!-- CANDIDATURA OK -->
-<div class="tela" id="t-registo-t-ok">
-  <div class="centro">
-    <div class="icone">📋</div>
-    <h2>Candidatura Enviada!</h2>
-    <p>A tua candidatura foi recebida!</p><br>
-    <div class="card" style="width:100%;text-align:left;">
-      <p>⏳ Estado: <strong style="color:#ffab00;">A aguardar aprovação</strong></p>
-      <div class="div"></div>
-      <p>Serás contactado em até 48 horas:</p>
-      <p style="color:var(--v);font-weight:700;">📞 87 479 3972</p>
+    <div class="field-label" style="margin-top:10px;">Preco por hora (MT)</div>
+    <input type="number" id="rt-preco" placeholder="Ex: 500 MT/hora (opcional)">
+
+    <div class="field-label" style="margin-top:10px;">Raio de deslocacao</div>
+    <select id="rt-raio">
+      <option value="">Selecciona</option>
+      <option value="5km">Ate 5 km da minha zona</option>
+      <option value="10km">Ate 10 km</option>
+      <option value="20km">Ate 20 km</option>
+      <option value="provincia">Toda a provincia</option>
+      <option value="nacional">Nacional (qualquer zona)</option>
+    </select>
+
+    <div style="display:flex;gap:8px;margin-top:16px;">
+      <button class="bv" onclick="wizBack(2)" style="flex:1;margin:0;">← Voltar</button>
+      <button onclick="wizNext(4)" style="flex:2;margin:0;">Continuar →</button>
     </div>
-    <button onclick="ir('t-inicio')" style="margin-top:14px;">🏠 Voltar ao início</button>
+  </div>
+
+  <!-- ═══ PASSO 4 — Documentos e referencias ═══ -->
+  <div id="wiz-p4" style="display:none;">
+    <h2 style="margin-bottom:4px;">Documentos e referencias</h2>
+    <p style="margin-bottom:18px;">Para verificar a tua identidade e experiencia.</p>
+
+    <div class="card" style="margin-bottom:14px;">
+      <div style="font-size:11px;color:var(--v);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">🪪 Identificacao</div>
+      <div class="field-label">Numero do BI *</div>
+      <input type="text" id="rt-bi" placeholder="Ex: 123456789A0000B">
+      <p style="font-size:11px;color:var(--t3);margin-top:2px;">Sera verificado pelo administrador do FixMoc.</p>
+      <div class="field-label" style="margin-top:10px;">Bairro / Endereco actual *</div>
+      <input type="text" id="rt-endereco" placeholder="Ex: Bairro Polana Cimento, Maputo">
+    </div>
+
+    <div class="card" style="margin-bottom:14px;">
+      <div style="font-size:11px;color:var(--t2);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">👥 Referencia profissional</div>
+      <p style="font-size:12px;margin-bottom:10px;">Uma pessoa que pode confirmar o teu trabalho (antigo chefe, cliente ou colega).</p>
+      <div class="field-label">Nome da referencia</div>
+      <input type="text" id="rt-ref1" placeholder="Ex: Sr. Carlos Machava">
+      <div class="field-label" style="margin-top:8px;">Relacao com a referencia</div>
+      <select id="rt-refrel">
+        <option value="">Selecciona (opcional)</option>
+        <option value="ex-chefe">Ex-chefe / Empregador</option>
+        <option value="cliente">Cliente anterior</option>
+        <option value="colega">Colega de trabalho</option>
+        <option value="outro">Outro</option>
+      </select>
+      <div class="field-label" style="margin-top:8px;">Telefone da referencia</div>
+      <input type="tel" id="rt-ref1tel" placeholder="Ex: 84 123 4567">
+    </div>
+
+    <div class="card" style="margin-bottom:14px;">
+      <div style="font-size:11px;color:var(--t2);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">✍️ Carta de motivacao</div>
+      <p style="font-size:12px;margin-bottom:10px;">Porque queres ser tecnico FixMoc? O que te distingue dos outros?</p>
+      <textarea id="rt-bio" placeholder="Escreve aqui a tua carta de motivacao. Ex: Tenho 5 anos de experiencia como eletricista. Sou pontual, responsavel e trabalho com qualidade. Quero ajudar as familias de Maputo com servicos confiaveis..." rows="5"></textarea>
+      <p style="font-size:11px;color:var(--t3);margin-top:4px;">Minimo 50 caracteres. Isto e lido pelo administrador.</p>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-top:8px;">
+      <button class="bv" onclick="wizBack(3)" style="flex:1;margin:0;">← Voltar</button>
+      <button onclick="wizNext(5)" style="flex:2;margin:0;">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ═══ PASSO 5 — Confirmacao e envio ═══ -->
+  <div id="wiz-p5" style="display:none;">
+    <h2 style="margin-bottom:4px;">Confirma a candidatura</h2>
+    <p style="margin-bottom:16px;">Verifica os teus dados antes de enviar.</p>
+
+    <div class="card cardv" id="wiz-resumo" style="margin-bottom:14px;"></div>
+
+    <div class="card" style="margin-bottom:14px;border-color:rgba(41,121,255,.4);background:rgba(41,121,255,.04);">
+      <div style="font-size:13px;font-weight:700;margin-bottom:10px;color:#82b1ff;">📬 O que acontece a seguir?</div>
+      <div class="timeline-item">
+        <div class="tl-dot" style="background:#00e676;"></div>
+        <div><strong style="font-size:13px;">Candidatura recebida</strong><br><span style="font-size:12px;color:var(--t2);">O FixMoc recebe e analisa os teus dados.</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot" style="background:#ffab00;"></div>
+        <div><strong style="font-size:13px;">Verificacao pelo admin (ate 48h)</strong><br><span style="font-size:12px;color:var(--t2);">Verificamos o teu BI, referencias e experiencia.</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot" style="background:#2979ff;"></div>
+        <div><strong style="font-size:13px;">Contacto pelo telefone</strong><br><span style="font-size:12px;color:var(--t2);">Ligamos para o numero <strong>87 479 3972</strong> para te informar.</span></div>
+      </div>
+      <div class="timeline-item" style="border:none;">
+        <div class="tl-dot" style="background:#00e676;border:2px solid var(--v);"></div>
+        <div><strong style="font-size:13px;">Conta activada ✅</strong><br><span style="font-size:12px;color:var(--t2);">Podes receber clientes e trabalhar pelo FixMoc!</span></div>
+      </div>
+    </div>
+
+    <div class="card carda" style="margin-bottom:16px;">
+      <p style="font-size:12px;">⚠️ Candidaturas com dados falsos ou incompletos serao <strong>rejeitadas automaticamente</strong>. Seras notificado pelo telefone.</p>
+    </div>
+
+    <button onclick="registarTecnico()" style="padding:16px;font-size:15px;">🚀 Enviar candidatura</button>
+    <button class="bv" onclick="wizBack(4)" style="margin-top:6px;">← Rever documentos</button>
+  </div>
+
+</div>
+
+<!-- CANDIDATURA ENVIADA -->
+<div class="tela" id="t-reg-t-ok">
+  <div class="centro">
+    <div style="font-size:70px;margin-bottom:6px;">📬</div>
+    <h2 style="margin-bottom:8px;">Candidatura Enviada!</h2>
+    <p style="margin-bottom:20px;">Os teus dados foram recebidos com sucesso.</p>
+    <div class="card" style="width:100%;text-align:left;margin-bottom:16px;">
+      <div class="timeline-item">
+        <div class="tl-dot" style="background:#00e676;"></div>
+        <div><strong style="font-size:13px;color:#fff;">Candidatura recebida ✅</strong></div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot" style="background:#ffab00;opacity:.5;"></div>
+        <div><strong style="font-size:13px;color:var(--t2);">Em analise pelo admin...</strong><br><span style="font-size:12px;color:var(--t3);">Ate 48 horas</span></div>
+      </div>
+      <div class="timeline-item" style="border:none;">
+        <div class="tl-dot" style="background:var(--b);border:2px solid var(--b);"></div>
+        <div><strong style="font-size:13px;color:var(--t3);">Conta activada</strong><br><span style="font-size:12px;color:var(--t3);">Apos aprovacao</span></div>
+      </div>
+    </div>
+    <div class="card carda" style="width:100%;text-align:left;">
+      <p style="font-size:13px;font-weight:600;margin-bottom:4px;">📞 Proximos passos</p>
+      <p style="font-size:13px;">Seras contactado pelo numero:</p>
+      <p style="color:var(--v);font-weight:700;font-size:16px;margin-top:4px;">87 479 3972</p>
+    </div>
+    <button onclick="ir('t-inicio')" style="margin-top:18px;width:100%;">Voltar ao inicio</button>
   </div>
 </div>
 
-<!-- HOME -->
+<!-- HOME CLIENTE -->
 <div class="tela" id="t-home">
-  <h2 id="saudacao">Ola! Bem-vindo ao FixMoç 👋</h2>
+  <h2 id="saudacao">Ola! Bem-vindo ao FixMoc</h2>
   <p style="margin-bottom:14px;">O que precisas hoje?</p>
   <div class="grid">
-    <button onclick="pedido('⚡ Eletricista')">⚡ Eletricista</button>
-    <button onclick="pedido('💧 Canalizador')">💧 Canalizador</button>
-    <button onclick="pedido('🪚 Carpinteiro')">🪚 Carpinteiro</button>
-    <button onclick="pedido('💻 Informática')">💻 Informática</button>
-    <button onclick="pedido('🧱 Pedreiro')">🧱 Pedreiro</button>
-    <button onclick="pedido('🧹 Limpeza')">🧹 Limpeza</button>
-    <button onclick="pedido('🎨 Pintor')">🎨 Pintor</button>
-    <button onclick="pedido('❄️ Ar Condicionado')">❄️ Ar Condicionado</button>
-    <button onclick="pedido('🚗 Mecânico')">🚗 Mecânico</button>
-    <button onclick="pedido('📺 Eletrodomésticos')">📺 Eletrodomésticos</button>
-    <button onclick="pedido('🔒 Serralheiro')">🔒 Serralheiro</button>
-    <button onclick="pedido('🪟 Vidraceiro')">🪟 Vidraceiro</button>
-    <button onclick="pedido('🌿 Járdineiro')">🌿 Járdineiro</button>
-    <button onclick="pedido('👶 Babysitter')">👶 Babysitter</button>
-    <button onclick="pedido('🍳 Cozinheiro')">🍳 Cozinheiro</button>
-    <button onclick="pedido('📦 Mudanças')">📦 Mudanças</button>
+    <button onclick="pedido('Eletricista')">Eletricista</button>
+    <button onclick="pedido('Canalizador')">Canalizador</button>
+    <button onclick="pedido('Carpinteiro')">Carpinteiro</button>
+    <button onclick="pedido('Informatica')">Informatica</button>
+    <button onclick="pedido('Pedreiro')">Pedreiro</button>
+    <button onclick="pedido('Limpeza')">Limpeza</button>
+    <button onclick="pedido('Pintor')">Pintor</button>
+    <button onclick="pedido('Ar Condicionado')">Ar Condicionado</button>
+    <button onclick="pedido('Mecanico')">Mecanico</button>
+    <button onclick="pedido('Eletrodomesticos')">Eletrodomesticos</button>
+    <button onclick="pedido('Serralheiro')">Serralheiro</button>
+    <button onclick="pedido('Vidraceiro')">Vidraceiro</button>
+    <button onclick="pedido('Jardineiro')">Jardineiro</button>
+    <button onclick="pedido('Babysitter')">Babysitter</button>
+    <button onclick="pedido('Cozinheiro')">Cozinheiro</button>
+    <button onclick="pedido('Mudancas')">Mudancas</button>
   </div>
 </div>
 
-<!-- PEDIDO -->
+<!-- FAZER PEDIDO -->
 <div class="tela" id="t-pedido">
-  <h2>📋 Fazer Pedido</h2>
-  <div class="card card-v"><h3 id="s-servico">Servico</h3></div>
+  <h2>Fazer Pedido</h2>
+  <div class="card cardv"><h3 id="s-servico">Servico</h3></div>
   <input type="text" id="p-nome" placeholder="O teu nome">
   <input type="tel" id="p-tel" placeholder="O teu telefone">
   <select id="p-prov">
     <option value="">Selecciona a tua provincia</option>
     <option>Maputo Cidade</option><option>Maputo Provincia</option><option>Matola</option>
     <option>Gaza</option><option>Inhambane</option><option>Sofala (Beira)</option>
-    <option>Manica</option><option>Tete</option><option>Zambézia (Quelimane)</option>
+    <option>Manica</option><option>Tete</option><option>Zambezia (Quelimane)</option>
     <option>Nampula</option><option>Cabo Delgado</option><option>Niassa</option>
   </select>
   <input type="text" id="p-bairro" placeholder="O teu bairro (opcional)">
   <textarea id="p-desc" placeholder="Descreve o problema..." rows="3"></textarea>
   <select id="p-urg">
-    <option value="urgente">🔴 Urgente</option>
-    <option value="normal" selected>🟡 Normal</option>
-    <option value="sem-pressa">🟢 Sem pressa</option>
+    <option value="urgente">Urgente</option>
+    <option value="normal" selected>Normal</option>
+    <option value="sem-pressa">Sem pressa</option>
   </select>
-  <button onclick="enviarPedido()">📨 Enviar Pedido</button>
-  <button class="bv" onclick="ir('t-home')">← Voltar</button>
+  <button onclick="enviarPedido()">Enviar Pedido</button>
+  <button class="bv" onclick="irHome()">Voltar</button>
 </div>
 
-<!-- SUCESSO PEDIDO -->
+<!-- PEDIDO ENVIADO -->
 <div class="tela" id="t-sucesso">
   <div class="centro">
     <div class="icone">✅</div>
     <h2>Pedido Enviado!</h2>
-    <p>Técnicos da tua zona vao contactar-te em breve.</p><br>
-    <button onclick="ir('t-agendar')">📅 Agendar data</button>
-    <button class="ba" onclick="irAvaliar(null)">⭐ Avaliar Técnico</button>
-    <button class="bv" onclick="ir('t-home')">🏠 Voltar ao inicio</button>
+    <p>Tecnicos da tua zona vao contactar-te em breve.</p><br>
+    <button onclick="irAgendar()">Agendar data</button>
+    <button class="ba" onclick="irAvaliar(null)">Avaliar Tecnico</button>
+    <button class="bv" onclick="irHome()">Voltar ao inicio</button>
   </div>
 </div>
 
 <!-- AGENDAMENTO -->
 <div class="tela" id="t-agendar">
-  <h2>📅 Agendar Servico</h2>
-  <div class="card card-v"><h3 id="s-agendar">Servico</h3></div>
-  <div class="card"><h3>📅 Data</h3><input type="date" id="a-data"></div>
+  <h2>Agendar Servico</h2>
+  <div class="card cardv"><h3 id="s-agendar">Servico</h3></div>
+  <div class="card"><h3>Data</h3><input type="date" id="a-data"></div>
   <div class="card">
-    <h3>⏰ Hora</h3>
+    <h3>Hora</h3>
     <select id="a-hora">
       <option>08:00</option><option>09:00</option><option>10:00</option><option>11:00</option>
       <option>12:00</option><option>13:00</option><option>14:00</option><option>15:00</option>
@@ -252,11 +484,11 @@ textarea{resize:vertical;min-height:80px}
     </select>
   </div>
   <div class="card">
-    <h3>🏠 Tipo de imóvel</h3>
-    <select><option>🏠 Casa</option><option>🏢 Apartamento</option><option>🏪 Lojá</option><option>💼 Escritorio</option></select>
+    <h3>Tipo de imovel</h3>
+    <select><option>Casa</option><option>Apartamento</option><option>Loja</option><option>Escritorio</option></select>
   </div>
-  <button onclick="confirmarAgendar()">✅ Confirmar</button>
-  <button class="bv" onclick="ir('t-home')">← Voltar</button>
+  <button onclick="confirmarAgendar()">Confirmar</button>
+  <button class="bv" onclick="irHome()">Voltar</button>
 </div>
 
 <!-- AGENDAMENTO OK -->
@@ -266,19 +498,19 @@ textarea{resize:vertical;min-height:80px}
     <h2>Agendamento Confirmado!</h2>
     <div class="card" style="width:100%;text-align:left;margin-top:16px;">
       <p id="resumo-agendar"></p>
-      <p>👷 Técnicos notificados!</p>
+      <p>Tecnicos notificados!</p>
     </div>
-    <button onclick="ir('t-home')" style="width:100%;margin-top:10px;">🏠 Voltar ao inicio</button>
+    <button onclick="irHome()" style="margin-top:10px;">Voltar ao inicio</button>
   </div>
 </div>
 
 <!-- AREA TECNICO -->
 <div class="tela" id="t-tecnico">
-  <h2>🔧 Area do Técnico</h2>
-  <button onclick="irPerfilTecnico()">👤 Ver meu perfil</button>
+  <h2>Area do Tecnico</h2>
+  <button onclick="irPerfilTecnico()">Ver meu perfil</button>
   <p style="margin:14px 0 8px;color:var(--t2);">Pedidos na tua zona:</p>
   <div id="lista-pedidos">
-    <div class="card"><p style="text-align:center;">A carregar... ⏳</p></div>
+    <div class="card"><p style="text-align:center;">A carregar...</p></div>
   </div>
 </div>
 
@@ -290,41 +522,51 @@ textarea{resize:vertical;min-height:80px}
     <div class="card" style="width:100%;text-align:left;margin-top:14px;">
       <p>Contacta o cliente:</p>
       <div class="div"></div>
-      <p>📞 <strong style="color:var(--v)" id="tel-aceite">—</strong></p>
-      <p>📍 <span id="prov-aceite">—</span></p>
+      <p>Telefone: <strong style="color:var(--v)" id="tel-aceite">—</strong></p>
+      <p>Provincia: <span id="prov-aceite">—</span></p>
     </div>
-    <button onclick="irPagamento('Servico')" style="width:100%;margin-top:8px;">💰 Registar Pagamento</button>
-    <button onclick="ir('t-chat')" class="ba" style="width:100%;">💬 Chat</button>
-    <button class="bv" onclick="ir('t-tecnico')" style="width:100%;">← Ver mais pedidos</button>
+    <button onclick="irPagamento()" style="width:100%;margin-top:8px;">Registar Pagamento</button>
+    <button onclick="ir('t-chat')" class="ba" style="width:100%;">Chat</button>
+    <button class="bv" onclick="ir('t-tecnico')" style="width:100%;">Ver mais pedidos</button>
   </div>
 </div>
 
 <!-- PERFIL TECNICO -->
 <div class="tela" id="t-perfil-t">
-  <h2>👤 Meu Perfil</h2>
+  <h2>Meu Perfil</h2>
   <div style="text-align:center;padding:14px 0 18px;">
-    <div class="avatar">👷</div>
-    <h3 id="pf-nome" style="font-size:18px;color:#fff;">—</h3>
-    <div class="bv2" id="pf-ver">⏳ Aguarda verificação</div>
-    <p style="margin-top:6px;" id="pf-aval">⭐ Sem avaliacoes</p>
+    <div style="font-size:60px;">👷</div>
+    <h3 id="pf-nome" style="font-size:18px;color:#fff;margin-top:8px;">—</h3>
+    <div class="bver" id="pf-ver">A aguardar verificacao</div>
+    <p style="margin-top:6px;" id="pf-aval">Sem avaliacoes</p>
   </div>
   <div class="card">
-    <p id="pf-tel">📞 —</p>
-    <p id="pf-prov">📍 —</p>
-    <p id="pf-email">📧 —</p>
+    <p id="pf-espec">Especialidade: —</p>
+    <p id="pf-exp">Experiencia: —</p>
+    <p id="pf-tel">Telefone: —</p>
+    <p id="pf-prov">Provincia: —</p>
+    <p id="pf-email">Email: —</p>
   </div>
   <div class="card">
-    <h3>📊 Estatísticas</h3>
-    <p id="pf-serv">✅ Servicos feitos: 0</p>
-    <p id="pf-desde">📅 Membro desde: 2026</p>
+    <h3>Bio</h3>
+    <p id="pf-bio">—</p>
   </div>
-  <button class="bp" onclick="eliminarConta()">🗑️ Eliminar Conta</button>
-  <button class="bv" onclick="ir('t-tecnico')">← Voltar</button>
+  <div class="card" id="pf-extra-card">
+    <h3>Detalhes profissionais</h3>
+    <div id="pf-extra"><p style="color:var(--t2)">—</p></div>
+  </div>
+  <div class="card">
+    <h3>Estatisticas</h3>
+    <p id="pf-serv">Servicos feitos: 0</p>
+    <p id="pf-desde">Membro desde: 2026</p>
+  </div>
+  <button class="bp" onclick="eliminarConta()">Eliminar Conta</button>
+  <button class="bv" onclick="ir('t-tecnico')">Voltar</button>
 </div>
 
 <!-- AVALIACAO -->
 <div class="tela" id="t-aval">
-  <h2>⭐ Avaliar Técnico</h2>
+  <h2>Avaliar Tecnico</h2>
   <p>Como foi o servico?</p>
   <div class="estrelas" id="estrelas">
     <span class="estrela" onclick="aval(1)">⭐</span>
@@ -335,8 +577,8 @@ textarea{resize:vertical;min-height:80px}
   </div>
   <p id="nota-aval" style="text-align:center;font-size:13px;color:var(--t2);">Toca nas estrelas</p>
   <textarea id="comentario" placeholder="Deixa um comentario..." rows="3"></textarea>
-  <button onclick="enviarAval()">📨 Enviar Avaliacao</button>
-  <button class="bv" onclick="ir('t-home')">← Voltar</button>
+  <button onclick="enviarAval()">Enviar Avaliacao</button>
+  <button class="bv" onclick="irHome()">Voltar</button>
 </div>
 
 <!-- AVALIACAO OK -->
@@ -345,84 +587,84 @@ textarea{resize:vertical;min-height:80px}
     <div class="icone">🎉</div>
     <h2>Obrigado!</h2>
     <p>Avaliacao guardada com sucesso!</p>
-    <button onclick="ir('t-home')" style="margin-top:18px;">🏠 Voltar ao inicio</button>
+    <button onclick="irHome()" style="margin-top:18px;">Voltar ao inicio</button>
   </div>
 </div>
 
 <!-- NOTIFICACOES -->
 <div class="tela" id="t-notif">
-  <h2>🔔 Notificações</h2>
-  <div class="card"><p>Vai a <strong>Pedidos</strong> para ver o estado em tempo real.</p></div>
-  <button class="bv" onclick="ir('t-home')">← Voltar</button>
+  <h2>Notificacoes</h2>
+  <div class="card"><p>Vai a Pedidos para ver o estado dos teus pedidos em tempo real.</p></div>
+  <button class="bv" onclick="irHome()">Voltar</button>
 </div>
 
 <!-- CHAT -->
 <div class="tela" id="t-chat">
-  <h2>💬 Chat</h2>
+  <h2>Chat</h2>
   <div class="card" style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
     <span style="font-size:34px;">👷</span>
-    <div><h3 style="margin:0;font-size:14px;">Técnico FixMoç</h3><p style="margin:0;font-size:12px;">Online</p></div>
+    <div><h3 style="margin:0;font-size:14px;">Tecnico FixMoc</h3><p style="margin:0;font-size:12px;">Online</p></div>
   </div>
   <div class="chat-m" id="chat-msgs">
     <div class="mt">Ola! Recebi o teu pedido. Posso ir amanha as 9h. Funciona?</div>
   </div>
   <div class="chat-in">
     <input type="text" id="chat-inp" placeholder="Escreve uma mensagem...">
-    <button onclick="enviarMsg()">📨</button>
+    <button onclick="enviarMsg()">→</button>
   </div>
-  <button class="bv" onclick="ir('t-home')">← Voltar</button>
+  <button class="bv" onclick="irHome()">Voltar</button>
 </div>
 
 <!-- SUPORTE -->
 <div class="tela" id="t-suporte">
-  <h2>📢 Suporte</h2>
-  <div class="card card-v">
+  <h2>Suporte</h2>
+  <div class="card cardv">
     <h3>Contacto</h3>
-    <p>📞 87 479 3972</p>
-    <p>📧 isacjázznur1 @ gmail.com</p>
+    <p>Telefone: 87 479 3972</p>
+    <p>Email: isacjazznur1 @ gmail.com</p>
   </div>
   <div class="card">
-    <h3>📝 Enviar Reclamação</h3>
+    <h3>Enviar Reclamacao</h3>
     <input type="text" id="sup-nome" placeholder="O teu nome">
     <select id="sup-tipo">
-      <option>Problema com técnico</option>
+      <option>Problema com tecnico</option>
       <option>Problema com pagamento</option>
       <option>Problema com app</option>
       <option>Outro</option>
     </select>
     <textarea id="sup-msg" placeholder="Descreve o teu problema..." rows="3"></textarea>
-    <button onclick="enviarReclam()">📨 Enviar</button>
+    <button onclick="enviarReclam()">Enviar</button>
   </div>
-  <button class="bv" onclick="ir('t-home')">← Voltar</button>
+  <button class="bv" onclick="irHome()">Voltar</button>
 </div>
 
 <!-- RECLAMACAO OK -->
 <div class="tela" id="t-reclam-ok">
   <div class="centro">
     <div class="icone">✅</div>
-    <h2>Reclamação Enviada!</h2>
+    <h2>Reclamacao Enviada!</h2>
     <p>Respondemos em ate 24 horas.</p>
-    <button onclick="ir('t-home')" style="margin-top:18px;">🏠 Voltar ao inicio</button>
+    <button onclick="irHome()" style="margin-top:18px;">Voltar ao inicio</button>
   </div>
 </div>
 
 <!-- PAGAMENTO -->
 <div class="tela" id="t-pagar">
-  <h2>💰 Pagamento</h2>
-  <div class="card card-v"><h3 id="s-pagar">Servico</h3></div>
+  <h2>Pagamento</h2>
+  <div class="card cardv"><h3 id="s-pagar">Servico</h3></div>
   <div class="card">
-    <h3>💵 Valor do servico (MT)</h3>
+    <h3>Valor do servico (MT)</h3>
     <input type="number" id="valor" placeholder="Ex: 1500" oninput="calcComissao()">
-    <p style="font-size:12px;margin-top:4px;">Comissão FixMoç (10%): <span id="comissao">0 MT</span></p>
+    <p style="font-size:12px;margin-top:4px;">Comissao FixMoc (10%): <span id="comissao" style="color:var(--v);font-weight:700;">0 MT</span></p>
   </div>
   <div class="card">
-    <h3>💳 Metodo de pagamento</h3>
-    <button onclick="pagar('M-Pesa')">📱 M-Pesa</button>
-    <button onclick="pagar('e-Mola')">📱 e-Mola</button>
-    <button onclick="pagar('mKesh')">📱 mKesh</button>
-    <button onclick="pagar('Dinheiro')" style="background:linear-gradient(135deg,#009900,#006600);">💵 Dinheiro em mao</button>
+    <h3>Metodo de pagamento</h3>
+    <button onclick="pagar('M-Pesa')">M-Pesa</button>
+    <button onclick="pagar('e-Mola')">e-Mola</button>
+    <button onclick="pagar('mKesh')">mKesh</button>
+    <button onclick="pagar('Dinheiro')" style="background:linear-gradient(135deg,#009900,#006600);">Dinheiro em mao</button>
   </div>
-  <button class="bv" onclick="ir('t-home')">← Voltar</button>
+  <button class="bv" onclick="irHome()">Voltar</button>
 </div>
 
 <!-- PAGAMENTO OK -->
@@ -433,120 +675,117 @@ textarea{resize:vertical;min-height:80px}
     <div class="card" style="width:100%;text-align:left;margin-top:14px;">
       <p id="resumo-pagar"></p>
       <div class="div"></div>
-      <p>✅ Registado com sucesso!</p>
+      <p>Registado com sucesso!</p>
     </div>
-    <button onclick="irAvaliar(null)" style="width:100%;margin-top:8px;">⭐ Avaliar Técnico</button>
-    <button class="bv" onclick="ir('t-home')" style="width:100%;">🏠 Voltar ao inicio</button>
+    <button onclick="irAvaliar(null)" style="width:100%;margin-top:8px;">Avaliar Tecnico</button>
+    <button class="bv" onclick="irHome()" style="width:100%;">Voltar ao inicio</button>
   </div>
 </div>
 
 <!-- HISTORICO -->
 <div class="tela" id="t-hist">
-  <h2>📋 Histórico de Pedidos</h2>
-  <div id="lista-hist"><p style="color:var(--t2);text-align:center;">A carregar... ⏳</p></div>
-  <button class="bv" onclick="ir('t-home')">← Voltar</button>
+  <h2>Historico de Pedidos</h2>
+  <div id="lista-hist"><p style="color:var(--t2);text-align:center;">A carregar...</p></div>
+  <button class="bv" onclick="irHome()">Voltar</button>
 </div>
 
 <!-- ADMIN -->
 <div class="tela" id="t-admin">
-  <h2>⚙️ Painel Admin</h2>
-  <div class="badge">⚡ Dados reais</div>
-  <div class="card card-v">
-    <h3>📊 Estatísticas</h3>
-    <p>👥 Utilizadores: <strong id="adm-u" style="color:var(--v)">—</strong></p>
-    <p>👷 Técnicos: <strong id="adm-t" style="color:var(--v)">—</strong></p>
-    <p>📋 Pedidos pendentes: <strong id="adm-p" style="color:var(--v)">—</strong></p>
-    <p>📢 Reclamacoes: <strong id="adm-r" style="color:var(--v)">—</strong></p>
+  <h2>Painel Admin</h2>
+  <div class="badge">DADOS REAIS</div>
+  <div class="card cardv">
+    <h3>Estatisticas</h3>
+    <p>Utilizadores: <strong id="adm-u" style="color:var(--v)">—</strong></p>
+    <p>Tecnicos: <strong id="adm-t" style="color:var(--v)">—</strong></p>
+    <p>Pedidos pendentes: <strong id="adm-p" style="color:var(--v)">—</strong></p>
+    <p>Reclamacoes: <strong id="adm-r" style="color:var(--v)">—</strong></p>
   </div>
   <div class="card">
-    <h3>👷 Técnicos a aprovar</h3>
+    <h3>Tecnicos a aprovar</h3>
     <div id="adm-lista"><p style="color:var(--t2)">A carregar...</p></div>
   </div>
-  <button class="bv" onclick="ir('t-home')">← Voltar</button>
+  <button class="bv" onclick="irHome()">Voltar</button>
 </div>
 
 <!-- DEFINICOES -->
 <div class="tela" id="t-def">
-  <h2>⚙️ Definições</h2>
+  <h2>Definicoes</h2>
   <div class="card">
-    <h3>👤 A minha conta</h3>
+    <h3>A minha conta</h3>
     <p id="def-email" style="color:var(--v);margin-bottom:10px;">—</p>
-    <button onclick="ir('t-senha')">🔑 Mudar Senha</button>
-    <button class="bp" onclick="eliminarConta()">🗑️ Eliminar Conta</button>
-    <button class="bv" onclick="logout()">🚪 Sair da conta</button>
+    <button onclick="ir('t-senha')">Mudar Senha</button>
+    <button class="bp" onclick="eliminarConta()">Eliminar Conta</button>
+    <button class="bv" onclick="logout()">Sair da conta</button>
   </div>
   <div class="card">
-    <h3>📄 Legal e Suporte</h3>
-    <button onclick="ir('t-termos')">📜 Termos de Uso</button>
-    <button onclick="ir('t-privac')">🔒 Privacidade</button>
-    <button onclick="ir('t-sobre')">ℹ️ Sobre o FixMoç</button>
-    <button onclick="ir('t-suporte')">📢 Suporte</button>
+    <h3>Legal e Suporte</h3>
+    <button onclick="ir('t-termos')">Termos de Uso</button>
+    <button onclick="ir('t-privac')">Privacidade</button>
+    <button onclick="ir('t-sobre')">Sobre o FixMoc</button>
+    <button onclick="ir('t-suporte')">Suporte</button>
   </div>
-  <button class="bv" onclick="ir('t-home')">← Voltar</button>
+  <button class="bv" onclick="irHome()">Voltar</button>
 </div>
 
 <!-- MUDAR SENHA -->
 <div class="tela" id="t-senha">
-  <h2>🔑 Mudar Senha</h2>
+  <h2>Mudar Senha</h2>
   <div class="card">
-    <input type="password" id="s-nova" placeholder="Nova senha (min. 6 caracteres)">
+    <input type="password" id="s-nova" placeholder="Nova senha (minimo 6 caracteres)">
     <input type="password" id="s-conf" placeholder="Confirmar nova senha">
-    <button onclick="mudarSenha()">✅ Confirmar</button>
+    <button onclick="mudarSenha()">Confirmar</button>
   </div>
-  <button class="bv" onclick="ir('t-def')">← Voltar</button>
+  <button class="bv" onclick="ir('t-def')">Voltar</button>
 </div>
 
-<!-- SENHA ALTERADA -->
+<!-- SENHA OK -->
 <div class="tela" id="t-senha-ok">
   <div class="centro">
     <div class="icone">🔑</div>
     <h2>Senha Alterada!</h2>
-    <p>Alterada com sucesso!</p>
-    <button onclick="ir('t-home')" style="margin-top:18px;">🏠 Voltar ao inicio</button>
+    <button onclick="irHome()" style="margin-top:18px;">Voltar ao inicio</button>
   </div>
 </div>
 
 <!-- TERMOS -->
 <div class="tela" id="t-termos">
-  <h2>📜 Termos de Uso</h2>
+  <h2>Termos de Uso</h2>
   <div class="card">
-    <p>1. O FixMoç conecta técnicos e clientes em Moçambique.</p>
-    <p>2. Cobramos 10% de comissão por cada servico fechado.</p>
-    <p>3. Os técnicos devem ser verificados antes de prestar servicos.</p>
-    <p>4. O FixMoç não se responsabiliza por danos causados pelos técnicos.</p>
-    <p>5. Contacto: isacjázznur1 @ gmail.com</p>
+    <p>1. O FixMoc conecta tecnicos e clientes em Mocambique.</p>
+    <p>2. Cobramos 10% de comissao por cada servico fechado.</p>
+    <p>3. Os tecnicos sao verificados antes de prestar servicos.</p>
+    <p>4. O FixMoc nao se responsabiliza por danos causados pelos tecnicos.</p>
+    <p>5. Contacto: 87 479 3972</p>
   </div>
-  <button class="bv" onclick="ir('t-def')">← Voltar</button>
+  <button class="bv" onclick="ir('t-def')">Voltar</button>
 </div>
 
 <!-- PRIVACIDADE -->
 <div class="tela" id="t-privac">
-  <h2>🔒 Privacidade</h2>
+  <h2>Privacidade</h2>
   <div class="card">
     <p>1. Dados recolhidos para melhorar os servicos.</p>
-    <p>2. Os teus dados não sao vendidos a terceiros.</p>
+    <p>2. Os teus dados nao sao vendidos a terceiros.</p>
     <p>3. Protegidos pelo Supabase (SSL).</p>
     <p>4. Podes eliminar a conta a qualquer momento.</p>
-    <p>5. Contacto: isacjázznur1 @ gmail.com</p>
   </div>
-  <button class="bv" onclick="ir('t-def')">← Voltar</button>
+  <button class="bv" onclick="ir('t-def')">Voltar</button>
 </div>
 
 <!-- SOBRE -->
 <div class="tela" id="t-sobre">
-  <h2>ℹ️ Sobre o FixMoç</h2>
+  <h2>Sobre o FixMoc</h2>
   <div style="text-align:center;padding:14px 0;">
-    <div style="font-size:48px;font-weight:900;color:var(--v);">FixMoç</div>
+    <div style="font-size:48px;font-weight:900;color:var(--v);">FixMoc</div>
     <p>Versao 2.0 — Supabase Edition</p>
-    <p>🇲🇿 Feito em Moçambique</p>
+    <p>Feito em Mocambique</p>
   </div>
   <div class="card">
-    <p>👷 Fundador: Isac Jázznur</p>
-    <p>📞 87 479 3972</p>
-    <p>📧 isacjázznur1 @ gmail.com</p>
-    <p>🗄️ Backend: Supabase (PostgreSQL)</p>
+    <p>Fundador: Isac Jazznur</p>
+    <p>Telefone: 87 479 3972</p>
+    <p>Backend: Supabase (PostgreSQL)</p>
   </div>
-  <button class="bv" onclick="ir('t-def')">← Voltar</button>
+  <button class="bv" onclick="ir('t-def')">Voltar</button>
 </div>
 
 <!-- MENU -->
@@ -559,105 +798,103 @@ textarea{resize:vertical;min-height:80px}
 </div>
 
 <script>
-// FixMoç v2.0 — Supabase
-const SB_URL = 'https://xlkkzdtitxiamttaqhfy.supabase.co';
-const SB_KEY = 'sb_publishable_XAvOrmQPHgSca8lXCjfhUg_squa2CSe';
-const db = supabase.createClient(SB_URL, SB_KEY);
+var SB_URL = 'https://xlkkzdtitxiamttaqhfy.supabase.co';
+var SB_KEY = 'sb_publishable_XAvOrmQPHgSca8lXCjfhUg_squa2CSe';
+var db = supabase.createClient(SB_URL, SB_KEY);
 
-const A = {
-  user: null,
-  perfil: null,
-  tipo: 'cliente',
-  servico: '',
-  notaAval: 0,
-  pedidoAval: null
-};
+var A = { user:null, perfil:null, tipo:'cliente', servico:'', notaAval:0, pedidoAval:null };
 
-// INIT
+// Wizard — declarado no topo para evitar erros de referencia
+var wizServicos = [];
+var wizPasso = 1;
+
 window.onload = async function() {
   try {
-    const { data } = await db.auth.getSession();
-    if (data.session) {
-      A.user = data.session.user;
-      await carregarPerfil();
-    } else {
+    var res = await db.auth.getSession();
+    if (!res.data.session) {
       mostrar('t-inicio');
     }
-  } catch(e) {
-    mostrar('t-inicio');
-  }
+    // Se há sessão, o onAuthStateChange abaixo dispara SIGNED_IN e chama carregarPerfil
+  } catch(e) { mostrar('t-inicio'); }
 
   db.auth.onAuthStateChange(async function(ev, sess) {
     if (ev === 'SIGNED_IN' && sess) {
       A.user = sess.user;
       await carregarPerfil();
+    } else if (ev === 'INITIAL_SESSION') {
+      if (sess) { A.user = sess.user; await carregarPerfil(); }
+      else { mostrar('t-inicio'); }
     } else if (ev === 'SIGNED_OUT') {
-      A.user = null;
-      A.perfil = null;
-      mostrar('t-inicio');
+      A.user=null; A.perfil=null; menuHide(); mostrar('t-inicio');
     }
   });
 };
 
 async function carregarPerfil() {
   try {
-    const { data } = await db.from('utilizadores').select('*').eq('uid', A.user.id).single();
-    if (data) {
-      A.perfil = data;
-      if (data.tipo === 'tecnico') {
+    var res = await db.from('utilizadores').select('*').eq('uid', A.user.id).single();
+    if (res.data) {
+      A.perfil = res.data;
+      if (res.data.tipo === 'tecnico') {
+        if (!res.data.verificado) {
+          // Resetar wizard para nao mostrar dados anteriores se o utilizador navegar
+          wizServicos = [];
+          wizPasso = 1;
+          mostrar('t-reg-t-ok');
+          return;
+        }
         mostrar('t-tecnico');
-        menuOn('m-home');
         menuShow();
+        menuOn('m-home');
         carregarPedidosTecnico();
       } else {
         irHome();
       }
-    } else {
-      irHome();
-    }
-  } catch(e) {
-    irHome();
-  }
+    } else { irHome(); }
+  } catch(e) { irHome(); }
 }
 
-// NAVEGACAO
 function mostrar(id) {
-  document.querySelectorAll('.tela').forEach(function(t) { t.style.display = 'none'; });
+  document.querySelectorAll('.tela').forEach(function(t) { t.style.display='none'; });
   var el = document.getElementById(id);
-  if (el) { el.style.display = 'block'; window.scrollTo(0,0); }
+  if (el) { el.style.display='block'; window.scrollTo(0,0); }
 }
 
-function menuShow() { document.getElementById('menu').style.display = 'flex'; }
-function menuHide() { document.getElementById('menu').style.display = 'none'; }
+function menuShow() { document.getElementById('menu').style.display='flex'; }
+function menuHide() { document.getElementById('menu').style.display='none'; }
 function menuOn(id) {
   document.querySelectorAll('#menu button').forEach(function(b) { b.classList.remove('on'); });
-  var b = document.getElementById(id);
-  if (b) b.classList.add('on');
+  var b = document.getElementById(id); if (b) b.classList.add('on');
 }
 
 function ir(id) { mostrar(id); }
 
-function escolher(tipo) {
-  A.tipo = tipo;
-  mostrar('t-login');
-  menuHide();
+function escolher(tipo) { A.tipo=tipo; mostrar('t-login'); menuHide(); }
+
+function irRegisto() {
+  if (A.tipo === 'tecnico') {
+    // Resetar wizard para comecar do passo 1 limpo
+    wizServicos = [];
+    wizPasso = 1;
+    // Limpar chips seleccionados
+    document.querySelectorAll('.serv-chip').forEach(function(c){ c.classList.remove('sel'); });
+    wizIrPasso(1);
+    mostrar('t-reg-t');
+  }
+  else mostrar('t-registo');
 }
 
 function irHome() {
-  mostrar('t-home');
-  menuShow();
-  menuOn('m-home');
+  mostrar('t-home'); menuShow(); menuOn('m-home');
   if (A.perfil && A.perfil.nome) {
     var n = A.perfil.nome.split(' ')[0];
-    document.getElementById('saudacao').textContent = 'Ola, ' + n + '! Bem-vindo ao FixMoç 👋';
+    document.getElementById('saudacao').textContent = 'Ola, ' + n + '! Bem-vindo ao FixMoc';
   }
 }
 
 function irDef() {
-  mostrar('t-def');
-  menuShow();
-  menuOn('m-def');
-  if (A.user) document.getElementById('def-email').textContent = '📧 ' + A.user.email;
+  mostrar('t-def'); menuShow(); menuOn('m-def');
+  if (A.user) document.getElementById('def-email').textContent = A.user.email;
 }
 
 function irPerfilTecnico() {
@@ -665,59 +902,84 @@ function irPerfilTecnico() {
   if (A.perfil) {
     var p = A.perfil;
     document.getElementById('pf-nome').textContent = p.nome || '—';
-    document.getElementById('pf-tel').textContent = '📞 ' + (p.tel || '—');
-    document.getElementById('pf-prov').textContent = '📍 ' + (p.provincia || '—');
-    document.getElementById('pf-email').textContent = '📧 ' + (p.email || '—');
-    document.getElementById('pf-ver').textContent = p.verificado ? '✅ Verificado' : '⏳ Aguarda verificação';
-    document.getElementById('pf-aval').textContent = p.avaliacao > 0 ? '⭐ ' + Number(p.avaliacao).toFixed(1) : '⭐ Sem avaliacoes';
-    document.getElementById('pf-serv').textContent = '✅ Servicos feitos: ' + (p.total_servicos || 0);
+    document.getElementById('pf-espec').textContent = 'Especialidade: ' + (p.especialidade || '—');
+    document.getElementById('pf-exp').textContent = 'Experiencia: ' + (p.experiencia || '—');
+    document.getElementById('pf-tel').textContent = 'Telefone: ' + (p.tel || '—');
+    document.getElementById('pf-prov').textContent = 'Provincia: ' + (p.provincia || '—');
+    document.getElementById('pf-email').textContent = 'Email: ' + (p.email || '—');
+    document.getElementById('pf-bio').textContent = p.bio || '—';
+    document.getElementById('pf-ver').textContent = p.verificado ? '✅ Verificado pelo FixMoc' : '⏳ A aguardar verificacao';
+    // Campos adicionais
+    var extra = document.getElementById('pf-extra');
+    if (extra) {
+      var txt = '';
+      if (p.disponibilidade) txt += '<p>Disponibilidade: '+p.disponibilidade+'</p>';
+      if (p.preco_hora) txt += '<p>Preco/hora: <strong style="color:var(--v)">'+p.preco_hora+' MT</strong></p>';
+      if (p.raio) txt += '<p>Raio de atuacao: '+p.raio+'</p>';
+      if (p.certificacoes) txt += '<p>Certificacoes: '+p.certificacoes+'</p>';
+      extra.innerHTML = txt;
+    }
+    document.getElementById('pf-aval').textContent = p.avaliacao > 0 ? p.avaliacao.toFixed(1) + ' estrelas' : 'Sem avaliacoes';
+    document.getElementById('pf-serv').textContent = 'Servicos feitos: ' + (p.total_servicos || 0);
     var ano = p.criado_em ? new Date(p.criado_em).getFullYear() : 2026;
-    document.getElementById('pf-desde').textContent = '📅 Membro desde: ' + ano;
+    document.getElementById('pf-desde').textContent = 'Membro desde: ' + ano;
   }
 }
 
 function irAvaliar(pedidoId) {
-  A.pedidoAval = pedidoId;
-  A.notaAval = 0;
+  A.pedidoAval = pedidoId; A.notaAval = 0;
   document.querySelectorAll('.estrela').forEach(function(e) { e.classList.remove('on'); });
   document.getElementById('nota-aval').textContent = 'Toca nas estrelas';
   document.getElementById('comentario').value = '';
   mostrar('t-aval');
 }
 
-function irPagamento(s) {
-  document.getElementById('s-pagar').textContent = s || 'Servico';
+function irAgendar() {
+  // Preencher o serviço no ecrã de agendamento
+  var el = document.getElementById('s-agendar');
+  if (el) el.textContent = A.servico || 'Servico';
+  // Definir data mínima como hoje
+  var dataEl = document.getElementById('a-data');
+  if (dataEl) {
+    var hoje = new Date().toISOString().split('T')[0];
+    dataEl.min = hoje;
+    dataEl.value = '';
+  }
+  mostrar('t-agendar');
+}
+
+function irPagamento() {
+  document.getElementById('s-pagar').textContent = A.servico || 'Servico';
   document.getElementById('valor').value = '';
   document.getElementById('comissao').textContent = '0 MT';
   mostrar('t-pagar');
 }
 
 function irAdmin() {
-  if (!A.user) { toast('⚠️ Faz login primeiro!', 1); return; }
+  if (!A.user) { toast('Faz login primeiro!', 1); return; }
   carregarAdmin();
 }
 
 async function irHist() {
-  mostrar('t-hist');
-  menuShow();
-  menuOn('m-ped');
+  mostrar('t-hist'); menuShow(); menuOn('m-ped');
   if (!A.user) return;
   var c = document.getElementById('lista-hist');
-  c.innerHTML = '<p style="color:var(--t2);text-align:center;">A carregar... ⏳</p>';
-  var { data } = await db.from('pedidos').select('*').eq('cliente_uid', A.user.id).order('criado_em', {ascending: false});
+  c.innerHTML = '<p style="color:var(--t2);text-align:center;">A carregar...</p>';
+  var res = await db.from('pedidos').select('*').eq('cliente_uid', A.user.id).order('criado_em', {ascending:false});
+  var data = res.data;
   if (!data || data.length === 0) {
-    c.innerHTML = '<div class="card"><p style="text-align:center;color:var(--t2);">Ainda não fizeste nenhum pedido.</p></div>';
+    c.innerHTML = '<div class="card"><p style="text-align:center;color:var(--t2);">Ainda nao fizeste nenhum pedido.</p></div>';
     return;
   }
   c.innerHTML = '';
   data.forEach(function(p) {
-    var cor = p.status === 'concluido' ? '#00e676' : p.status === 'aceite' ? '#2979ff' : p.status === 'cancelado' ? '#ff3d00' : '#ffab00';
-    var lbl = p.status === 'concluido' ? '🟢 Concluido' : p.status === 'aceite' ? '🔵 Aceite' : p.status === 'cancelado' ? '🔴 Cancelado' : '🟡 Pendente';
+    var cor = p.status==='concluido'?'#00e676':p.status==='aceite'?'#2979ff':p.status==='cancelado'?'#ff3d00':'#ffab00';
+    var lbl = p.status==='concluido'?'Concluido':p.status==='aceite'?'Aceite':p.status==='cancelado'?'Cancelado':'Pendente';
     var df = p.criado_em ? new Date(p.criado_em).toLocaleDateString('pt-PT') : '—';
     var extra = '';
-    if (p.status === 'pendente') extra = '<button class="bp" onclick="cancelarPedido(\'' + p.id + '\')" style="margin-top:8px;width:100%;">❌ Cancelar</button>';
-    if (p.status === 'aceite') extra = '<button onclick="irAvaliar(\'' + p.id + '\')" style="margin-top:8px;width:100%;">⭐ Avaliar</button>';
-    c.innerHTML += '<div class="card"><h3>' + p.servico + '</h3><p>📍 ' + p.provincia + '</p><p>📅 ' + df + (p.tecnico_nome ? ' · 👷 ' + p.tecnico_nome : '') + '</p><p style="color:' + cor + ';font-weight:600;">' + lbl + '</p>' + extra + '</div>';
+    if (p.status === 'pendente') extra = '<button class="bp" onclick="cancelarPedido(\'' + p.id + '\')" style="margin-top:8px;width:100%;">Cancelar</button>';
+    if (p.status === 'aceite') extra = '<button onclick="irAvaliar(\'' + p.id + '\')" style="margin-top:8px;width:100%;">Avaliar</button>';
+    c.innerHTML += '<div class="card"><h3>' + p.servico + '</h3><p>' + p.provincia + '</p><p>' + df + (p.tecnico_nome?' | '+p.tecnico_nome:'') + '</p><p style="color:'+cor+';font-weight:600;">' + lbl + '</p>' + extra + '</div>';
   });
 }
 
@@ -725,97 +987,72 @@ async function irHist() {
 async function login() {
   var email = document.getElementById('l-email').value.trim();
   var senha = document.getElementById('l-senha').value;
-  if (!email || !senha) { toast('⚠️ Preenche email e senha!', 1); return; }
+  if (!email||!senha) { toast('Preenche email e senha!', 1); return; }
   loading(1);
-  var { error } = await db.auth.signInWithPassword({ email: email, password: senha });
+  var res = await db.auth.signInWithPassword({ email:email, password:senha });
   loading(0);
-  if (error) toast(tradErr(error.message), 1);
-  else toast('✅ Bem-vindo de volta!');
+  if (res.error) toast(tradErr(res.error.message), 1);
+  else toast('Bem-vindo de volta!');
 }
 
-async function registar(tipo) {
+async function registar() {
   var nome = document.getElementById('r-nome').value.trim();
   var tel = document.getElementById('r-tel').value.trim();
   var email = document.getElementById('r-email').value.trim();
   var senha = document.getElementById('r-senha').value;
   var prov = document.getElementById('r-prov').value;
-  if (!nome || !tel || !email || !senha) { toast('⚠️ Preenche todos os campos!', 1); return; }
-  if (senha.length < 6) { toast('⚠️ Senha com mínimo 6 caracteres!', 1); return; }
+  if (!nome||!tel||!email||!senha) { toast('Preenche todos os campos!', 1); return; }
+  if (senha.length < 6) { toast('Senha com minimo 6 caracteres!', 1); return; }
   loading(1);
-  var { data, error } = await db.auth.signUp({ email: email, password: senha });
-  if (error) { loading(0); toast(tradErr(error.message), 1); return; }
-  if (data.user) {
+  var res = await db.auth.signUp({ email:email, password:senha });
+  if (res.error) { loading(0); toast(tradErr(res.error.message), 1); return; }
+  if (res.data.user) {
     await db.from('utilizadores').insert({
-      uid: data.user.id, nome: nome, tel: tel, email: email,
-      tipo: tipo || 'cliente', provincia: prov, verificado: false,
-      avaliacao: 0, total_servicos: 0, criado_em: new Date().toISOString()
+      uid:res.data.user.id, nome:nome, tel:tel, email:email,
+      tipo:'cliente', provincia:prov, verificado:true,
+      avaliacao:0, total_servicos:0, criado_em:new Date().toISOString()
     });
   }
   loading(0);
-  toast('✅ Conta criada! A entrar...');
-}
-
-async function registarTecnico() {
-  var nome = document.getElementById('rt-nome').value.trim();
-  var tel = document.getElementById('rt-tel').value.trim();
-  var email = document.getElementById('rt-email').value.trim();
-  var senha = document.getElementById('rt-senha').value;
-  var espec = document.getElementById('rt-espec').value;
-  var exp = document.getElementById('rt-exp').value;
-  var prov = document.getElementById('rt-prov').value;
-  var bio = document.getElementById('rt-bio').value.trim();
-  if (!nome || !tel || !email || !senha) { toast('⚠️ Preenche os dados pessoais!', 1); return; }
-  if (!espec || !prov) { toast('⚠️ Preenche a especialidade e zona!', 1); return; }
-  if (senha.length < 6) { toast('⚠️ Senha com mínimo 6 caracteres!', 1); return; }
-  loading(1);
-  var { data, error } = await db.auth.signUp({ email: email, password: senha });
-  if (error) { loading(0); toast(tradErr(error.message), 1); return; }
-  if (data.user) {
-    await db.from('utilizadores').insert({
-      uid: data.user.id, nome: nome, tel: tel, email: email,
-      tipo: 'tecnico', provincia: prov, verificado: false,
-      especialidade: espec, experiencia: exp, bio: bio,
-      avaliacao: 0, total_servicos: 0, criado_em: new Date().toISOString()
-    });
-  }
-  loading(0);
-  mostrar('t-registo-t-ok');
-  toast('📋 Candidatura enviada!');
+  toast('Conta criada! A entrar...');
 }
 
 async function logout() {
   if (!confirm('Tens a certeza que queres sair?')) return;
   await db.auth.signOut();
-  menuHide();
-  toast('👋 Sessão terminada.');
+  toast('Sessao terminada.');
 }
 
 async function eliminarConta() {
-  if (!confirm('🗑️ Eliminar conta? Os teus dados serao apagados.')) return;
+  if (!confirm('Eliminar conta permanentemente? Esta acao nao pode ser desfeita.')) return;
+  if (!A.user) return;
   loading(1);
+  // Apagar todos os dados do utilizador
+  await db.from('agendamentos').delete().eq('cliente_uid', A.user.id);
+  await db.from('avaliacoes').delete().eq('cliente_uid', A.user.id);
   await db.from('pedidos').delete().eq('cliente_uid', A.user.id);
   await db.from('utilizadores').delete().eq('uid', A.user.id);
   await db.auth.signOut();
   loading(0);
-  toast('Conta eliminada.');
+  toast('Conta eliminada com sucesso.');
 }
 
 async function mudarSenha() {
   var nova = document.getElementById('s-nova').value;
   var conf = document.getElementById('s-conf').value;
-  if (!nova || !conf) { toast('⚠️ Preenche os campos!', 1); return; }
-  if (nova !== conf) { toast('⚠️ Senhas não coincidem!', 1); return; }
-  if (nova.length < 6) { toast('⚠️ Mínimo 6 caracteres!', 1); return; }
+  if (!nova||!conf) { toast('Preenche os campos!', 1); return; }
+  if (nova !== conf) { toast('Senhas nao coincidem!', 1); return; }
+  if (nova.length < 6) { toast('Minimo 6 caracteres!', 1); return; }
   loading(1);
-  var { error } = await db.auth.updateUser({ password: nova });
+  var res = await db.auth.updateUser({ password:nova });
   loading(0);
-  if (error) toast('Erro ao mudar senha.', 1);
-  else { toast('✅ Senha alterada!'); mostrar('t-senha-ok'); }
+  if (res.error) toast('Erro ao mudar senha.', 1);
+  else { toast('Senha alterada!'); mostrar('t-senha-ok'); }
 }
 
 // PEDIDOS
 function pedido(servico) {
-  if (!A.user) { toast('⚠️ Faz login para pedir!', 1); mostrar('t-login'); return; }
+  if (!A.user) { toast('Faz login para pedir!', 1); mostrar('t-login'); return; }
   A.servico = servico;
   document.getElementById('s-servico').textContent = servico;
   if (A.perfil) {
@@ -826,28 +1063,28 @@ function pedido(servico) {
 }
 
 async function enviarPedido() {
-  if (!A.user) { toast('⚠️ Faz login primeiro!', 1); return; }
+  if (!A.user) { toast('Faz login primeiro!', 1); return; }
   var nome = document.getElementById('p-nome').value.trim();
   var tel = document.getElementById('p-tel').value.trim();
   var prov = document.getElementById('p-prov').value;
   var bairro = document.getElementById('p-bairro').value.trim();
   var desc = document.getElementById('p-desc').value.trim();
   var urg = document.getElementById('p-urg').value;
-  if (!nome || !tel || !prov) { toast('⚠️ Preenche nome, telefone e provincia!', 1); return; }
+  if (!nome||!tel||!prov) { toast('Preenche nome, telefone e provincia!', 1); return; }
   loading(1);
-  var { error } = await db.from('pedidos').insert({
-    cliente_uid: A.user.id, cliente_nome: nome, cliente_tel: tel,
-    provincia: prov, bairro: bairro, descricao: desc, urgencia: urg,
-    servico: A.servico, status: 'pendente', criado_em: new Date().toISOString()
+  var res = await db.from('pedidos').insert({
+    cliente_uid:A.user.id, cliente_nome:nome, cliente_tel:tel,
+    provincia:prov, bairro:bairro, descricao:desc, urgencia:urg,
+    servico:A.servico, status:'pendente', criado_em:new Date().toISOString()
   });
   loading(0);
-  if (error) toast('Erro: ' + error.message, 1);
-  else { toast('✅ Pedido enviado!'); mostrar('t-sucesso'); }
+  if (res.error) toast('Erro: '+res.error.message, 1);
+  else { toast('Pedido enviado!'); mostrar('t-sucesso'); }
 }
 
 async function cancelarPedido(id) {
   if (!confirm('Cancelar este pedido?')) return;
-  await db.from('pedidos').update({ status: 'cancelado' }).eq('id', id);
+  await db.from('pedidos').update({status:'cancelado'}).eq('id', id);
   toast('Pedido cancelado.');
   irHist();
 }
@@ -856,76 +1093,79 @@ async function carregarPedidosTecnico() {
   if (!A.perfil) return;
   var c = document.getElementById('lista-pedidos');
   var prov = A.perfil.provincia;
-  var q = db.from('pedidos').select('*').eq('status', 'pendente').order('criado_em', {ascending: false});
+  var q = db.from('pedidos').select('*').eq('status','pendente').order('criado_em',{ascending:false});
   if (prov) q = q.eq('provincia', prov);
-  var { data } = await q;
-  if (!data || data.length === 0) {
-    c.innerHTML = '<div class="card"><p style="text-align:center;color:var(--t2);">Nenhum pedido na tua zona. 👍</p></div>';
+  var res = await q;
+  var data = res.data;
+  if (!data||data.length===0) {
+    c.innerHTML = '<div class="card"><p style="text-align:center;color:var(--t2);">Nenhum pedido na tua zona.</p></div>';
     return;
   }
   c.innerHTML = '';
   data.forEach(function(p) {
-    var uc = p.urgencia === 'urgente' ? 'vu' : p.urgencia === 'sem-pressa' ? 'vs' : 'vn';
-    var ul = p.urgencia === 'urgente' ? '🔴 Urgente' : p.urgencia === 'sem-pressa' ? '🟢 Sem pressa' : '🟡 Normal';
-    c.innerHTML += '<div class="card"><h3>' + p.servico + '</h3><p>📍 ' + p.provincia + (p.bairro ? ' · ' + p.bairro : '') + '</p><p>📝 ' + (p.descricao || 'Sem descricao') + '</p><p class="' + uc + '">' + ul + '</p><p>👤 ' + p.cliente_nome + '</p><div style="display:flex;gap:8px;margin-top:10px;"><button onclick="aceitarPedido(\'' + p.id + '\',\'' + p.cliente_tel + '\',\'' + p.provincia + '\')" style="margin:0;flex:1;">✅ Aceitar</button><button class="bv" style="margin:0;flex:1;">❌ Recusar</button></div></div>';
+    var uc = p.urgencia==='urgente'?'vu':p.urgencia==='sem-pressa'?'vs':'vn';
+    var ul = p.urgencia==='urgente'?'Urgente':p.urgencia==='sem-pressa'?'Sem pressa':'Normal';
+    c.innerHTML += '<div class="card"><h3>'+p.servico+'</h3><p>'+p.provincia+(p.bairro?' | '+p.bairro:'')+'</p><p>'+(p.descricao||'Sem descricao')+'</p><p class="'+uc+'">'+ul+'</p><p>'+p.cliente_nome+'</p><div style="display:flex;gap:8px;margin-top:10px;"><button onclick="aceitarPedido(\''+p.id+'\',\''+p.cliente_tel+'\',\''+p.provincia+'\')" style="margin:0;flex:1;">Aceitar</button><button class="bv" style="margin:0;flex:1;">Recusar</button></div></div>';
   });
 }
 
 async function aceitarPedido(id, tel, prov) {
-  if (!A.user || !A.perfil) return;
+  if (!A.user||!A.perfil) return;
   loading(1);
-  var { error } = await db.from('pedidos').update({
-    status: 'aceite', tecnico_uid: A.user.id,
-    tecnico_nome: A.perfil.nome, tecnico_tel: A.perfil.tel,
-    aceito_em: new Date().toISOString()
+  var res = await db.from('pedidos').update({
+    status:'aceite', tecnico_uid:A.user.id,
+    tecnico_nome:A.perfil.nome, tecnico_tel:A.perfil.tel,
+    aceito_em:new Date().toISOString()
   }).eq('id', id);
   loading(0);
-  if (error) { toast('Erro ao aceitar.', 1); return; }
+  if (res.error) { toast('Erro ao aceitar.', 1); return; }
   document.getElementById('tel-aceite').textContent = tel || '—';
   document.getElementById('prov-aceite').textContent = prov || '—';
   mostrar('t-aceite');
-  toast('✅ Pedido aceite!');
+  toast('Pedido aceite!');
 }
 
 // AGENDAMENTO
 async function confirmarAgendar() {
   var data = document.getElementById('a-data').value;
   var hora = document.getElementById('a-hora').value;
-  if (!data) { toast('⚠️ Selecciona a data!', 1); return; }
-  if (!A.user) { toast('⚠️ Faz login primeiro!', 1); return; }
+  if (!data) { toast('Selecciona a data!', 1); return; }
+  // Verificar que a data não é no passado
+  var hoje = new Date().toISOString().split('T')[0];
+  if (data < hoje) { toast('Nao podes agendar uma data no passado!', 1); return; }
+  if (!A.user) { toast('Faz login primeiro!', 1); return; }
   loading(1);
-  await db.from('agendamentos').insert({
-    cliente_uid: A.user.id, servico: A.servico,
-    data: data, hora: hora, criado_em: new Date().toISOString()
+  var res = await db.from('agendamentos').insert({
+    cliente_uid:A.user.id, servico:A.servico,
+    data:data, hora:hora, criado_em:new Date().toISOString()
   });
   loading(0);
-  var df = new Date(data).toLocaleDateString('pt-PT');
-  document.getElementById('resumo-agendar').textContent = '✅ ' + A.servico + ' agendado para ' + df + ' as ' + hora;
-  toast('📅 Agendamento confirmado!');
+  if (res.error) { toast('Erro ao agendar: ' + res.error.message, 1); return; }
+  var df = new Date(data+'T12:00:00').toLocaleDateString('pt-PT');
+  document.getElementById('resumo-agendar').textContent = (A.servico||'Servico') + ' agendado para ' + df + ' as ' + hora;
+  toast('Agendamento confirmado!');
   mostrar('t-agendar-ok');
 }
 
 // AVALIACAO
 function aval(nota) {
   A.notaAval = nota;
-  document.querySelectorAll('.estrela').forEach(function(e, i) {
-    e.classList.toggle('on', i < nota);
-  });
-  var msgs = ['', '😞 Péssimo', '😕 Mau', '😐 Razoável', '😊 Bom', '🤩 Excelente!'];
+  document.querySelectorAll('.estrela').forEach(function(e,i) { e.classList.toggle('on', i<nota); });
+  var msgs = ['','Pessimo','Mau','Razoavel','Bom','Excelente!'];
   document.getElementById('nota-aval').textContent = msgs[nota];
 }
 
 async function enviarAval() {
-  if (A.notaAval === 0) { toast('⚠️ Selecciona pelo menos 1 estrela!', 1); return; }
+  if (A.notaAval===0) { toast('Selecciona pelo menos 1 estrela!', 1); return; }
   var com = document.getElementById('comentario').value;
   loading(1);
-  var { error } = await db.from('avaliacoes').insert({
-    pedido_id: A.pedidoAval, cliente_uid: A.user ? A.user.id : null,
-    nota: A.notaAval, comentario: com, criado_em: new Date().toISOString()
+  var res = await db.from('avaliacoes').insert({
+    pedido_id:A.pedidoAval, cliente_uid:A.user?A.user.id:null,
+    nota:A.notaAval, comentario:com, criado_em:new Date().toISOString()
   });
   loading(0);
-  if (error) toast('Erro ao enviar avaliacao.', 1);
-  else { toast('⭐ Avaliacao enviada!'); mostrar('t-aval-ok'); }
+  if (res.error) toast('Erro ao enviar avaliacao.', 1);
+  else { toast('Avaliacao enviada!'); mostrar('t-aval-ok'); }
 }
 
 // SUPORTE
@@ -933,63 +1173,55 @@ async function enviarReclam() {
   var nome = document.getElementById('sup-nome').value.trim();
   var msg = document.getElementById('sup-msg').value.trim();
   var tipo = document.getElementById('sup-tipo').value;
-  if (!nome || !msg) { toast('⚠️ Preenche nome e mensagem!', 1); return; }
+  if (!nome||!msg) { toast('Preenche nome e mensagem!', 1); return; }
   loading(1);
   await db.from('reclamacoes').insert({
-    nome: nome, tipo: tipo, mensagem: msg,
-    cliente_uid: A.user ? A.user.id : null,
-    status: 'pendente', criado_em: new Date().toISOString()
+    nome:nome, tipo:tipo, mensagem:msg,
+    cliente_uid:A.user?A.user.id:null,
+    status:'pendente', criado_em:new Date().toISOString()
   });
   loading(0);
-  toast('✅ Reclamação enviada!');
+  toast('Reclamacao enviada!');
   mostrar('t-reclam-ok');
 }
 
 // PAGAMENTO
 function calcComissao() {
   var v = parseFloat(document.getElementById('valor').value) || 0;
-  document.getElementById('comissao').textContent = (v * 0.1).toFixed(0) + ' MT';
+  document.getElementById('comissao').textContent = (v*0.1).toFixed(0) + ' MT';
 }
 
 function pagar(metodo) {
   var v = document.getElementById('valor').value;
-  if (!v || parseFloat(v) <= 0) { toast('⚠️ Introduz o valor!', 1); return; }
-  var c = (parseFloat(v) * 0.1).toFixed(0);
-  document.getElementById('resumo-pagar').textContent = '💳 ' + metodo + ' · ' + parseFloat(v).toLocaleString('pt-PT') + ' MT · Comissao: ' + c + ' MT';
+  if (!v||parseFloat(v)<=0) { toast('Introduz o valor!', 1); return; }
+  var c = (parseFloat(v)*0.1).toFixed(0);
+  document.getElementById('resumo-pagar').textContent = metodo + ' | ' + parseFloat(v).toLocaleString('pt-PT') + ' MT | Comissao: ' + c + ' MT';
   mostrar('t-pagar-ok');
 }
 
-// ADMIN
-async function carregarAdmin() {
-  var { data: adm } = await db.from('admins').select('*').eq('uid', A.user.id).single();
-  if (!adm) { toast('⛔ Sem permissao de admin.', 1); return; }
-  var [us, ped, rec] = await Promise.all([
-    db.from('utilizadores').select('tipo'),
-    db.from('pedidos').select('id').eq('status', 'pendente'),
-    db.from('reclamacoes').select('id').eq('status', 'pendente')
-  ]);
-  var tec = (us.data || []).filter(function(u) { return u.tipo === 'tecnico'; });
-  document.getElementById('adm-u').textContent = (us.data || []).length;
-  document.getElementById('adm-t').textContent = tec.length;
-  document.getElementById('adm-p').textContent = (ped.data || []).length;
-  document.getElementById('adm-r').textContent = (rec.data || []).length;
-  var { data: apr } = await db.from('utilizadores').select('*').eq('tipo', 'tecnico').eq('verificado', false);
-  var lista = document.getElementById('adm-lista');
-  if (!apr || apr.length === 0) {
-    lista.innerHTML = '<p style="color:var(--t2)">Nenhum pendente. ✅</p>';
-  } else {
-    lista.innerHTML = '';
-    apr.forEach(function(t) {
-      lista.innerHTML += '<div class="card"><p>👤 ' + t.nome + '</p><p>📞 ' + t.tel + ' · 📍 ' + t.provincia + '</p><div style="display:flex;gap:8px;margin-top:8px;"><button onclick="aprovar(\'' + t.uid + '\')" style="margin:0;flex:1;background:linear-gradient(135deg,#009900,#006600);">✅ Aprovar</button><button class="bp" style="margin:0;flex:1;">❌ Rejeitar</button></div></div>';
-    });
-  }
-  mostrar('t-admin');
-  menuHide();
+async function aprovar(uid, nome, tel) {
+  loading(1);
+  var res = await db.from('utilizadores').update({verificado:true}).eq('uid', uid);
+  loading(0);
+  if (res.error) { toast('Erro ao aprovar.', 1); return; }
+  // Registar aprovacao na tabela admins_log (se existir) — falha silenciosamente
+  await db.from('admins').select('uid').eq('uid', A.user.id); // keep-alive
+  toast('✅ ' + (nome||'Tecnico') + ' aprovado! Contactar: ' + (tel||'—'));
+  carregarAdmin();
 }
 
-async function aprovar(uid) {
-  await db.from('utilizadores').update({ verificado: true }).eq('uid', uid);
-  toast('✅ Técnico aprovado!');
+async function rejeitar(uid, nome) {
+  if (!confirm('Rejeitar ' + (nome||'este tecnico') + '?\nA candidatura sera marcada como rejeitada.')) return;
+  loading(1);
+  // Marcar como rejeitado em vez de apagar — preserva o registo de auth
+  var res = await db.from('utilizadores').update({
+    verificado: false,
+    rejeitado: true,
+    rejeitado_em: new Date().toISOString()
+  }).eq('uid', uid);
+  loading(0);
+  if (res.error) { toast('Erro ao rejeitar: ' + res.error.message, 1); return; }
+  toast('❌ ' + (nome||'Tecnico') + ' rejeitado.');
   carregarAdmin();
 }
 
@@ -1000,45 +1232,254 @@ function enviarMsg() {
   if (!txt) return;
   var cm = document.getElementById('chat-msgs');
   var d = document.createElement('div');
-  d.className = 'mc';
-  d.textContent = txt;
+  d.className = 'mc'; d.textContent = txt;
   cm.appendChild(d);
-  inp.value = '';
-  cm.scrollTop = cm.scrollHeight;
+  inp.value = ''; cm.scrollTop = cm.scrollHeight;
   setTimeout(function() {
-    var rs = ['Ok, entendido! 👍', 'Perfeito, confirmo.', 'Sem problema!', 'Recebido!'];
+    var rs = ['Ok, entendido!','Perfeito, confirmo.','Sem problema!','Recebido!'];
     var r = document.createElement('div');
-    r.className = 'mt';
-    r.textContent = rs[Math.floor(Math.random() * rs.length)];
-    cm.appendChild(r);
-    cm.scrollTop = cm.scrollHeight;
+    r.className = 'mt'; r.textContent = rs[Math.floor(Math.random()*rs.length)];
+    cm.appendChild(r); cm.scrollTop = cm.scrollHeight;
   }, 1200);
 }
 
 document.addEventListener('keydown', function(e) {
-  if (e.key === 'Enter' && document.getElementById('chat-inp') === document.activeElement) enviarMsg();
+  if (e.key==='Enter'&&document.getElementById('chat-inp')===document.activeElement) enviarMsg();
 });
 
-// UTILS
+// WIZARD CANDIDATURA TECNICO — 5 PASSOS
+
+function toggleServ(el) {
+  var v = el.getAttribute('data-v');
+  var idx = wizServicos.indexOf(v);
+  if (idx > -1) { wizServicos.splice(idx,1); el.classList.remove('sel'); }
+  else { wizServicos.push(v); el.classList.add('sel'); }
+}
+
+function wizVoltarOuSair() {
+  if (wizPasso === 1) ir('t-inicio');
+  else wizBack(wizPasso - 1);
+}
+
+function wizNext(passo) {
+  if (passo === 2) {
+    if (wizServicos.length === 0) { toast('Escolhe pelo menos 1 servico!', 1); return; }
+    if (!document.getElementById('rt-prov').value) { toast('Selecciona a provincia de actuacao!', 1); return; }
+  }
+  if (passo === 3) {
+    var nome = document.getElementById('rt-nome').value.trim();
+    var tel = document.getElementById('rt-tel').value.trim();
+    var email = document.getElementById('rt-email').value.trim();
+    var senha = document.getElementById('rt-senha').value;
+    var nasc = document.getElementById('rt-nasc').value;
+    if (!nome) { toast('Preenche o nome completo!', 1); return; }
+    if (!tel) { toast('Preenche o numero de telefone!', 1); return; }
+    if (!email) { toast('Preenche o email!', 1); return; }
+    if (!senha || senha.length < 6) { toast('Senha com minimo 6 caracteres!', 1); return; }
+    if (nasc) {
+      var hoje = new Date();
+      var nascDate = new Date(nasc);
+      var idade = hoje.getFullYear() - nascDate.getFullYear();
+      var mesAtrasado = hoje.getMonth() < nascDate.getMonth() || (hoje.getMonth() === nascDate.getMonth() && hoje.getDate() < nascDate.getDate());
+      if (mesAtrasado) idade--;
+      if (idade < 18) { toast('Tens de ter mais de 18 anos!', 1); return; }
+    } else { toast('Data de nascimento obrigatoria!', 1); return; }
+  }
+  if (passo === 4) {
+    if (!document.getElementById('rt-exp').value) { toast('Selecciona os anos de experiencia!', 1); return; }
+    if (!document.getElementById('rt-disp').value) { toast('Selecciona a disponibilidade!', 1); return; }
+    var hist = document.getElementById('rt-historial').value.trim();
+    if (!hist || hist.length < 20) { toast('Descreve a tua experiencia anterior (minimo 20 caracteres).', 1); return; }
+  }
+  if (passo === 5) {
+    var bi = document.getElementById('rt-bi').value.trim();
+    var end = document.getElementById('rt-endereco').value.trim();
+    var bio = document.getElementById('rt-bio').value.trim();
+    if (!bi) { toast('O numero do BI e obrigatorio!', 1); return; }
+    if (!end) { toast('Indica o teu bairro/endereco!', 1); return; }
+    if (!bio || bio.length < 50) { toast('A carta de motivacao deve ter pelo menos 50 caracteres.', 1); return; }
+    var nome = document.getElementById('rt-nome').value.trim();
+    var tel = document.getElementById('rt-tel').value.trim();
+    var email = document.getElementById('rt-email').value.trim();
+    var prov = document.getElementById('rt-prov').value;
+    var exp = document.getElementById('rt-exp').value;
+    var disp = document.getElementById('rt-disp').value;
+    var preco = document.getElementById('rt-preco').value;
+    var ref1 = document.getElementById('rt-ref1').value.trim();
+    document.getElementById('wiz-resumo').innerHTML =
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">' +
+        '<div style="width:44px;height:44px;border-radius:50%;background:var(--vd);border:2px solid var(--v);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">👷</div>' +
+        '<div><div style="font-size:16px;font-weight:700;color:#fff;">'+nome+'</div><div style="font-size:12px;color:var(--v);">Candidato a Tecnico FixMoc</div></div>' +
+      '</div>' +
+      '<div class="div"></div>' +
+      '<p style="font-size:12px;margin-bottom:3px;">📱 '+tel+'&nbsp;&nbsp;✉️ '+email+'</p>' +
+      '<p style="font-size:12px;margin-bottom:3px;">📍 '+prov+' — '+end+'</p>' +
+      '<p style="font-size:12px;margin-bottom:3px;">🔧 <strong>'+wizServicos.join(', ')+'</strong></p>' +
+      '<p style="font-size:12px;margin-bottom:3px;">⏱️ '+exp+' de exp. &nbsp;|&nbsp; '+disp+'</p>' +
+      (preco?'<p style="font-size:12px;margin-bottom:3px;">💰 '+preco+' MT/hora</p>':'')+
+      (ref1?'<p style="font-size:12px;margin-bottom:3px;">👥 Ref: '+ref1+'</p>':'')+
+      '<div class="div"></div>' +
+      '<p style="font-size:12px;font-style:italic;color:var(--t2);">"'+bio.substring(0,120)+(bio.length>120?'...':'')+'"</p>';
+  }
+  wizIrPasso(passo);
+}
+
+function wizBack(passo) { wizIrPasso(passo); }
+
+function wizIrPasso(passo) {
+  wizPasso = passo;
+  for (var i=1;i<=5;i++) {
+    var p = document.getElementById('wiz-p'+i);
+    if (p) p.style.display = (i===passo)?'block':'none';
+    var ws = document.getElementById('ws'+i);
+    if (ws) {
+      ws.classList.remove('on','done');
+      if (i === passo) ws.classList.add('on');
+      else if (i < passo) ws.classList.add('done');
+    }
+    var wl = document.getElementById('wl'+i);
+    if (wl) { wl.classList.remove('done'); if (i < passo) wl.classList.add('done'); }
+  }
+  document.getElementById('wiz-label').textContent = 'Passo '+passo+' de 5';
+  window.scrollTo(0,0);
+}
+
+async function registarTecnico() {
+  var nome = document.getElementById('rt-nome').value.trim();
+  var tel = document.getElementById('rt-tel').value.trim();
+  var email = document.getElementById('rt-email').value.trim();
+  var senha = document.getElementById('rt-senha').value;
+  var prov = document.getElementById('rt-prov').value;
+  var bio = document.getElementById('rt-bio').value.trim();
+  var bi = document.getElementById('rt-bi').value.trim();
+  var disp = document.getElementById('rt-disp').value;
+  var preco = document.getElementById('rt-preco').value;
+  var raio = document.getElementById('rt-raio').value;
+  var cert = document.getElementById('rt-cert').value.trim();
+  var hist = document.getElementById('rt-historial').value.trim();
+  var end = document.getElementById('rt-endereco').value.trim();
+  var refNome = document.getElementById('rt-ref1').value.trim();
+  var refRel = document.getElementById('rt-refrel').value;
+  var refTel = document.getElementById('rt-ref1tel').value.trim();
+  var exp = document.getElementById('rt-exp').value;
+  var nasc = document.getElementById('rt-nasc').value;
+  var genero = document.getElementById('rt-genero').value;
+  var espec = wizServicos.length > 0 ? wizServicos[0] : '';
+  var todosServicos = wizServicos.join(', ');
+  loading(1);
+  var res = await db.auth.signUp({ email:email, password:senha });
+  if (res.error) { loading(0); toast(tradErr(res.error.message), 1); return; }
+  if (res.data.user) {
+    var ins = await db.from('utilizadores').insert({
+      uid:res.data.user.id, nome:nome, tel:tel, email:email,
+      tipo:'tecnico', provincia:prov, verificado:false,
+      especialidade:espec, todos_servicos:todosServicos,
+      experiencia:exp, bio:bio, historial:hist,
+      bi:bi, endereco:end,
+      disponibilidade:disp, preco_hora:preco?parseInt(preco):null,
+      raio:raio, certificacoes:cert||null,
+      data_nascimento:nasc||null, genero:genero||null,
+      referencia_nome:refNome||null, referencia_relacao:refRel||null,
+      referencia_tel:refTel||null,
+      avaliacao:0, total_servicos:0,
+      criado_em:new Date().toISOString()
+    });
+    if (ins.error) {
+      loading(0);
+      // Conta criada no auth mas insert falhou — informar o utilizador
+      toast('Erro ao guardar perfil: ' + (ins.error.message||'tente novamente'), 1);
+      return;
+    }
+  }
+  loading(0);
+  mostrar('t-reg-t-ok');
+  toast('Candidatura enviada com sucesso!');
+}
+
+// ADMIN — ficha completa do candidato
+async function carregarAdmin() {
+  var res = await db.from('admins').select('*').eq('uid', A.user.id).single();
+  if (!res.data) { toast('Sem permissao de admin.', 1); return; }
+  var us = await db.from('utilizadores').select('tipo');
+  var ped = await db.from('pedidos').select('id').eq('status','pendente');
+  var rec = await db.from('reclamacoes').select('id').eq('status','pendente');
+  var tec = (us.data||[]).filter(function(u){return u.tipo==='tecnico';});
+  document.getElementById('adm-u').textContent = (us.data||[]).length;
+  document.getElementById('adm-t').textContent = tec.length;
+  document.getElementById('adm-p').textContent = (ped.data||[]).length;
+  document.getElementById('adm-r').textContent = (rec.data||[]).length;
+  var apr = await db.from('utilizadores').select('*').eq('tipo','tecnico').eq('verificado',false).is('rejeitado', null).order('criado_em',{ascending:false});
+  var lista = document.getElementById('adm-lista');
+  if (!apr.data||apr.data.length===0) {
+    lista.innerHTML = '<div class="card"><p style="text-align:center;color:var(--t2);">✅ Nenhuma candidatura pendente.</p></div>';
+  } else {
+    lista.innerHTML = '<p style="font-size:12px;color:var(--t2);margin-bottom:8px;">'+apr.data.length+' candidatura(s) por analisar</p>';
+    apr.data.forEach(function(t) {
+      var data = t.criado_em ? new Date(t.criado_em).toLocaleDateString('pt-PT') : '—';
+      // Escapar valores para evitar quebra no onclick com nomes especiais
+      var uidSafe = (t.uid||'').replace(/'/g,"\\'");
+      var nomeSafe = (t.nome||'').replace(/'/g,"\\'");
+      var telSafe = (t.tel||'').replace(/'/g,"\\'")
+      lista.innerHTML +=
+        '<div class="card" style="margin-bottom:14px;">' +
+          '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">' +
+            '<div style="width:40px;height:40px;border-radius:50%;background:var(--vd);border:1px solid var(--v);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">👷</div>' +
+            '<div><div style="font-weight:700;font-size:15px;color:#fff;">'+t.nome+'</div>' +
+            '<div style="font-size:11px;color:var(--t3);">Candidatura enviada em '+data+'</div></div>' +
+          '</div>' +
+          '<div class="div" style="margin:8px 0;"></div>' +
+          '<div style="font-size:11px;color:var(--v);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">📋 Dados pessoais</div>' +
+          '<p style="font-size:13px;margin-bottom:2px;">📱 '+t.tel+'</p>' +
+          '<p style="font-size:13px;margin-bottom:2px;">✉️ '+(t.email||'—')+'</p>' +
+          '<p style="font-size:13px;margin-bottom:2px;">📍 '+t.provincia+(t.endereco?' — '+t.endereco:'')+'</p>' +
+          (t.bi?'<p style="font-size:13px;margin-bottom:2px;">🪪 BI: <strong>'+t.bi+'</strong></p>':
+            '<p style="font-size:13px;color:#ff8a80;margin-bottom:2px;">⚠️ BI nao fornecido</p>') +
+          (t.data_nascimento?'<p style="font-size:12px;color:var(--t2);margin-bottom:2px;">Data nasc.: '+new Date(t.data_nascimento).toLocaleDateString('pt-PT')+'</p>':'') +
+          '<div class="div" style="margin:8px 0;"></div>' +
+          '<div style="font-size:11px;color:var(--t2);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">🔧 Perfil profissional</div>' +
+          '<p style="font-size:13px;margin-bottom:2px;"><strong>Servicos:</strong> '+(t.todos_servicos||t.especialidade||'—')+'</p>' +
+          '<p style="font-size:13px;margin-bottom:2px;">Zona: '+t.provincia+(t.raio?' ('+t.raio+')':'')+'</p>' +
+          '<p style="font-size:13px;margin-bottom:2px;">Experiencia: '+(t.experiencia||'—')+'</p>' +
+          '<p style="font-size:13px;margin-bottom:2px;">Disponibilidade: '+(t.disponibilidade||'—')+'</p>' +
+          (t.preco_hora?'<p style="font-size:13px;margin-bottom:2px;">Preco: '+t.preco_hora+' MT/hora</p>':'') +
+          (t.historial?'<div style="margin:6px 0;padding:8px;background:var(--f4);border-radius:8px;border-left:3px solid var(--t3);"><div style="font-size:11px;color:var(--t3);margin-bottom:3px;">HISTORIAL</div><p style="font-size:12px;color:var(--t);">'+t.historial+'</p></div>':'') +
+          (t.certificacoes?'<p style="font-size:12px;color:var(--t2);margin-top:4px;">🎓 '+t.certificacoes+'</p>':'') +
+          (t.referencia_nome?
+            '<div class="div" style="margin:8px 0;"></div>' +
+            '<div style="font-size:11px;color:var(--t2);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">👥 Referencia profissional</div>' +
+            '<p style="font-size:13px;margin-bottom:2px;">'+t.referencia_nome+(t.referencia_relacao?' ('+t.referencia_relacao+')':'')+'</p>' +
+            (t.referencia_tel?'<p style="font-size:13px;">📱 '+t.referencia_tel+'</p>':'')
+          :'') +
+          '<div class="div" style="margin:8px 0;"></div>' +
+          '<div style="font-size:11px;color:var(--t2);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">✍️ Carta de motivacao</div>' +
+          '<div style="padding:10px;background:var(--f4);border-radius:8px;border-left:3px solid var(--v);margin-bottom:12px;"><p style="font-size:13px;font-style:italic;color:var(--t);">"'+(t.bio||'Sem carta de motivacao')+'"</p></div>' +
+          '<div style="display:flex;gap:8px;">' +
+            '<button onclick="aprovar(\''+uidSafe+'\',\''+nomeSafe+'\',\''+telSafe+'\')" style="margin:0;flex:1;background:linear-gradient(135deg,#009900,#006600);padding:12px;">✅ Aprovar</button>' +
+            '<button class="bp" onclick="rejeitar(\''+uidSafe+'\',\''+nomeSafe+'\')" style="margin:0;flex:1;padding:12px;">❌ Rejeitar</button>' +
+          '</div>' +
+        '</div>';
+    });
+  }
+  mostrar('t-admin');
+  menuHide();
+}
+
 function tradErr(msg) {
-  if (msg.indexOf('Invalid login') > -1) return '⚠️ Email ou senha incorrectos.';
-  if (msg.indexOf('already registered') > -1) return '⚠️ Email já registado.';
-  if (msg.indexOf('Password') > -1) return '⚠️ Senha com mínimo 6 caracteres.';
-  if (msg.indexOf('email') > -1) return '⚠️ Email invalido.';
-  return '⚠️ ' + msg;
+  if (msg.indexOf('Invalid login')>-1) return 'Email ou senha incorrectos.';
+  if (msg.indexOf('already registered')>-1) return 'Email ja registado.';
+  if (msg.indexOf('Password')>-1) return 'Senha com minimo 6 caracteres.';
+  return msg;
 }
 
 function toast(msg, err) {
   var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'on' + (err ? ' err' : '');
+  t.textContent = msg; t.className = 'on'+(err?' err':'');
   clearTimeout(window._tt);
-  window._tt = setTimeout(function() { t.className = ''; }, 3500);
+  window._tt = setTimeout(function(){t.className='';}, 3500);
 }
 
 function loading(show) {
-  var ov = document.getElementById('ov');
-  ov.className = show ? 'on' : '';
+  document.getElementById('ov').className = show ? 'on' : '';
 }
 </script>
 </body>
