@@ -2,793 +2,1709 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="FixMoç — Primeira plataforma moçambicana que conecta técnicos de confiança com clientes.">
-<meta name="theme-color" content="#00e676">
-<title>FixMoç — Serviços Técnicos em Moçambique</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>FixMoç - Serviços Técnicos em Moçambique</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
-:root {
-  --verde: #00e676; --verde-escuro: #00b050; --verde-dim: rgba(0,230,118,0.12);
-  --azul: #2979ff; --vermelho: #ff3d00;
-  --fundo: #080c0e; --fundo2: #0f1518; --fundo3: #161d21; --fundo4: #1e272d;
-  --borda: #1f2c33; --texto: #e8f0f4; --texto2: #8fa3ad; --texto3: #4d6672; --branco: #ffffff;
-}
-* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-html,body { height:100%; background:var(--fundo); color:var(--texto); font-family:'DM Sans',sans-serif; font-size:15px; max-width:480px; margin:0 auto; overflow-x:hidden; }
-::-webkit-scrollbar{width:3px} ::-webkit-scrollbar-track{background:var(--fundo)} ::-webkit-scrollbar-thumb{background:var(--borda);border-radius:2px}
-[id^="tela-"]{display:none;padding:24px 18px 90px;min-height:100vh;animation:slideUp .28s cubic-bezier(.22,1,.36,1)}
-@keyframes slideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-#tela-inicio{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:100vh;padding:40px 24px;background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(0,230,118,0.08) 0%,transparent 70%),var(--fundo)}
-.logo-inicio h1{font-family:'Syne',sans-serif;font-size:64px;font-weight:800;color:var(--verde);letter-spacing:-2px;line-height:1;text-shadow:0 0 40px rgba(0,230,118,0.4)}
-.logo-inicio .badge{display:inline-block;background:var(--verde-dim);border:1px solid rgba(0,230,118,0.25);color:var(--verde);font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-top:8px}
-.logo-inicio p{color:var(--texto2);font-size:15px;margin-top:14px;margin-bottom:50px;line-height:1.5}
-.botoes-inicio{display:flex;flex-direction:column;gap:13px;width:100%;max-width:320px}
-.btn-cliente{background:linear-gradient(135deg,var(--verde),var(--verde-escuro))!important;color:#000!important;font-weight:700!important}
-.btn-tecnico{background:var(--fundo3)!important;border:1px solid var(--borda)!important;color:var(--texto)!important}
-.versao-link{font-size:10px;margin-top:36px} .versao-link a{color:var(--texto3);text-decoration:none}
-h2{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:20px;color:var(--branco)}
-h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:600;margin-bottom:10px;color:var(--texto)}
-p{font-size:14px;color:var(--texto2);line-height:1.6;margin-bottom:5px} a{color:var(--verde);text-decoration:none}
-button{display:block;width:100%;padding:14px 18px;margin:8px 0;background:linear-gradient(135deg,var(--verde),var(--verde-escuro));color:#000;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;border:none;border-radius:14px;cursor:pointer;transition:all .18s;letter-spacing:.3px}
-button:active{transform:scale(.97);opacity:.85}
-.btn-voltar{background:var(--fundo3)!important;border:1px solid var(--borda)!important;color:var(--texto2)!important;font-weight:500!important}
-.btn-perigo{background:linear-gradient(135deg,#ff3d00,#cc2200)!important;color:#fff!important}
-.btn-azul{background:linear-gradient(135deg,#2979ff,#1a56dd)!important;color:#fff!important}
-input[type="text"],input[type="email"],input[type="password"],input[type="tel"],input[type="date"],input[type="number"],textarea,select{width:100%;padding:14px 16px;margin:7px 0;background:var(--fundo3);border:1px solid var(--borda);border-radius:12px;color:var(--texto);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none}
-input:focus,textarea:focus,select:focus{border-color:var(--verde);box-shadow:0 0 0 3px rgba(0,230,118,0.1)}
-select option{background:var(--fundo3)} textarea{resize:vertical;min-height:90px}
-.pedido-card{background:var(--fundo3);border:1px solid var(--borda);border-radius:16px;padding:16px;margin:12px 0}
-.card-destaque{border-color:rgba(0,230,118,0.3);background:linear-gradient(135deg,var(--fundo3),rgba(0,230,118,0.04))}
-.servicos{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:8px}
-.servicos button{background:var(--fundo3);border:1px solid var(--borda);border-radius:14px;padding:18px 10px;font-size:13px;color:var(--texto);font-weight:500;margin:0}
-.servicos button:hover,.servicos button:active{border-color:var(--verde);background:var(--verde-dim);color:var(--verde);transform:scale(.97)}
-.perfil-foto{text-align:center;padding:16px 0 20px} .perfil-foto h3{font-size:20px;color:var(--branco);margin-top:8px}
-.perfil-avatar{font-size:64px;line-height:1}
-.badge-verificado{display:inline-block;background:var(--verde-dim);border:1px solid rgba(0,230,118,0.3);color:var(--verde);font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;margin-top:6px}
-.estrelas{display:flex;justify-content:center;gap:12px;margin:16px 0}
-.estrela{font-size:38px;cursor:pointer;filter:grayscale(1) opacity(.4);transition:filter .15s,transform .15s;user-select:none}
-.estrela.ativa{filter:grayscale(0) opacity(1);transform:scale(1.15)}
-#nota-avaliacao{text-align:center;color:var(--texto2);font-size:13px;margin-bottom:8px}
-.chat-cabecalho{display:flex;align-items:center;gap:14px;background:var(--fundo3);border:1px solid var(--borda);border-radius:16px;padding:14px 16px;margin-bottom:16px}
-.chat-cabecalho .avatar{font-size:36px} .chat-cabecalho h3{margin-bottom:2px;font-size:15px} .chat-cabecalho p{font-size:12px;margin:0}
-#chat-mensagens{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;min-height:180px;max-height:320px;overflow-y:auto}
-.mensagem-tecnico,.mensagem-cliente{max-width:78%;padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.5;animation:fadeMsg .2s ease}
-@keyframes fadeMsg{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.mensagem-tecnico{background:var(--fundo4);border:1px solid var(--borda);color:var(--texto);align-self:flex-start;border-bottom-left-radius:4px}
-.mensagem-cliente{background:var(--verde-dim);border:1px solid rgba(0,230,118,0.2);color:var(--verde);align-self:flex-end;border-bottom-right-radius:4px}
-.mensagem-tecnico p,.mensagem-cliente p{color:inherit;margin:0}
-.chat-input{display:flex;gap:10px;align-items:center;margin-bottom:10px}
-.chat-input input{flex:1;margin:0} .chat-input button{width:48px;min-width:48px;height:48px;padding:0;border-radius:12px;font-size:18px;margin:0;flex-shrink:0}
-.urgencia-urgente{color:#ff3d00;font-weight:600} .urgencia-normal{color:#ffab00;font-weight:600} .urgencia-sem-pressa{color:var(--verde);font-weight:600}
-.divisor{height:1px;background:var(--borda);margin:16px 0}
-.tela-central{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:80vh;padding-bottom:20px}
-.icone-grande{font-size:72px;margin-bottom:16px;animation:pop .4s cubic-bezier(.34,1.56,.64,1)}
-@keyframes pop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
-.tela-central h2{margin-bottom:10px} .tela-central p{max-width:280px;text-align:center}
-#menu-nav{display:none;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(8,12,14,0.96);backdrop-filter:blur(12px);border-top:1px solid var(--borda);justify-content:space-around;align-items:center;padding:8px 0 12px;z-index:1000}
-#menu-nav button{background:none!important;border:none!important;color:var(--texto3)!important;font-size:10px!important;font-weight:500!important;padding:6px 10px!important;width:auto!important;margin:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;gap:4px!important;transition:color .15s!important;border-radius:0!important}
-#menu-nav button .menu-icon{font-size:20px} #menu-nav button.ativo{color:var(--verde)!important}
-.sb-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(62,207,142,0.1);border:1px solid rgba(62,207,142,0.3);color:#3ecf8e;font-size:10px;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:16px;letter-spacing:1px;text-transform:uppercase}
-.notif-dot{display:inline-block;width:8px;height:8px;background:var(--verde);border-radius:50%;margin-right:6px;vertical-align:middle}
-#comissao{color:var(--verde);font-weight:700}
-#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--fundo4);border:1px solid var(--borda);color:var(--texto);padding:12px 20px;border-radius:12px;font-size:14px;font-weight:500;z-index:9999;opacity:0;transition:all .3s;pointer-events:none;max-width:320px;text-align:center}
-#toast.show{opacity:1;transform:translateX(-50%) translateY(0)} #toast.erro{border-color:var(--vermelho);color:#ff8a80}
-#loading-overlay{display:none;position:fixed;inset:0;background:rgba(8,12,14,0.75);backdrop-filter:blur(4px);z-index:8888;align-items:center;justify-content:center}
-#loading-overlay.show{display:flex}
-.spinner{width:40px;height:40px;border:3px solid var(--borda);border-top-color:var(--verde);border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-@media(max-width:360px){h2{font-size:18px}.logo-inicio h1{font-size:52px}.servicos{gap:8px}button{font-size:13px}}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--v:#00e676;--ve:#00b050;--vd:rgba(0,230,118,0.12);--az:#2979ff;--vm:#ff3d00;--f:#080c0e;--f2:#0f1518;--f3:#161d21;--f4:#1e272d;--b:#1f2c33;--t:#e8f0f4;--t2:#8fa3ad;--t3:#4d6672}
+html,body{height:100%;background:var(--f);color:var(--t);font-family:Arial,sans-serif;font-size:15px;max-width:480px;margin:0 auto;overflow-x:hidden}
+.tela{display:none;padding:20px 16px 100px;min-height:100vh}
+#t-inicio{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:100vh;padding:40px 20px}
+.logo{font-size:60px;font-weight:900;color:var(--v);margin-bottom:8px}
+.sub{color:var(--t2);font-size:14px;margin:10px 0 40px}
+.bts{display:flex;flex-direction:column;gap:12px;width:100%;max-width:300px}
+h2{font-size:20px;font-weight:700;margin-bottom:16px;color:#fff}
+h3{font-size:14px;font-weight:600;margin-bottom:8px;color:var(--t)}
+p{font-size:14px;color:var(--t2);line-height:1.6;margin-bottom:4px}
+a{color:var(--v);text-decoration:none}
+button{display:block;width:100%;padding:14px;margin:8px 0;background:linear-gradient(135deg,var(--v),var(--ve));color:#000;font-size:14px;font-weight:700;border:none;border-radius:12px;cursor:pointer;touch-action:manipulation}
+button:active{opacity:.8;transform:scale(.98)}
+.bv{background:var(--f3)!important;border:1px solid var(--b)!important;color:var(--t2)!important}
+.bp{background:linear-gradient(135deg,#ff3d00,#cc2200)!important;color:#fff!important}
+.ba{background:linear-gradient(135deg,#2979ff,#1a56dd)!important;color:#fff!important}
+.bc{background:linear-gradient(135deg,var(--v),var(--ve));color:#000;font-weight:700}
+.bt{background:var(--f3);border:1px solid var(--b);color:var(--t)}
+input,textarea,select{width:100%;padding:13px 14px;margin:6px 0;background:var(--f3);border:1px solid var(--b);border-radius:10px;color:var(--t);font-size:14px;outline:none;-webkit-appearance:none;font-family:Arial,sans-serif}
+input:focus,textarea:focus,select:focus{border-color:var(--v)}
+select option{background:var(--f3)}
+textarea{resize:vertical;min-height:80px}
+.card{background:var(--f3);border:1px solid var(--b);border-radius:14px;padding:14px;margin:10px 0}
+.card-v{border-color:rgba(0,230,118,0.3);background:linear-gradient(135deg,var(--f3),rgba(0,230,118,0.04))}
+.carda{border-color:rgba(255,171,0,0.4);background:rgba(255,171,0,0.04)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}
+.grid button{background:var(--f3);border:1px solid var(--b);border-radius:12px;padding:16px 8px;font-size:13px;color:var(--t);font-weight:500;margin:0}
+.grid button:active{border-color:var(--v);color:var(--v)}
+.centro{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:75vh}
+.icone{font-size:70px;margin-bottom:14px}
+.estrelas{display:flex;justify-content:center;gap:10px;margin:14px 0}
+.estrela{font-size:36px;cursor:pointer;opacity:.4;touch-action:manipulation}
+.estrela.on{opacity:1}
+.div{height:1px;background:var(--b);margin:14px 0}
+#menu{display:none;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(8,12,14,0.97);border-top:1px solid var(--b);justify-content:space-around;align-items:center;padding:8px 0 14px;z-index:999}
+#menu button{background:none!important;border:none!important;color:var(--t3)!important;font-size:10px!important;font-weight:500!important;padding:6px 8px!important;width:auto!important;margin:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;gap:3px!important;border-radius:0!important}
+#menu button span{font-size:20px}
+#menu button.on{color:var(--v)!important}
+#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--f4);border:1px solid var(--b);color:var(--t);padding:11px 18px;border-radius:10px;font-size:13px;font-weight:500;z-index:9999;opacity:0;transition:all .25s;pointer-events:none;max-width:300px;text-align:center;white-space:pre-line}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.err{border-color:var(--vm);color:#ff8a80}
+#ov{display:none;position:fixed;inset:0;background:rgba(8,12,14,0.8);z-index:8888;align-items:center;justify-content:center;pointer-events:none}
+#ov.on{display:flex;pointer-events:all}
+.spin{width:38px;height:38px;border:3px solid var(--b);border-top-color:var(--v);border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.badge{display:inline-block;background:var(--vd);border:1px solid rgba(0,230,118,.25);color:var(--v);font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:14px;letter-spacing:1px;text-transform:uppercase}
+.vu{color:#ff3d00;font-weight:600}
+.vn{color:#ffab00;font-weight:600}
+.vs{color:var(--v);font-weight:600}
+.avatar{font-size:60px;text-align:center;margin:10px 0}
+.bv2{display:inline-block;background:var(--vd);border:1px solid rgba(0,230,118,.3);color:var(--v);font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;margin-top:4px}
+.chat-m{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;min-height:160px;max-height:300px;overflow-y:auto}
+.mt{max-width:78%;padding:9px 13px;border-radius:14px;font-size:14px;background:var(--f4);border:1px solid var(--b);align-self:flex-start;border-bottom-left-radius:3px}
+.mc{max-width:78%;padding:9px 13px;border-radius:14px;font-size:14px;background:var(--vd);border:1px solid rgba(0,230,118,.2);color:var(--v);align-self:flex-end;border-bottom-right-radius:3px}
+.chat-in{display:flex;gap:8px;align-items:center}
+.chat-in input{flex:1;margin:0}
+.chat-in button{width:46px;min-width:46px;height:46px;padding:0;border-radius:10px;font-size:16px;margin:0;flex-shrink:0}
+.serv-chip{background:var(--f3);border:1.5px solid var(--b);border-radius:12px;padding:13px 10px;font-size:13px;color:var(--t);font-weight:500;text-align:center;cursor:pointer;touch-action:manipulation;transition:all .18s;user-select:none}
+.serv-chip.sel{background:var(--vd);border-color:var(--v);color:var(--v);font-weight:700}
+.wstep{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0}
+.wstep span{width:28px;height:28px;border-radius:50%;background:var(--f3);border:2px solid var(--b);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--t3);transition:all .3s}
+.wstep small{font-size:9px;color:var(--t3);white-space:nowrap;transition:color .3s}
+.wstep.on span{background:var(--vd);border-color:var(--v);color:var(--v)}
+.wstep.on small{color:var(--v)}
+.wstep.done span{background:var(--ve);border-color:var(--ve);color:#000}
+.wline{flex:1;height:2px;background:var(--b);margin:0 3px;margin-bottom:14px;transition:background .3s}
+.wline.done{background:var(--ve)}
+.req-item{padding:8px 0;border-bottom:1px solid var(--b);font-size:13px;color:var(--t);display:flex;align-items:center;gap:8px}
+.req-item:last-child{border-bottom:none;padding-bottom:0}
+.req-doc{color:var(--t2)}
+.field-label{font-size:12px;font-weight:600;color:var(--t2);margin-bottom:2px;margin-top:4px;letter-spacing:.3px}
+.timeline-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--b)}
+.timeline-item:last-child{border-bottom:none}
+.tl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:5px}
 </style>
 </head>
 <body>
-<div id="loading-overlay"><div class="spinner"></div></div>
+<div id="ov"><div class="spin"></div></div>
 <div id="toast"></div>
 
 <!-- INÍCIO -->
-<div id="tela-inicio">
-  <div class="logo-inicio">
-    <h1>FixMoç</h1>
-    <span class="badge">🇲🇿 Moçambique</span>
-    <p>Conectamos técnicos e clientes<br>em todo o país</p>
+<div class="tela" id="t-inicio">
+  <div class="logo">FixMoç</div>
+  <div style="color:var(--v);font-size:12px;letter-spacing:2px;">MOÇAMBIQUE 🇲🇿</div>
+  <p class="sub">Conectamos técnicos e clientes<br>em todo o país</p>
+  <div class="bts">
+    <button class="bc" onclick="escolher('cliente')">👤 Sou Cliente</button>
+    <button class="bt" onclick="escolher('tecnico')">🔧 Sou Técnico</button>
   </div>
-  <div class="botoes-inicio">
-    <button class="btn-cliente" onclick="mostrarLogin()">👤 Sou Cliente</button>
-    <button class="btn-tecnico" onclick="mostrarLogin()">🔧 Sou Técnico</button>
-  </div>
-  <p class="versao-link"><a href="#" onclick="verificarAdmin()">v2.0 Supabase</a></p>
+  <p style="font-size:10px;margin-top:30px;"><a href="#" onclick="irAdmin()">v2.0</a></p>
 </div>
 
 <!-- LOGIN -->
-<div id="tela-login">
+<div class="tela" id="t-login">
   <h2>Entrar na conta</h2>
-  <div class="sb-badge">⚡ Supabase — Real</div>
-  <input type="email" id="login-email" placeholder="O teu email">
-  <input type="password" id="login-senha" placeholder="A tua senha">
-  <button onclick="fazerLogin()">Entrar</button>
-  <p style="text-align:center;margin-top:12px;">Não tens conta? <a href="#" onclick="mostrarRegisto()">Regista-te</a></p>
-  <button class="btn-voltar" onclick="mostrarInicio()">← Voltar</button>
+  <div class="badge">⚡ Supabase Real</div>
+  <input type="email" id="l-email" placeholder="O teu email" autocomplete="email">
+  <input type="password" id="l-senha" placeholder="A tua senha" autocomplete="current-password">
+  <button onclick="login()">Entrar</button>
+  <p style="text-align:center;margin-top:10px;">Não tens conta? <a href="#" onclick="irRegisto()">Regista-te</a></p>
+  <button class="bv" onclick="ir('t-inicio')">← Voltar</button>
 </div>
 
-<!-- REGISTO -->
-<div id="tela-registo">
-  <h2>Criar conta</h2>
-  <div class="sb-badge">⚡ Dados guardados na nuvem</div>
-  <input type="text"     id="reg-nome"  placeholder="O teu nome completo">
-  <input type="tel"      id="reg-tel"   placeholder="Telefone (ex: 87 479 3972)">
-  <input type="email"    id="reg-email" placeholder="O teu email">
-  <input type="password" id="reg-senha" placeholder="Senha (mínimo 6 caracteres)">
-  <select id="provincia-tecnico">
-    <option value="">Selecciona a tua província</option>
-    <option>Maputo Cidade</option><option>Maputo Província</option><option>Matola</option>
-    <option>Gaza</option><option>Inhambane</option><option>Sofala (Beira)</option>
-    <option>Manica</option><option>Tete</option><option>Zambézia (Quelimane)</option>
-    <option>Nampula</option><option>Cabo Delgado</option><option>Niassa</option>
+<!-- REGISTO CLIENTE -->
+<div class="tela" id="t-registo">
+  <h2>👤 Criar conta Cliente</h2>
+  <div class="badge">⚡ Registo rápido</div>
+  <input type="text" id="r-nome" placeholder="Nome completo">
+  <input type="tel" id="r-tel" placeholder="Telefone (ex: 87 479 3972)">
+  <input type="email" id="r-email" placeholder="Email" autocomplete="email">
+  <input type="password" id="r-senha" placeholder="Senha (mínimo 6 caracteres)" autocomplete="new-password">
+  <select id="r-prov" onchange="carregarDistritos('r-prov','r-dist','r-bairro')">
+    <option value="">📍 Selecciona a tua província</option>
   </select>
-  <select id="tipo-utilizador">
-    <option value="cliente">Sou Cliente</option>
-    <option value="tecnico">Sou Técnico</option>
+  <select id="r-dist" onchange="carregarBairros('r-dist','r-bairro')" style="display:none;">
+    <option value="">🏙️ Selecciona o distrito</option>
   </select>
-  <button onclick="criarConta()">✅ Criar conta</button>
-  <p style="text-align:center;margin-top:8px;">Já tens conta? <a href="#" onclick="mostrarLogin()">Entrar</a></p>
-  <button class="btn-voltar" onclick="mostrarInicio()">← Voltar</button>
+  <select id="r-bairro" style="display:none;">
+    <option value="">🏘️ Selecciona o bairro</option>
+  </select>
+  <button onclick="registar()">✅ Criar conta</button>
+  <p style="text-align:center;margin-top:8px;">És técnico? <a href="#" onclick="ir('t-reg-t')">Regista-te aqui</a></p>
+  <p style="text-align:center;">Já tens conta? <a href="#" onclick="ir('t-login')">Entrar</a></p>
+  <button class="bv" onclick="ir('t-inicio')">← Voltar</button>
 </div>
 
-<!-- HOME -->
-<div id="tela-home">
-  <h2 id="saudacao-home">Olá! Bem-vindo ao FixMoç 👋</h2>
-  <p style="margin-bottom:16px;">O que precisas hoje?</p>
-  <div class="servicos">
-    <button onclick="mostrarPedido('⚡ Eletricista')">⚡ Eletricista</button>
-    <button onclick="mostrarPedido('💧 Canalizador')">💧 Canalizador</button>
-    <button onclick="mostrarPedido('🪚 Carpinteiro')">🪚 Carpinteiro</button>
-    <button onclick="mostrarPedido('💻 Informática')">💻 Informática</button>
-    <button onclick="mostrarPedido('🧱 Pedreiro')">🧱 Pedreiro</button>
-    <button onclick="mostrarPedido('🧹 Limpeza')">🧹 Limpeza</button>
-    <button onclick="mostrarPedido('🎨 Pintor')">🎨 Pintor</button>
-    <button onclick="mostrarPedido('❄️ Ar Condicionado')">❄️ Ar Condicionado</button>
-    <button onclick="mostrarPedido('🚗 Mecânico')">🚗 Mecânico</button>
-    <button onclick="mostrarPedido('📺 Eletrodomésticos')">📺 Eletrodomésticos</button>
-    <button onclick="mostrarPedido('🔒 Serralheiro')">🔒 Serralheiro</button>
-    <button onclick="mostrarPedido('🪟 Vidraceiro')">🪟 Vidraceiro</button>
-    <button onclick="mostrarPedido('🌿 Jardineiro')">🌿 Jardineiro</button>
-    <button onclick="mostrarPedido('👶 Babysitter')">👶 Babysitter</button>
-    <button onclick="mostrarPedido('🍳 Cozinheiro')">🍳 Cozinheiro</button>
-    <button onclick="mostrarPedido('📦 Mudanças')">📦 Mudanças</button>
+<!-- CANDIDATURA TÉCNICO — 5 PASSOS -->
+<div class="tela" id="t-reg-t" style="padding-top:16px;">
+
+  <!-- Cabeçalho do wizard -->
+  <div style="margin-bottom:22px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+      <button class="bv" onclick="wizVoltarOuSair()" style="width:36px;height:36px;padding:0;margin:0;font-size:18px;border-radius:10px;flex-shrink:0;">←</button>
+      <div style="flex:1;">
+        <div style="font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;">Vaga de Técnico — FixMoç</div>
+        <div style="font-size:13px;color:var(--t2);" id="wiz-label">Passo 1 de 5</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:0;margin-bottom:0;">
+      <div class="wstep on" id="ws1"><span>1</span><small>Requisitos</small></div>
+      <div class="wline" id="wl1"></div>
+      <div class="wstep" id="ws2"><span>2</span><small>Dados</small></div>
+      <div class="wline" id="wl2"></div>
+      <div class="wstep" id="ws3"><span>3</span><small>Experiência</small></div>
+      <div class="wline" id="wl3"></div>
+      <div class="wstep" id="ws4"><span>4</span><small>Documentos</small></div>
+      <div class="wline" id="wl4"></div>
+      <div class="wstep" id="ws5"><span>5</span><small>Enviar</small></div>
+    </div>
+  </div>
+
+  <!-- ═══ PASSO 1 — Requisitos e área de actuação ═══ -->
+  <div id="wiz-p1">
+    <div style="text-align:center;padding:10px 0 18px;">
+      <div style="font-size:44px;margin-bottom:8px;">🔧</div>
+      <h2 style="margin-bottom:6px;">Vaga de Técnico</h2>
+      <p>Preenche a candidatura completa.<br>O FixMoç analisa e aprova em até 48h.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:12px;">
+      <div style="font-size:11px;color:var(--v);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">📋 Requisitos obrigatórios</div>
+      <div class="req-item">✅ Ter mais de 18 anos</div>
+      <div class="req-item">✅ Bilhete de Identidade (BI) válido</div>
+      <div class="req-item">✅ Mínimo 1 ano de experiência comprovada</div>
+      <div class="req-item">✅ Telefone activo (será o teu contacto)</div>
+      <div class="req-item">✅ Comprometer-se com as regras do FixMoç</div>
+    </div>
+
+    <div class="card" style="margin-bottom:12px;">
+      <div style="font-size:11px;color:var(--t2);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">📄 Documentos necessários</div>
+      <div class="req-item req-doc">📎 Cópia do BI (número obrigatório)</div>
+      <div class="req-item req-doc">📎 Comprovativo de experiência ou formação</div>
+      <div class="req-item req-doc" style="opacity:.7;">📎 Carta de referência (opcional mas valorizada)</div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <div style="font-size:11px;color:var(--t2);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">🔧 Qual é a tua área de trabalho?</div>
+      <p style="margin-bottom:10px;font-size:13px;">Escolhe os serviços que ofereces:</p>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:7px;">
+        <div class="serv-chip" data-v="⚡ Eletricista" onclick="toggleServ(this)">⚡ Eletricista</div>
+        <div class="serv-chip" data-v="💧 Canalizador" onclick="toggleServ(this)">💧 Canalizador</div>
+        <div class="serv-chip" data-v="🪚 Carpinteiro" onclick="toggleServ(this)">🪚 Carpinteiro</div>
+        <div class="serv-chip" data-v="💻 Informática" onclick="toggleServ(this)">💻 Informática</div>
+        <div class="serv-chip" data-v="🧱 Pedreiro" onclick="toggleServ(this)">🧱 Pedreiro</div>
+        <div class="serv-chip" data-v="🧹 Limpeza" onclick="toggleServ(this)">🧹 Limpeza</div>
+        <div class="serv-chip" data-v="🎨 Pintor" onclick="toggleServ(this)">🎨 Pintor</div>
+        <div class="serv-chip" data-v="❄️ Ar Condicionado" onclick="toggleServ(this)">❄️ Ar Condicionado</div>
+        <div class="serv-chip" data-v="🚗 Mecânico" onclick="toggleServ(this)">🚗 Mecânico</div>
+        <div class="serv-chip" data-v="📺 Eletrodomésticos" onclick="toggleServ(this)">📺 Eletrodomésticos</div>
+        <div class="serv-chip" data-v="🔒 Serralheiro" onclick="toggleServ(this)">🔒 Serralheiro</div>
+        <div class="serv-chip" data-v="🪟 Vidraceiro" onclick="toggleServ(this)">🪟 Vidraceiro</div>
+        <div class="serv-chip" data-v="🌿 Jardineiro" onclick="toggleServ(this)">🌿 Jardineiro</div>
+        <div class="serv-chip" data-v="👶 Babysitter" onclick="toggleServ(this)">👶 Babysitter</div>
+        <div class="serv-chip" data-v="🍳 Cozinheiro" onclick="toggleServ(this)">🍳 Cozinheiro</div>
+        <div class="serv-chip" data-v="📦 Mudanças" onclick="toggleServ(this)">📦 Mudanças</div>
+      </div>
+      <select id="rt-prov" style="margin-top:12px;" onchange="carregarDistritos('rt-prov','rt-dist','rt-bairro')">
+        <option value="">📍 Província de actuação *</option>
+      </select>
+      <select id="rt-dist" style="display:none;margin-top:6px;" onchange="carregarBairros('rt-dist','rt-bairro')">
+        <option value="">🏙️ Selecciona o distrito</option>
+      </select>
+      <select id="rt-bairro" style="display:none;margin-top:6px;">
+        <option value="">🏘️ Selecciona o bairro</option>
+      </select>
+    </div>
+
+    <div class="card carda" style="margin-bottom:16px;">
+      <p style="font-size:12px;">⚠️ Ao continuar confirmas que tens mais de 18 anos e aceitas os <a href="#" onclick="ir('t-termos')">Termos de Uso</a> do FixMoç.</p>
+    </div>
+    <button onclick="wizNext(2)">Continuar para os dados pessoais →</button>
+    <p style="text-align:center;margin-top:10px;font-size:13px;">Já tens conta? <a href="#" onclick="ir('t-login')">Entrar aqui</a></p>
+  </div>
+
+  <!-- ═══ PASSO 2 — Dados pessoais ═══ -->
+  <div id="wiz-p2" style="display:none;">
+    <h2 style="margin-bottom:4px;">Dados pessoais</h2>
+    <p style="margin-bottom:18px;">Informação básica da tua conta no FixMoç.</p>
+
+    <div class="field-label">Nome completo *</div>
+    <input type="text" id="rt-nome" placeholder="Ex: João Manuel Nhantumbo">
+
+    <div class="field-label" style="margin-top:10px;">Número de telefone *</div>
+    <input type="tel" id="rt-tel" placeholder="Ex: 87 479 3972">
+    <p style="font-size:11px;color:var(--t3);margin-top:2px;">Este número será o teu contacto principal com os clientes.</p>
+
+    <div class="field-label" style="margin-top:10px;">Email *</div>
+    <input type="email" id="rt-email" placeholder="Ex: joao@gmail.com" autocomplete="email">
+
+    <div class="field-label" style="margin-top:10px;">Senha *</div>
+    <input type="password" id="rt-senha" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+
+    <div class="field-label" style="margin-top:10px;">Data de nascimento *</div>
+    <input type="date" id="rt-nasc" max="2007-01-01">
+    <p style="font-size:11px;color:var(--t3);margin-top:2px;">Tens de ter mais de 18 anos.</p>
+
+    <div class="field-label" style="margin-top:10px;">Género</div>
+    <select id="rt-genero">
+      <option value="">Selecciona (opcional)</option>
+      <option value="M">Masculino</option>
+      <option value="F">Feminino</option>
+      <option value="O">Prefiro não dizer</option>
+    </select>
+
+    <div style="display:flex;gap:8px;margin-top:16px;">
+      <button class="bv" onclick="wizBack(1)" style="flex:1;margin:0;">← Voltar</button>
+      <button onclick="wizNext(3)" style="flex:2;margin:0;">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ═══ PASSO 3 — Experiência profissional ═══ -->
+  <div id="wiz-p3" style="display:none;">
+    <h2 style="margin-bottom:4px;">Experiência profissional</h2>
+    <p style="margin-bottom:18px;">Conta-nos sobre o teu trabalho. Quanto mais completo, melhor a tua candidatura.</p>
+
+    <div class="field-label">Anos de experiência na área *</div>
+    <select id="rt-exp">
+      <option value="">Selecciona</option>
+      <option value="1-2">1 a 2 anos</option>
+      <option value="3-5">3 a 5 anos</option>
+      <option value="5-10">5 a 10 anos</option>
+      <option value="mais10">Mais de 10 anos</option>
+    </select>
+
+    <div class="field-label" style="margin-top:10px;">Onde já trabalhou? *</div>
+    <textarea id="rt-historial" placeholder="Descreve os teus empregos ou projectos anteriores. Ex: Trabalhei 3 anos como eletricista na empresa XYZ. Fiz instalações em casas e prédios em Maputo..." rows="4"></textarea>
+
+    <div class="field-label" style="margin-top:10px;">Formação ou certificados</div>
+    <textarea id="rt-cert" placeholder="Ex: Curso de Electricidade — Centro de Formação ABC (2021)&#10;Certificado de Segurança no Trabalho — IEFP (2022)" rows="3"></textarea>
+    <p style="font-size:11px;color:var(--t3);margin-top:2px;">Não é obrigatório, mas aumenta as tuas hipóteses de aprovação.</p>
+
+    <div class="field-label" style="margin-top:10px;">Disponibilidade de horário *</div>
+    <select id="rt-disp">
+      <option value="">Selecciona</option>
+      <option value="tempo-inteiro">Tempo inteiro (todos os dias)</option>
+      <option value="manha">Só de manhã (7h — 12h)</option>
+      <option value="tarde">Só de tarde (13h — 18h)</option>
+      <option value="fins-semana">Fins de semana</option>
+      <option value="flexivel">Horário flexível (combinamos)</option>
+    </select>
+
+    <div class="field-label" style="margin-top:10px;">Preço por hora (MT)</div>
+    <input type="number" id="rt-preco" placeholder="Ex: 500 MT/hora (opcional)">
+
+    <div class="field-label" style="margin-top:10px;">Raio de deslocação</div>
+    <select id="rt-raio">
+      <option value="">Selecciona</option>
+      <option value="5km">Até 5 km da minha zona</option>
+      <option value="10km">Até 10 km</option>
+      <option value="20km">Até 20 km</option>
+      <option value="provincia">Toda a província</option>
+      <option value="nacional">Nacional (qualquer zona)</option>
+    </select>
+
+    <div style="display:flex;gap:8px;margin-top:16px;">
+      <button class="bv" onclick="wizBack(2)" style="flex:1;margin:0;">← Voltar</button>
+      <button onclick="wizNext(4)" style="flex:2;margin:0;">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ═══ PASSO 4 — Documentos e referências ═══ -->
+  <div id="wiz-p4" style="display:none;">
+    <h2 style="margin-bottom:4px;">Documentos e referências</h2>
+    <p style="margin-bottom:18px;">Para verificar a tua identidade e experiência.</p>
+
+    <div class="card" style="margin-bottom:14px;">
+      <div style="font-size:11px;color:var(--v);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">🪪 Identificação</div>
+      <div class="field-label">Número do BI *</div>
+      <input type="text" id="rt-bi" placeholder="Ex: 123456789A0000B">
+      <p style="font-size:11px;color:var(--t3);margin-top:2px;">Será verificado pelo administrador do FixMoç.</p>
+      <div class="field-label" style="margin-top:10px;">Bairro / Endereço actual *</div>
+      <input type="text" id="rt-endereco" placeholder="Ex: Bairro Polana Cimento, Maputo">
+    </div>
+
+    <div class="card" style="margin-bottom:14px;">
+      <div style="font-size:11px;color:var(--t2);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">👥 Referência profissional</div>
+      <p style="font-size:12px;margin-bottom:10px;">Uma pessoa que pode confirmar o teu trabalho (antigo chefe, cliente ou colega).</p>
+      <div class="field-label">Nome da referência</div>
+      <input type="text" id="rt-ref1" placeholder="Ex: Sr. Carlos Machava">
+      <div class="field-label" style="margin-top:8px;">Relação com a referência</div>
+      <select id="rt-refrel">
+        <option value="">Selecciona (opcional)</option>
+        <option value="ex-chefe">Ex-chefe / Empregador</option>
+        <option value="cliente">Cliente anterior</option>
+        <option value="colega">Colega de trabalho</option>
+        <option value="outro">Outro</option>
+      </select>
+      <div class="field-label" style="margin-top:8px;">Telefone da referência</div>
+      <input type="tel" id="rt-ref1tel" placeholder="Ex: 84 123 4567">
+    </div>
+
+    <div class="card" style="margin-bottom:14px;">
+      <div style="font-size:11px;color:var(--t2);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">✍️ Carta de motivação</div>
+      <p style="font-size:12px;margin-bottom:10px;">Porque queres ser técnico FixMoç? O que te distingue dos outros?</p>
+      <textarea id="rt-bio" placeholder="Escreve aqui a tua carta de motivação. Ex: Tenho 5 anos de experiência como eletricista. Sou pontual, responsável e trabalho com qualidade. Quero ajudar as famílias de Maputo com serviços confiáveis..." rows="5"></textarea>
+      <p style="font-size:11px;color:var(--t3);margin-top:4px;">Mínimo 50 caracteres. Isto é lido pelo administrador.</p>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-top:8px;">
+      <button class="bv" onclick="wizBack(3)" style="flex:1;margin:0;">← Voltar</button>
+      <button onclick="wizNext(5)" style="flex:2;margin:0;">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- ═══ PASSO 5 — Confirmação e envio ═══ -->
+  <div id="wiz-p5" style="display:none;">
+    <h2 style="margin-bottom:4px;">Confirma a candidatura</h2>
+    <p style="margin-bottom:16px;">Verifica os teus dados antes de enviar.</p>
+
+    <div class="card card-v" id="wiz-resumo" style="margin-bottom:14px;"></div>
+
+    <div class="card" style="margin-bottom:14px;border-color:rgba(41,121,255,.4);background:rgba(41,121,255,.04);">
+      <div style="font-size:13px;font-weight:700;margin-bottom:10px;color:#82b1ff;">📬 O que acontece a seguir?</div>
+      <div class="timeline-item">
+        <div class="tl-dot" style="background:#00e676;"></div>
+        <div><strong style="font-size:13px;">Candidatura recebida</strong><br><span style="font-size:12px;color:var(--t2);">O FixMoç recebe e analisa os teus dados.</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot" style="background:#ffab00;"></div>
+        <div><strong style="font-size:13px;">Verificação pelo admin (até 48h)</strong><br><span style="font-size:12px;color:var(--t2);">Verificamos o teu BI, referências e experiência.</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot" style="background:#2979ff;"></div>
+        <div><strong style="font-size:13px;">Contacto pelo telefone</strong><br><span style="font-size:12px;color:var(--t2);">Ligamos para o número que indicaste para te informar.</span></div>
+      </div>
+      <div class="timeline-item" style="border:none;">
+        <div class="tl-dot" style="background:#00e676;border:2px solid var(--v);"></div>
+        <div><strong style="font-size:13px;">Conta activada ✅</strong><br><span style="font-size:12px;color:var(--t2);">Podes receber clientes e trabalhar pelo FixMoç!</span></div>
+      </div>
+    </div>
+
+    <div class="card carda" style="margin-bottom:16px;">
+      <p style="font-size:12px;">⚠️ Candidaturas com dados falsos ou incompletos serão <strong>rejeitadas automaticamente</strong>. Serás notificado pelo telefone.</p>
+    </div>
+
+    <button onclick="registarTecnico()" style="padding:16px;font-size:15px;">🚀 Enviar candidatura</button>
+    <button class="bv" onclick="wizBack(4)" style="margin-top:6px;">← Rever documentos</button>
+  </div>
+
+</div>
+
+<!-- CANDIDATURA ENVIADA -->
+<div class="tela" id="t-reg-t-ok">
+  <div class="centro">
+    <div style="font-size:70px;margin-bottom:6px;">📬</div>
+    <h2 style="margin-bottom:8px;">Candidatura Enviada!</h2>
+    <p style="margin-bottom:20px;">Os teus dados foram recebidos com sucesso.</p>
+    <div class="card" style="width:100%;text-align:left;margin-bottom:16px;">
+      <div class="timeline-item">
+        <div class="tl-dot" style="background:#00e676;"></div>
+        <div><strong style="font-size:13px;color:#fff;">Candidatura recebida ✅</strong></div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot" style="background:#ffab00;opacity:.5;"></div>
+        <div><strong style="font-size:13px;color:var(--t2);">Em análise pelo admin...</strong><br><span style="font-size:12px;color:var(--t3);">Até 48 horas</span></div>
+      </div>
+      <div class="timeline-item" style="border:none;">
+        <div class="tl-dot" style="background:var(--b);border:2px solid var(--b);"></div>
+        <div><strong style="font-size:13px;color:var(--t3);">Conta activada</strong><br><span style="font-size:12px;color:var(--t3);">Após aprovação</span></div>
+      </div>
+    </div>
+    <div class="card carda" style="width:100%;text-align:left;">
+      <p style="font-size:13px;font-weight:600;margin-bottom:4px;">📞 Próximos passos</p>
+      <p style="font-size:13px;">Serás contactado pelo número:</p>
+      <p style="color:var(--v);font-weight:700;font-size:16px;margin-top:4px;">87 479 3972</p>
+    </div>
+    <button onclick="ir('t-inicio')" style="margin-top:18px;width:100%;">🏠 Voltar ao início</button>
   </div>
 </div>
 
-<!-- PEDIDO -->
-<div id="tela-pedido">
+<!-- HOME CLIENTE -->
+<div class="tela" id="t-home">
+  <h2 id="saudacao">Olá! Bem-vindo ao FixMoç 👋</h2>
+  <p style="margin-bottom:14px;">O que precisas hoje?</p>
+  <div class="grid">
+    <button onclick="pedido('⚡ Eletricista')">⚡ Eletricista</button>
+    <button onclick="pedido('💧 Canalizador')">💧 Canalizador</button>
+    <button onclick="pedido('🪚 Carpinteiro')">🪚 Carpinteiro</button>
+    <button onclick="pedido('💻 Informática')">💻 Informática</button>
+    <button onclick="pedido('🧱 Pedreiro')">🧱 Pedreiro</button>
+    <button onclick="pedido('🧹 Limpeza')">🧹 Limpeza</button>
+    <button onclick="pedido('🎨 Pintor')">🎨 Pintor</button>
+    <button onclick="pedido('❄️ Ar Condicionado')">❄️ Ar Condicionado</button>
+    <button onclick="pedido('🚗 Mecânico')">🚗 Mecânico</button>
+    <button onclick="pedido('📺 Eletrodomésticos')">📺 Eletrodomésticos</button>
+    <button onclick="pedido('🔒 Serralheiro')">🔒 Serralheiro</button>
+    <button onclick="pedido('🪟 Vidraceiro')">🪟 Vidraceiro</button>
+    <button onclick="pedido('🌿 Jardineiro')">🌿 Jardineiro</button>
+    <button onclick="pedido('👶 Babysitter')">👶 Babysitter</button>
+    <button onclick="pedido('🍳 Cozinheiro')">🍳 Cozinheiro</button>
+    <button onclick="pedido('📦 Mudanças')">📦 Mudanças</button>
+  </div>
+</div>
+
+<!-- FAZER PEDIDO -->
+<div class="tela" id="t-pedido">
   <h2>📋 Fazer Pedido</h2>
-  <div class="pedido-card card-destaque"><h3 id="servico-escolhido">🔧 Serviço</h3></div>
-  <input type="text" id="pedido-nome" placeholder="O teu nome">
-  <input type="tel"  id="pedido-tel"  placeholder="O teu telefone">
-  <select id="provincia-pedido">
-    <option value="">Selecciona a tua província</option>
-    <option>Maputo Cidade</option><option>Maputo Província</option><option>Matola</option>
-    <option>Gaza</option><option>Inhambane</option><option>Sofala (Beira)</option>
-    <option>Manica</option><option>Tete</option><option>Zambézia (Quelimane)</option>
-    <option>Nampula</option><option>Cabo Delgado</option><option>Niassa</option>
+  <div class="card card-v"><h3 id="s-servico">Serviço</h3></div>
+  <input type="text" id="p-nome" placeholder="O teu nome">
+  <input type="tel" id="p-tel" placeholder="O teu telefone">
+  <select id="p-prov" onchange="carregarDistritos('p-prov','p-dist','p-bairro-sel')">
+    <option value="">📍 Selecciona a tua província</option>
   </select>
-  <input type="text" id="pedido-bairro" placeholder="O teu bairro (opcional)">
-  <textarea id="pedido-descricao" placeholder="Descreve o problema..." rows="4"></textarea>
-  <select id="pedido-urgencia">
+  <select id="p-dist" style="display:none;" onchange="carregarBairros('p-dist','p-bairro-sel')">
+    <option value="">🏙️ Selecciona o distrito</option>
+  </select>
+  <select id="p-bairro-sel" style="display:none;">
+    <option value="">🏘️ Selecciona o bairro</option>
+  </select>
+  <input type="text" id="p-bairro" placeholder="Bairro específico ou referência (opcional)">
+  <textarea id="p-desc" placeholder="Descreve o problema..." rows="3"></textarea>
+  <select id="p-urg">
     <option value="urgente">🔴 Urgente</option>
     <option value="normal" selected>🟡 Normal</option>
     <option value="sem-pressa">🟢 Sem pressa</option>
   </select>
-  <button onclick="pedidoEnviado()">📨 Enviar Pedido</button>
-  <button class="btn-voltar" onclick="mostrarHome()">← Voltar</button>
+  <button onclick="enviarPedido()">📨 Enviar Pedido</button>
+  <button class="bv" onclick="irHome()">← Voltar</button>
 </div>
 
-<!-- SUCESSO -->
-<div id="tela-sucesso">
-  <div class="tela-central">
-    <div class="icone-grande">✅</div>
+<!-- PEDIDO ENVIADO -->
+<div class="tela" id="t-sucesso">
+  <div class="centro">
+    <div class="icone">✅</div>
     <h2>Pedido Enviado!</h2>
-    <p>Guardado! Técnicos da tua zona vão contactar-te em breve.</p><br>
-    <button onclick="mostrarAgendamento()">📅 Agendar data e hora</button>
-    <button class="btn-azul" onclick="mostrarAvaliacaoTela(null)">⭐ Avaliar Técnico</button>
-    <button class="btn-voltar" onclick="mostrarHome()">🏠 Voltar ao início</button>
+    <p>Técnicos da tua zona vão contactar-te em breve.</p><br>
+    <button onclick="irAgendar()">📅 Agendar data</button>
+    <button class="ba" onclick="irAvaliar(null)">⭐ Avaliar Técnico</button>
+    <button class="bv" onclick="irHome()">🏠 Voltar ao início</button>
   </div>
 </div>
 
 <!-- AGENDAMENTO -->
-<div id="tela-agendamento">
+<div class="tela" id="t-agendar">
   <h2>📅 Agendar Serviço</h2>
-  <div class="pedido-card card-destaque"><h3 id="servico-agendado">🔧 Serviço</h3></div>
-  <div class="pedido-card"><h3>📅 Escolhe a data</h3><input type="date" id="data-servico"></div>
-  <div class="pedido-card">
-    <h3>⏰ Escolhe a hora</h3>
-    <select id="hora-servico">
+  <div class="card card-v"><h3 id="s-agendar">Serviço</h3></div>
+  <div class="card"><h3>📅 Data</h3><input type="date" id="a-data"></div>
+  <div class="card">
+    <h3>⏰ Hora</h3>
+    <select id="a-hora">
       <option>08:00</option><option>09:00</option><option>10:00</option><option>11:00</option>
       <option>12:00</option><option>13:00</option><option>14:00</option><option>15:00</option>
       <option>16:00</option><option>17:00</option><option>18:00</option>
     </select>
   </div>
-  <div class="pedido-card">
+  <div class="card">
     <h3>🏠 Tipo de imóvel</h3>
-    <select><option>🏠 Casa particular</option><option>🏢 Apartamento</option><option>🏪 Loja</option><option>🏭 Fábrica</option><option>💼 Escritório</option></select>
+    <select><option>🏠 Casa</option><option>🏢 Apartamento</option><option>🏪 Loja</option><option>💼 Escritório</option></select>
   </div>
-  <button onclick="confirmarAgendamento()">✅ Confirmar Agendamento</button>
-  <button class="btn-voltar" onclick="mostrarHome()">← Voltar</button>
+  <button onclick="confirmarAgendar()">✅ Confirmar</button>
+  <button class="bv" onclick="irHome()">← Voltar</button>
 </div>
 
-<!-- AGENDAMENTO CONFIRMADO -->
-<div id="tela-agendamento-confirmado">
-  <div class="tela-central">
-    <div class="icone-grande">📅</div>
+<!-- AGENDAMENTO OK -->
+<div class="tela" id="t-agendar-ok">
+  <div class="centro">
+    <div class="icone">📅</div>
     <h2>Agendamento Confirmado!</h2>
-    <div class="pedido-card" style="width:100%;text-align:left;margin-top:20px;">
-      <p id="resumo-agendamento"></p><p>👷 Técnicos notificados!</p>
+    <div class="card" style="width:100%;text-align:left;margin-top:16px;">
+      <p id="resumo-agendar"></p>
+      <p>👷 Técnicos notificados!</p>
     </div>
-    <button onclick="mostrarHome()" style="width:100%;margin-top:12px;">🏠 Voltar ao início</button>
+    <button onclick="irHome()" style="margin-top:10px;">🏠 Voltar ao início</button>
   </div>
 </div>
 
-<!-- ÁREA TÉCNICO -->
-<div id="tela-tecnico">
+<!-- ÁREA DO TÉCNICO -->
+<div class="tela" id="t-tecnico">
   <h2>🔧 Área do Técnico</h2>
-  <button onclick="mostrarPerfilTecnico()">👤 Ver meu perfil</button>
-  <p style="margin:16px 0 8px;color:var(--texto2);">Pedidos disponíveis na tua zona:</p>
-  <div id="lista-pedidos-tecnico">
-    <div class="pedido-card"><p style="text-align:center;">A carregar... ⏳</p></div>
+  <button onclick="irPerfilTecnico()">👤 Ver meu perfil</button>
+  <p style="margin:14px 0 8px;color:var(--t2);">Pedidos na tua zona:</p>
+  <div id="lista-pedidos">
+    <div class="card"><p style="text-align:center;">A carregar... ⏳</p></div>
   </div>
 </div>
 
-<!-- ACEITE -->
-<div id="tela-aceite">
-  <div class="tela-central">
-    <div class="icone-grande">🎉</div>
+<!-- PEDIDO ACEITE -->
+<div class="tela" id="t-aceite">
+  <div class="centro">
+    <div class="icone">🎉</div>
     <h2>Pedido Aceite!</h2>
-    <div class="pedido-card" style="width:100%;text-align:left;margin-top:16px;">
+    <div class="card" style="width:100%;text-align:left;margin-top:14px;">
       <p>Contacta o cliente:</p>
-      <div class="divisor"></div>
-      <p>📞 <strong style="color:var(--verde)" id="tel-cliente-aceite">—</strong></p>
-      <p>📍 <span id="prov-cliente-aceite">—</span></p>
+      <div class="div"></div>
+      <p>📞 <strong style="color:var(--v)" id="tel-aceite">—</strong></p>
+      <p>📍 <span id="prov-aceite">—</span></p>
     </div>
-    <button onclick="mostrarPagamento('Serviço aceite')" style="width:100%;margin-top:8px;">💰 Registar Pagamento</button>
-    <button onclick="mostrarChat()" class="btn-azul" style="width:100%;">💬 Chat</button>
-    <button class="btn-voltar" onclick="mostrarTecnico()" style="width:100%;">← Ver mais pedidos</button>
+    <button onclick="irPagamento()" style="width:100%;margin-top:8px;">💰 Registar Pagamento</button>
+    <button onclick="ir('t-chat')" class="ba" style="width:100%;">💬 Chat</button>
+    <button class="bv" onclick="ir('t-tecnico')" style="width:100%;">← Ver mais pedidos</button>
   </div>
 </div>
 
 <!-- PERFIL TÉCNICO -->
-<div id="tela-perfil-tecnico">
+<div class="tela" id="t-perfil-t">
   <h2>👤 Meu Perfil</h2>
-  <div class="perfil-foto">
-    <div class="perfil-avatar">👷</div>
-    <h3 id="perfil-nome">—</h3>
-    <div class="badge-verificado" id="perfil-verificado">⏳ Aguarda verificação</div>
-    <p style="margin-top:8px;" id="perfil-avaliacao">⭐ Sem avaliações ainda</p>
+  <div style="text-align:center;padding:14px 0 18px;">
+    <div class="avatar">👷</div>
+    <h3 id="pf-nome" style="font-size:18px;color:#fff;margin-top:8px;">—</h3>
+    <div class="bv2" id="pf-ver">⏳ A aguardar verificação</div>
+    <p style="margin-top:6px;" id="pf-aval">⭐ Sem avaliações</p>
   </div>
-  <div class="pedido-card">
-    <p id="perfil-tel">📞 —</p>
-    <p id="perfil-prov">📍 —</p>
-    <p id="perfil-email">📧 —</p>
+  <div class="card">
+    <p id="pf-espec">🔧 Especialidade: —</p>
+    <p id="pf-exp">📊 Experiência: —</p>
+    <p id="pf-tel">📞 —</p>
+    <p id="pf-prov">📍 —</p>
+    <p id="pf-email">📧 —</p>
   </div>
-  <div class="pedido-card">
+  <div class="card">
+    <h3>✍️ Carta de motivação</h3>
+    <p id="pf-bio">—</p>
+  </div>
+  <div class="card" id="pf-extra-card">
+    <h3>📋 Detalhes profissionais</h3>
+    <div id="pf-extra"><p style="color:var(--t2)">—</p></div>
+  </div>
+  <div class="card">
     <h3>📊 Estatísticas</h3>
-    <p id="perfil-servicos">✅ Serviços feitos: 0</p>
-    <p id="perfil-membro">📅 Membro desde: 2026</p>
+    <p id="pf-serv">✅ Serviços feitos: 0</p>
+    <p id="pf-desde">📅 Membro desde: 2026</p>
   </div>
-  <button class="btn-perigo" onclick="eliminarPerfil()">🗑️ Eliminar Conta</button>
-  <button class="btn-voltar" onclick="mostrarTecnico()">← Voltar aos pedidos</button>
+  <button class="bp" onclick="eliminarConta()">🗑️ Eliminar Conta</button>
+  <button class="bv" onclick="ir('t-tecnico')">← Voltar</button>
 </div>
 
 <!-- AVALIAÇÃO -->
-<div id="tela-avaliacao">
+<div class="tela" id="t-aval">
   <h2>⭐ Avaliar Técnico</h2>
   <p>Como foi o serviço?</p>
-  <div class="estrelas" id="grupo-estrelas">
-    <span class="estrela" onclick="avaliar(1)">⭐</span>
-    <span class="estrela" onclick="avaliar(2)">⭐</span>
-    <span class="estrela" onclick="avaliar(3)">⭐</span>
-    <span class="estrela" onclick="avaliar(4)">⭐</span>
-    <span class="estrela" onclick="avaliar(5)">⭐</span>
+  <div class="estrelas" id="estrelas">
+    <span class="estrela" onclick="aval(1)">⭐</span>
+    <span class="estrela" onclick="aval(2)">⭐</span>
+    <span class="estrela" onclick="aval(3)">⭐</span>
+    <span class="estrela" onclick="aval(4)">⭐</span>
+    <span class="estrela" onclick="aval(5)">⭐</span>
   </div>
-  <p id="nota-avaliacao">Toca nas estrelas para avaliar</p>
-  <textarea id="comentario-avaliacao" placeholder="Deixa um comentário..." rows="3"></textarea>
-  <button onclick="enviarAvaliacao()">📨 Enviar Avaliação</button>
-  <button class="btn-voltar" onclick="mostrarHome()">← Voltar</button>
+  <p id="nota-aval" style="text-align:center;font-size:13px;color:var(--t2);">Toca nas estrelas</p>
+  <textarea id="comentario" placeholder="Deixa um comentário..." rows="3"></textarea>
+  <button onclick="enviarAval()">📨 Enviar Avaliação</button>
+  <button class="bv" onclick="irHome()">← Voltar</button>
 </div>
 
-<!-- AVALIAÇÃO ENVIADA -->
-<div id="tela-avaliacao-enviada">
-  <div class="tela-central">
-    <div class="icone-grande">🎉</div>
-    <h2>Obrigado pela avaliação!</h2>
-    <p>Guardada com sucesso! Ajuda outros clientes.</p>
-    <button onclick="mostrarHome()" style="margin-top:20px;">🏠 Voltar ao início</button>
+<!-- AVALIAÇÃO OK -->
+<div class="tela" id="t-aval-ok">
+  <div class="centro">
+    <div class="icone">🎉</div>
+    <h2>Obrigado!</h2>
+    <p>Avaliação guardada com sucesso!</p>
+    <button onclick="irHome()" style="margin-top:18px;">🏠 Voltar ao início</button>
   </div>
 </div>
 
 <!-- NOTIFICAÇÕES -->
-<div id="tela-notificacoes">
+<div class="tela" id="t-notif">
   <h2>🔔 Notificações</h2>
-  <div class="pedido-card"><p>Vai a <strong>Pedidos</strong> para ver o estado em tempo real.</p></div>
-  <button class="btn-voltar" onclick="mostrarHome()">← Voltar</button>
+  <div class="card"><p>Vai a <strong>Pedidos</strong> para ver o estado dos teus pedidos em tempo real.</p></div>
+  <button class="bv" onclick="irHome()">← Voltar</button>
 </div>
 
 <!-- CHAT -->
-<div id="tela-chat">
+<div class="tela" id="t-chat">
   <h2>💬 Chat</h2>
-  <div class="chat-cabecalho">
-    <div class="avatar">👷</div>
-    <div><h3>Técnico FixMoç</h3><p>Online</p></div>
+  <div class="card" style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+    <span style="font-size:34px;">👷</span>
+    <div><h3 style="margin:0;font-size:14px;">Técnico FixMoç</h3><p style="margin:0;font-size:12px;">Online</p></div>
   </div>
-  <div id="chat-mensagens">
-    <div class="mensagem-tecnico"><p>Olá! Recebi o teu pedido. Posso ir amanhã às 9h. Funciona?</p></div>
+  <div class="chat-m" id="chat-msgs">
+    <div class="mt">Olá! Recebi o teu pedido. Posso ir amanhã às 9h. Funciona?</div>
   </div>
-  <div class="chat-input">
-    <input type="text" id="campo-mensagem" placeholder="Escreve uma mensagem...">
-    <button onclick="enviarMensagem()">📨</button>
+  <div class="chat-in">
+    <input type="text" id="chat-inp" placeholder="Escreve uma mensagem...">
+    <button onclick="enviarMsg()">📨</button>
   </div>
-  <button class="btn-voltar" onclick="mostrarHome()">← Voltar</button>
+  <button class="bv" onclick="irHome()">← Voltar</button>
 </div>
 
 <!-- SUPORTE -->
-<div id="tela-suporte">
+<div class="tela" id="t-suporte">
   <h2>📢 Suporte</h2>
-  <div class="pedido-card card-destaque">
-    <h3>Contacto</h3><p>📞 87 479 3972</p><p>📧 isacjazznur1@gmail.com</p>
+  <div class="card card-v">
+    <h3>Contacto</h3>
+    <p>📞 87 479 3972</p>
+    <p>📧 isacjazznur1 @ gmail.com</p>
   </div>
-  <div class="pedido-card">
+  <div class="card">
     <h3>📝 Enviar Reclamação</h3>
-    <input type="text" id="suporte-nome" placeholder="O teu nome">
-    <select id="suporte-tipo">
-      <option>Problema com técnico</option><option>Problema com pagamento</option>
-      <option>Problema com app</option><option>Outro</option>
+    <input type="text" id="sup-nome" placeholder="O teu nome">
+    <select id="sup-tipo">
+      <option>Problema com técnico</option>
+      <option>Problema com pagamento</option>
+      <option>Problema com app</option>
+      <option>Outro</option>
     </select>
-    <textarea id="suporte-mensagem" placeholder="Descreve o teu problema..." rows="4"></textarea>
-    <button onclick="enviarReclamacao()">📨 Enviar</button>
+    <textarea id="sup-msg" placeholder="Descreve o teu problema..." rows="3"></textarea>
+    <button onclick="enviarReclam()">📨 Enviar</button>
   </div>
-  <button class="btn-voltar" onclick="mostrarHome()">← Voltar</button>
+  <button class="bv" onclick="irHome()">← Voltar</button>
 </div>
 
-<!-- RECLAMAÇÃO ENVIADA -->
-<div id="tela-reclamacao-enviada">
-  <div class="tela-central">
-    <div class="icone-grande">✅</div>
+<!-- RECLAMAÇÃO OK -->
+<div class="tela" id="t-reclam-ok">
+  <div class="centro">
+    <div class="icone">✅</div>
     <h2>Reclamação Enviada!</h2>
     <p>Respondemos em até 24 horas.</p>
-    <button onclick="mostrarHome()" style="margin-top:20px;">🏠 Voltar ao início</button>
+    <button onclick="irHome()" style="margin-top:18px;">🏠 Voltar ao início</button>
   </div>
 </div>
 
 <!-- PAGAMENTO -->
-<div id="tela-pagamento">
+<div class="tela" id="t-pagar">
   <h2>💰 Pagamento</h2>
-  <div class="pedido-card card-destaque"><h3 id="servico-pagar">🔧 Serviço</h3></div>
-  <div class="pedido-card">
-    <h3>💵 Valor do serviço</h3>
-    <input type="number" id="valor-servico" placeholder="Ex: 1500" oninput="calcularComissao()">
-    <p style="font-size:12px;margin-top:6px;">💡 Comissão FixMoç (10%): <span id="comissao">0 MT</span></p>
+  <div class="card card-v"><h3 id="s-pagar">Serviço</h3></div>
+  <div class="card">
+    <h3>💵 Valor do serviço (MT)</h3>
+    <input type="number" id="valor" placeholder="Ex: 1500" oninput="calcComissao()">
+    <p style="font-size:12px;margin-top:4px;">Comissão FixMoç (10%): <span id="comissao" style="color:var(--v);font-weight:700;">0 MT</span></p>
   </div>
-  <div class="pedido-card">
-    <h3>💳 Método</h3>
-    <button onclick="pagarCom('M-Pesa')">📱 M-Pesa</button>
-    <button onclick="pagarCom('e-Mola')">📱 e-Mola</button>
-    <button onclick="pagarCom('mKesh')">📱 mKesh</button>
-    <button onclick="pagarCom('Dinheiro')" style="background:linear-gradient(135deg,#009900,#006600);">💵 Dinheiro em mão</button>
+  <div class="card">
+    <h3>💳 Método de pagamento</h3>
+    <button onclick="pagar('M-Pesa')">📱 M-Pesa</button>
+    <button onclick="pagar('e-Mola')">📱 e-Mola</button>
+    <button onclick="pagar('mKesh')">📱 mKesh</button>
+    <button onclick="pagar('Dinheiro')" style="background:linear-gradient(135deg,#009900,#006600);">💵 Dinheiro em mão</button>
   </div>
-  <button class="btn-voltar" onclick="mostrarHome()">← Voltar</button>
+  <button class="bv" onclick="irHome()">← Voltar</button>
 </div>
 
-<!-- PAGAMENTO CONFIRMADO -->
-<div id="tela-pagamento-confirmado">
-  <div class="tela-central">
-    <div class="icone-grande">💳</div>
+<!-- PAGAMENTO OK -->
+<div class="tela" id="t-pagar-ok">
+  <div class="centro">
+    <div class="icone">💳</div>
     <h2>Pagamento Registado!</h2>
-    <div class="pedido-card" style="width:100%;text-align:left;margin-top:16px;">
-      <p id="resumo-pagamento"></p><div class="divisor"></div><p>✅ Registado com sucesso!</p>
+    <div class="card" style="width:100%;text-align:left;margin-top:14px;">
+      <p id="resumo-pagar"></p>
+      <div class="div"></div>
+      <p>✅ Registado com sucesso!</p>
     </div>
-    <button onclick="mostrarAvaliacaoTela(null)" style="width:100%;margin-top:8px;">⭐ Avaliar Técnico</button>
-    <button class="btn-voltar" onclick="mostrarHome()" style="width:100%;">🏠 Voltar ao início</button>
+    <button onclick="irAvaliar(null)" style="width:100%;margin-top:8px;">⭐ Avaliar Técnico</button>
+    <button class="bv" onclick="irHome()" style="width:100%;">🏠 Voltar ao início</button>
   </div>
 </div>
 
 <!-- HISTÓRICO -->
-<div id="tela-historico">
+<div class="tela" id="t-hist">
   <h2>📋 Histórico de Pedidos</h2>
-  <div id="lista-historico"><p style="color:var(--texto2);text-align:center;">A carregar... ⏳</p></div>
-  <button class="btn-voltar" onclick="mostrarHome()">← Voltar</button>
+  <div id="lista-hist"><p style="color:var(--t2);text-align:center;">A carregar... ⏳</p></div>
+  <button class="bv" onclick="irHome()">← Voltar</button>
 </div>
 
 <!-- ADMIN -->
-<div id="tela-admin">
+<div class="tela" id="t-admin">
   <h2>⚙️ Painel Admin</h2>
-  <div class="sb-badge">⚡ Dados em tempo real</div>
-  <div class="pedido-card card-destaque">
+  <div class="badge">⚡ Dados reais</div>
+  <div class="card card-v">
     <h3>📊 Estatísticas</h3>
-    <p>👥 Utilizadores: <strong id="admin-users" style="color:var(--verde)">—</strong></p>
-    <p>👷 Técnicos: <strong id="admin-tecnicos" style="color:var(--verde)">—</strong></p>
-    <p>📋 Pedidos pendentes: <strong id="admin-pedidos" style="color:var(--verde)">—</strong></p>
-    <p>📢 Reclamações: <strong id="admin-reclamacoes" style="color:var(--verde)">—</strong></p>
+    <p>👥 Utilizadores: <strong id="adm-u" style="color:var(--v)">—</strong></p>
+    <p>👷 Técnicos: <strong id="adm-t" style="color:var(--v)">—</strong></p>
+    <p>📋 Pedidos pendentes: <strong id="adm-p" style="color:var(--v)">—</strong></p>
+    <p>📢 Reclamações: <strong id="adm-r" style="color:var(--v)">—</strong></p>
   </div>
-  <div class="pedido-card">
-    <h3>👷 Técnicos a aguardar aprovação</h3>
-    <div id="admin-lista-tecnicos"><p style="color:var(--texto2)">A carregar...</p></div>
+  <div class="card">
+    <h3>👷 Técnicos a aprovar</h3>
+    <div id="adm-lista"><p style="color:var(--t2)">A carregar...</p></div>
   </div>
-  <button class="btn-voltar" onclick="mostrarHome()">← Voltar</button>
+  <button class="bv" onclick="irHome()">← Voltar</button>
 </div>
 
 <!-- DEFINIÇÕES -->
-<div id="tela-definicoes">
+<div class="tela" id="t-def">
   <h2>⚙️ Definições</h2>
-  <div class="pedido-card">
+  <div class="card">
     <h3>👤 A minha conta</h3>
-    <p id="def-email" style="color:var(--verde);margin-bottom:12px;">—</p>
-    <button onclick="mostrarMudarSenha()">🔑 Mudar Senha</button>
-    <button class="btn-perigo" onclick="eliminarPerfil()">🗑️ Eliminar Conta</button>
-    <button class="btn-voltar" onclick="fazerLogout()">🚪 Sair da conta</button>
+    <p id="def-email" style="color:var(--v);margin-bottom:10px;">—</p>
+    <button onclick="ir('t-senha')">🔑 Mudar Senha</button>
+    <button class="bp" onclick="eliminarConta()">🗑️ Eliminar Conta</button>
+    <button class="bv" onclick="logout()">🚪 Sair da conta</button>
   </div>
-  <div class="pedido-card">
-    <h3>📄 Legal</h3>
-    <button onclick="mostrarTermos()">📜 Termos de Uso</button>
-    <button onclick="mostrarPrivacidade()">🔒 Política de Privacidade</button>
-    <button onclick="mostrarSobre()">ℹ️ Sobre o FixMoç</button>
-    <button onclick="mostrarSuporte()">📢 Suporte</button>
+  <div class="card">
+    <h3>📄 Legal e Suporte</h3>
+    <button onclick="ir('t-termos')">📜 Termos de Uso</button>
+    <button onclick="ir('t-privac')">🔒 Privacidade</button>
+    <button onclick="ir('t-sobre')">ℹ️ Sobre o FixMoç</button>
+    <button onclick="ir('t-suporte')">📢 Suporte</button>
   </div>
-  <button class="btn-voltar" onclick="mostrarHome()">← Voltar</button>
+  <button class="bv" onclick="irHome()">← Voltar</button>
 </div>
 
 <!-- MUDAR SENHA -->
-<div id="tela-mudar-senha">
+<div class="tela" id="t-senha">
   <h2>🔑 Mudar Senha</h2>
-  <div class="pedido-card">
-    <input type="password" id="senha-nova" placeholder="Nova senha (mín. 6 caracteres)">
-    <input type="password" id="senha-confirmar" placeholder="Confirmar nova senha">
-    <button onclick="confirmarMudarSenha()">✅ Confirmar</button>
+  <div class="card">
+    <input type="password" id="s-nova" placeholder="Nova senha (mínimo 6 caracteres)" autocomplete="new-password">
+    <input type="password" id="s-conf" placeholder="Confirmar nova senha" autocomplete="new-password">
+    <button onclick="mudarSenha()">✅ Confirmar</button>
   </div>
-  <button class="btn-voltar" onclick="mostrarDefinicoes()">← Voltar</button>
+  <button class="bv" onclick="ir('t-def')">← Voltar</button>
 </div>
 
-<!-- SENHA ALTERADA -->
-<div id="tela-senha-alterada">
-  <div class="tela-central">
-    <div class="icone-grande">🔑</div>
+<!-- SENHA OK -->
+<div class="tela" id="t-senha-ok">
+  <div class="centro">
+    <div class="icone">🔑</div>
     <h2>Senha Alterada!</h2>
     <p>Alterada com sucesso!</p>
-    <button onclick="mostrarHome()" style="margin-top:20px;">🏠 Voltar ao início</button>
+    <button onclick="irHome()" style="margin-top:18px;">🏠 Voltar ao início</button>
   </div>
 </div>
 
 <!-- TERMOS -->
-<div id="tela-termos">
+<div class="tela" id="t-termos">
   <h2>📜 Termos de Uso</h2>
-  <div class="pedido-card">
+  <div class="card">
     <p>1. O FixMoç conecta técnicos e clientes em Moçambique.</p>
-    <p>2. O FixMoç cobra 10% de comissão por cada serviço fechado.</p>
-    <p>3. Os técnicos devem ser verificados antes de prestar serviços.</p>
+    <p>2. Cobramos 10% de comissão por cada serviço fechado.</p>
+    <p>3. Os técnicos são verificados antes de prestar serviços.</p>
     <p>4. O FixMoç não se responsabiliza por danos causados pelos técnicos.</p>
-    <p>5. Contacto: isacjazznur1@gmail.com</p>
+    <p>5. Contacto: 87 479 3972</p>
   </div>
-  <button class="btn-voltar" onclick="mostrarDefinicoes()">← Voltar</button>
+  <button class="bv" onclick="ir('t-def')">← Voltar</button>
 </div>
 
 <!-- PRIVACIDADE -->
-<div id="tela-privacidade">
-  <h2>🔒 Política de Privacidade</h2>
-  <div class="pedido-card">
+<div class="tela" id="t-privac">
+  <h2>🔒 Privacidade</h2>
+  <div class="card">
     <p>1. Dados recolhidos para melhorar os serviços.</p>
     <p>2. Os teus dados não são vendidos a terceiros.</p>
-    <p>3. Protegidos pelo Supabase (encriptação SSL).</p>
+    <p>3. Protegidos pelo Supabase (SSL).</p>
     <p>4. Podes eliminar a conta a qualquer momento.</p>
-    <p>5. Contacto: isacjazznur1@gmail.com</p>
+    <p>5. Contacto: isacjazznur1 @ gmail.com</p>
   </div>
-  <button class="btn-voltar" onclick="mostrarDefinicoes()">← Voltar</button>
+  <button class="bv" onclick="ir('t-def')">← Voltar</button>
 </div>
 
 <!-- SOBRE -->
-<div id="tela-sobre">
+<div class="tela" id="t-sobre">
   <h2>ℹ️ Sobre o FixMoç</h2>
-  <div class="perfil-foto">
-    <h1 style="font-family:'Syne',sans-serif;font-size:48px;color:var(--verde);">FixMoç</h1>
-    <p>Versão 2.0 — Supabase Edition</p><p>🇲🇿 Feito em Moçambique</p>
+  <div style="text-align:center;padding:14px 0;">
+    <div style="font-size:48px;font-weight:900;color:var(--v);">FixMoç</div>
+    <p>Versão 2.0 — Supabase Edition</p>
+    <p>🇲🇿 Feito em Moçambique</p>
   </div>
-  <div class="pedido-card">
+  <div class="card">
     <p>👷 Fundador: Isac Jazznur</p>
     <p>📞 87 479 3972</p>
-    <p>📧 isacjazznur1@gmail.com</p>
+    <p>📧 isacjazznur1 @ gmail.com</p>
     <p>🗄️ Backend: Supabase (PostgreSQL)</p>
   </div>
-  <button class="btn-voltar" onclick="mostrarDefinicoes()">← Voltar</button>
+  <button class="bv" onclick="ir('t-def')">← Voltar</button>
 </div>
 
-<!-- MENU INFERIOR -->
-<div id="menu-nav">
-  <button onclick="mostrarHome()" id="menu-inicio"><span class="menu-icon">🏠</span>Início</button>
-  <button onclick="mostrarHistorico()" id="menu-pedidos"><span class="menu-icon">📋</span>Pedidos</button>
-  <button onclick="mostrarNotificacoes()" id="menu-notif"><span class="menu-icon">🔔</span>Alertas</button>
-  <button onclick="mostrarChat()" id="menu-chat"><span class="menu-icon">💬</span>Chat</button>
-  <button onclick="mostrarDefinicoes()" id="menu-def"><span class="menu-icon">⚙️</span>Definições</button>
+<!-- MENU -->
+<div id="menu">
+  <button onclick="irHome()" id="m-home"><span>🏠</span>Início</button>
+  <button onclick="irHist()" id="m-ped"><span>📋</span>Pedidos</button>
+  <button onclick="ir('t-notif');menuOn('m-notif')" id="m-notif"><span>🔔</span>Alertas</button>
+  <button onclick="ir('t-chat');menuOn('m-chat')" id="m-chat"><span>💬</span>Chat</button>
+  <button onclick="irDef()" id="m-def"><span>⚙️</span>Config</button>
 </div>
 
 <script>
-// ============================================
-// FixMoç v2.0 — Backend Supabase Real
-// ============================================
-const SUPABASE_URL = 'https://xlkkzdtitxiamttaqhfy.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_XAvOrmQPHgSca8lXCjfhUg_squa2CSe';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+var SB_URL = 'https://xlkkzdtitxiamttaqhfy.supabase.co';
+var SB_KEY = 'sb_publishable_XAvOrmQPHgSca8lXCjfhUg_squa2CSe';
+var db = supabase.createClient(SB_URL, SB_KEY);
 
-const APP = { user:null, perfil:null, servicoEscolhido:'', servicoAgendado:'', notaAvaliacao:0, pedidoAvaliar:null };
+var A = { user:null, perfil:null, tipo:'cliente', servico:'', notaAval:0, pedidoAval:null };
 
-// INIT
-window.addEventListener('load', async () => {
-  const { data:{ session } } = await sb.auth.getSession();
-  if (session) { APP.user = session.user; await carregarPerfil(); }
-  else mostrarInicio();
+// Wizard
+var wizServicos = [];
+var wizPasso = 1;
 
-  sb.auth.onAuthStateChange(async (event, session) => {
-    if (event === 'SIGNED_IN' && session) { APP.user = session.user; await carregarPerfil(); }
-    else if (event === 'SIGNED_OUT') { APP.user=null; APP.perfil=null; mostrarInicio(); }
+window.onload = async function() {
+  iniciarSelects();
+  try {
+    var res = await db.auth.getSession();
+    if (!res.data.session) { mostrar('t-inicio'); }
+  } catch(e) { mostrar('t-inicio'); }
+
+  db.auth.onAuthStateChange(async function(ev, sess) {
+    if (ev === 'SIGNED_IN' && sess) {
+      A.user = sess.user;
+      await carregarPerfil();
+    } else if (ev === 'INITIAL_SESSION') {
+      if (sess) { A.user = sess.user; await carregarPerfil(); }
+      else { mostrar('t-inicio'); }
+    } else if (ev === 'SIGNED_OUT') {
+      A.user=null; A.perfil=null; menuHide(); mostrar('t-inicio');
+    }
   });
-});
+};
 
 async function carregarPerfil() {
   try {
-    const { data } = await sb.from('utilizadores').select('*').eq('uid', APP.user.id).single();
-    if (data) {
-      APP.perfil = data;
-      if (data.tipo === 'tecnico') { mostrarTecnico(); carregarPedidosTecnico(); }
-      else mostrarHome();
-      atualizarSaudacao();
-    } else mostrarHome();
-  } catch(e) { mostrarHome(); }
+    var res = await db.from('utilizadores').select('*').eq('uid', A.user.id).single();
+    if (res.data) {
+      A.perfil = res.data;
+      if (res.data.tipo === 'tecnico') {
+        if (!res.data.verificado) { mostrar('t-reg-t-ok'); return; }
+        mostrar('t-tecnico');
+        menuShow();
+        menuOn('m-home');
+        carregarPedidosTecnico();
+      } else { irHome(); }
+    } else { irHome(); }
+  } catch(e) { irHome(); }
+}
+
+function mostrar(id) {
+  document.querySelectorAll('.tela').forEach(function(t) { t.style.display='none'; });
+  var el = document.getElementById(id);
+  if (el) { el.style.display='block'; window.scrollTo(0,0); }
+}
+
+function menuShow() { document.getElementById('menu').style.display='flex'; }
+function menuHide() { document.getElementById('menu').style.display='none'; }
+function menuOn(id) {
+  document.querySelectorAll('#menu button').forEach(function(b) { b.classList.remove('on'); });
+  var b = document.getElementById(id); if (b) b.classList.add('on');
+}
+
+function ir(id) { mostrar(id); }
+
+function escolher(tipo) { A.tipo=tipo; mostrar('t-login'); menuHide(); }
+
+function irRegisto() {
+  if (A.tipo === 'tecnico') {
+    wizServicos = []; wizPasso = 1;
+    document.querySelectorAll('.serv-chip').forEach(function(c){ c.classList.remove('sel'); });
+    wizIrPasso(1);
+    mostrar('t-reg-t');
+  } else { mostrar('t-registo'); }
+}
+
+function irHome() {
+  mostrar('t-home'); menuShow(); menuOn('m-home');
+  if (A.perfil && A.perfil.nome) {
+    var n = A.perfil.nome.split(' ')[0];
+    document.getElementById('saudacao').textContent = 'Olá, ' + n + '! Bem-vindo ao FixMoç 👋';
+  }
+}
+
+function irDef() {
+  mostrar('t-def'); menuShow(); menuOn('m-def');
+  if (A.user) document.getElementById('def-email').textContent = '📧 ' + A.user.email;
+}
+
+function irPerfilTecnico() {
+  mostrar('t-perfil-t');
+  if (A.perfil) {
+    var p = A.perfil;
+    document.getElementById('pf-nome').textContent = p.nome || '—';
+    document.getElementById('pf-espec').textContent = '🔧 Especialidade: ' + (p.especialidade || '—');
+    document.getElementById('pf-exp').textContent = '📊 Experiência: ' + (p.experiencia || '—');
+    document.getElementById('pf-tel').textContent = '📞 ' + (p.tel || '—');
+    document.getElementById('pf-prov').textContent = '📍 ' + (p.provincia || '—');
+    document.getElementById('pf-email').textContent = '📧 ' + (p.email || '—');
+    document.getElementById('pf-bio').textContent = p.bio || '—';
+    document.getElementById('pf-ver').textContent = p.verificado ? '✅ Verificado pelo FixMoç' : '⏳ A aguardar verificação';
+    var extra = document.getElementById('pf-extra');
+    if (extra) {
+      var txt = '';
+      if (p.disponibilidade) txt += '<p>⏱️ Disponibilidade: '+p.disponibilidade+'</p>';
+      if (p.preco_hora) txt += '<p>💰 Preço/hora: <strong style="color:var(--v)">'+p.preco_hora+' MT</strong></p>';
+      if (p.raio) txt += '<p>📍 Raio de actuação: '+p.raio+'</p>';
+      if (p.certificacoes) txt += '<p>🎓 Certificações: '+p.certificacoes+'</p>';
+      extra.innerHTML = txt || '<p style="color:var(--t2)">—</p>';
+    }
+    document.getElementById('pf-aval').textContent = p.avaliacao > 0 ? '⭐ ' + p.avaliacao.toFixed(1) + ' estrelas' : '⭐ Sem avaliações';
+    document.getElementById('pf-serv').textContent = '✅ Serviços feitos: ' + (p.total_servicos || 0);
+    var ano = p.criado_em ? new Date(p.criado_em).getFullYear() : 2026;
+    document.getElementById('pf-desde').textContent = '📅 Membro desde: ' + ano;
+  }
+}
+
+function irAvaliar(pedidoId) {
+  A.pedidoAval = pedidoId; A.notaAval = 0;
+  document.querySelectorAll('.estrela').forEach(function(e) { e.classList.remove('on'); });
+  document.getElementById('nota-aval').textContent = 'Toca nas estrelas';
+  document.getElementById('comentario').value = '';
+  mostrar('t-aval');
+}
+
+function irAgendar() {
+  var el = document.getElementById('s-agendar');
+  if (el) el.textContent = A.servico || 'Serviço';
+  var dataEl = document.getElementById('a-data');
+  if (dataEl) {
+    var hoje = new Date().toISOString().split('T')[0];
+    dataEl.min = hoje; dataEl.value = '';
+  }
+  mostrar('t-agendar');
+}
+
+function irPagamento() {
+  document.getElementById('s-pagar').textContent = A.servico || 'Serviço';
+  document.getElementById('valor').value = '';
+  document.getElementById('comissao').textContent = '0 MT';
+  mostrar('t-pagar');
+}
+
+function irAdmin() {
+  if (!A.user) { toast('⚠️ Faz login primeiro!', 1); return; }
+  carregarAdmin();
+}
+
+async function irHist() {
+  mostrar('t-hist'); menuShow(); menuOn('m-ped');
+  if (!A.user) return;
+  var c = document.getElementById('lista-hist');
+  c.innerHTML = '<p style="color:var(--t2);text-align:center;">A carregar... ⏳</p>';
+  var res = await db.from('pedidos').select('*').eq('cliente_uid', A.user.id).order('criado_em', {ascending:false});
+  var data = res.data;
+  if (!data || data.length === 0) {
+    c.innerHTML = '<div class="card"><p style="text-align:center;color:var(--t2);">Ainda não fizeste nenhum pedido.</p></div>';
+    return;
+  }
+  c.innerHTML = '';
+  data.forEach(function(p) {
+    var cor = p.status==='concluido'?'#00e676':p.status==='aceite'?'#2979ff':p.status==='cancelado'?'#ff3d00':'#ffab00';
+    var lbl = p.status==='concluido'?'🟢 Concluído':p.status==='aceite'?'🔵 Aceite':p.status==='cancelado'?'🔴 Cancelado':'🟡 Pendente';
+    var df = p.criado_em ? new Date(p.criado_em).toLocaleDateString('pt-PT') : '—';
+    var extra = '';
+    if (p.status === 'pendente') extra = '<button class="bp" onclick="cancelarPedido(\'' + p.id + '\')" style="margin-top:8px;width:100%;">❌ Cancelar</button>';
+    if (p.status === 'aceite') extra = '<button onclick="irAvaliar(\'' + p.id + '\')" style="margin-top:8px;width:100%;">⭐ Avaliar</button>';
+    c.innerHTML += '<div class="card"><h3>' + p.servico + '</h3><p>📍 ' + p.provincia + '</p><p>📅 ' + df + (p.tecnico_nome?' · 👷 '+p.tecnico_nome:'') + '</p><p style="color:'+cor+';font-weight:600;">' + lbl + '</p>' + extra + '</div>';
+  });
 }
 
 // AUTH
-async function fazerLogin() {
-  const email = document.getElementById('login-email').value.trim();
-  const senha = document.getElementById('login-senha').value;
-  if (!email||!senha) { mostrarToast('⚠️ Preenche email e senha!','erro'); return; }
-  mostrarLoading(true);
-  const { error } = await sb.auth.signInWithPassword({ email, password:senha });
-  mostrarLoading(false);
-  if (error) mostrarToast(traduzirErro(error.message),'erro');
-  else mostrarToast('✅ Bem-vindo de volta!');
+async function login() {
+  var email = document.getElementById('l-email').value.trim();
+  var senha = document.getElementById('l-senha').value;
+  if (!email||!senha) { toast('⚠️ Preenche email e senha!', 1); return; }
+  loading(1);
+  var res = await db.auth.signInWithPassword({ email:email, password:senha });
+  loading(0);
+  if (res.error) toast(tradErr(res.error.message), 1);
+  else toast('✅ Bem-vindo de volta!');
 }
 
-async function criarConta() {
-  const nome=document.getElementById('reg-nome').value.trim();
-  const tel=document.getElementById('reg-tel').value.trim();
-  const email=document.getElementById('reg-email').value.trim();
-  const senha=document.getElementById('reg-senha').value;
-  const tipo=document.getElementById('tipo-utilizador').value;
-  const prov=document.getElementById('provincia-tecnico').value;
-  if (!nome||!tel||!email||!senha) { mostrarToast('⚠️ Preenche todos os campos!','erro'); return; }
-  if (senha.length<6) { mostrarToast('⚠️ Senha com mínimo 6 caracteres!','erro'); return; }
-  mostrarLoading(true);
-  const { data, error } = await sb.auth.signUp({ email, password:senha });
-  if (error) { mostrarLoading(false); mostrarToast(traduzirErro(error.message),'erro'); return; }
-  await sb.from('utilizadores').insert({ uid:data.user.id, nome, tel, email, tipo, provincia:prov, verificado:false, avaliacao:0, total_servicos:0, criado_em:new Date().toISOString() });
-  mostrarLoading(false);
-  mostrarToast('✅ Conta criada! Confirma o teu email se pedido.');
+async function registar() {
+  var nome = document.getElementById('r-nome').value.trim();
+  var tel = document.getElementById('r-tel').value.trim();
+  var email = document.getElementById('r-email').value.trim();
+  var senha = document.getElementById('r-senha').value;
+  var prov = document.getElementById('r-prov').value;
+  var dist = document.getElementById('r-dist') ? document.getElementById('r-dist').value : '';
+  var bairro = document.getElementById('r-bairro') ? document.getElementById('r-bairro').value : '';
+  if (!nome||!tel||!email||!senha) { toast('⚠️ Preenche todos os campos!', 1); return; }
+  if (senha.length < 6) { toast('⚠️ Senha com mínimo 6 caracteres!', 1); return; }
+  loading(1);
+  var res = await db.auth.signUp({ email:email, password:senha });
+  if (res.error) { loading(0); toast(tradErr(res.error.message), 1); return; }
+  if (res.data.user) {
+    await db.from('utilizadores').insert({
+      uid:res.data.user.id, nome:nome, tel:tel, email:email,
+      tipo:'cliente', provincia:prov, distrito:dist, bairro:bairro, verificado:true,
+      avaliacao:0, total_servicos:0, criado_em:new Date().toISOString()
+    });
+  }
+  loading(0);
+  toast('✅ Conta criada! A entrar...');
 }
 
-async function fazerLogout() {
+async function logout() {
   if (!confirm('Tens a certeza que queres sair?')) return;
-  await sb.auth.signOut();
-  mostrarToast('👋 Sessão terminada.');
+  await db.auth.signOut();
+  toast('👋 Sessão terminada.');
 }
 
-async function eliminarPerfil() {
-  if (!confirm('🗑️ Eliminar conta? IRREVERSÍVEL.')) return;
-  mostrarLoading(true);
-  await sb.from('utilizadores').delete().eq('uid', APP.user.id);
-  await sb.auth.signOut();
-  mostrarLoading(false);
+async function eliminarConta() {
+  if (!confirm('🗑️ Eliminar conta permanentemente? Esta acção não pode ser desfeita.')) return;
+  if (!A.user) return;
+  loading(1);
+  try {
+    await db.from('agendamentos').delete().eq('cliente_uid', A.user.id);
+    await db.from('avaliacoes').delete().eq('cliente_uid', A.user.id);
+    await db.from('pedidos').delete().eq('cliente_uid', A.user.id);
+    await db.from('utilizadores').delete().eq('uid', A.user.id);
+    await db.auth.signOut();
+    loading(0);
+    A.user = null; A.perfil = null;
+    toast('✅ Conta eliminada com sucesso.');
+    setTimeout(function(){ mostrar('t-inicio'); menuHide(); }, 1500);
+  } catch(e) {
+    loading(0);
+    toast('⚠️ Erro ao eliminar conta. Tenta novamente.', 1);
+  }
 }
 
-async function confirmarMudarSenha() {
-  const nova=document.getElementById('senha-nova').value;
-  const conf=document.getElementById('senha-confirmar').value;
-  if (!nova||!conf) { mostrarToast('⚠️ Preenche os campos!','erro'); return; }
-  if (nova!==conf) { mostrarToast('⚠️ Senhas não coincidem!','erro'); return; }
-  if (nova.length<6) { mostrarToast('⚠️ Mínimo 6 caracteres!','erro'); return; }
-  mostrarLoading(true);
-  const { error } = await sb.auth.updateUser({ password:nova });
-  mostrarLoading(false);
-  if (error) mostrarToast('Erro ao mudar senha.','erro');
-  else { mostrarToast('✅ Senha alterada!'); mostrarTela('tela-senha-alterada'); }
+// ═══════════════════════════════════════════════
+// SISTEMA DE LOCALIZAÇÃO: PROVÍNCIA → DISTRITO → BAIRRO
+// ═══════════════════════════════════════════════
+var LOCALIZACAO = {
+  'Maputo Cidade': {
+    'KaMpfumo': ['Polana Cimento A','Polana Cimento B','Central','Sommerschield','Malhangalene A','Malhangalene B','Coop'],
+    'KaNlhungwane': ['Maxaquene A','Maxaquene B','Maxaquene C','Maxaquene D'],
+    'KaMavota': ['Mavalane A','Mavalane B','Hulene A','Hulene B','Laulane','3 de Fevereiro','Aeroporto'],
+    'KaMaxaquene': ['Urbanização','Sommerschield II','Polana Caniço A','Polana Caniço B'],
+    'KaMubukwane': ['Chamanculo A','Chamanculo B','Chamanculo C','Chamanculo D','Xipamanine','Munhuana'],
+    'KaTembe': ['Catembe','Inhaca']
+  },
+  'Maputo Província': {
+    'Boane': ['Sede','Campoane','Matola Rio','Belavista'],
+    'Magude': ['Sede','Motaze','Mapulanguene','Moine'],
+    'Manhiça': ['Sede','Xinavane','Calanga','Ilha Josina Machel'],
+    'Marracuene': ['Sede','Ricatla','Machubo'],
+    'Matola': ['Matola Sede','Matola A','Matola B','Matola C','Infulene','Machava','Bunhiça','Tsalala','Liberdade'],
+    'Matutuíne': ['Bela Vista','Catuane','Zitundo','Salamanga'],
+    'Moamba': ['Sede','Ressano Garcia','Sabie'],
+    'Namaacha': ['Sede','Changalane']
+  },
+  'Gaza': {
+    'Xai-Xai': ['Sede','Chicumbane','Zongoene','Chilaulane'],
+    'Bilene': ['Sede','Calanga','Praia do Bilene','Siaia'],
+    'Chibuto': ['Sede','Chaimite','Changanine','Incaia'],
+    'Chigubo': ['Sede','Ndindiza'],
+    'Chicualacuala': ['Sede','Mapai'],
+    'Chokwè': ['Sede','Lionde','Macarretane'],
+    'Guijá': ['Sede','Eduardo Mondlane'],
+    'Limpopo': ['Sede','Maniquenique'],
+    'Mabalane': ['Sede','Combomune'],
+    'Manjacaze': ['Sede','Chidenguele','Tavane'],
+    'Massangena': ['Sede'],
+    'Massingir': ['Sede','Mavodze'],
+    'Mandlakazi': ['Sede','Incaia','Chibuto']
+  },
+  'Inhambane': {
+    'Inhambane': ['Sede','Balane','Muelé','Chambone'],
+    'Funhalouro': ['Sede'],
+    'Govuro': ['Sede','Nova Mambone'],
+    'Homoine': ['Sede','Morrumbene'],
+    'Inharrime': ['Sede','Chibonzane'],
+    'Jangamo': ['Sede','Quissico'],
+    'Massinga': ['Sede','Morrumbene'],
+    'Morrumbene': ['Sede','Maxixe'],
+    'Maxixe': ['Sede','Quissico','Chambone'],
+    'Panda': ['Sede'],
+    'Vilankulo': ['Sede','Inhassoro','Bazaruto'],
+    'Zavala': ['Sede','Quissico','Inharrime'],
+    'Mabote': ['Sede']
+  },
+  'Sofala (Beira)': {
+    'Beira': ['Munhava','Macúti','Ponta Gêa','Chota','Esturro','Manga','Nhaconjo','Inhamizua','Dondo','Buzi'],
+    'Buzi': ['Sede','Nova Sofala'],
+    'Chibabava': ['Sede'],
+    'Chemba': ['Sede'],
+    'Cheringoma': ['Sede','Inhaminga'],
+    'Caia': ['Sede'],
+    'Dondo': ['Sede','Nhamatanda'],
+    'Gorongosa': ['Sede','Casa Banana'],
+    'Machanga': ['Sede'],
+    'Maringue': ['Sede'],
+    'Marromeu': ['Sede','Luabo'],
+    'Muanza': ['Sede'],
+    'Nhamatanda': ['Sede','Tica']
+  },
+  'Manica': {
+    'Chimoio': ['Sede','Chissui','Vila Nova','Nhamaonha','Wazi','Socone'],
+    'Báruè': ['Sede','Catandica'],
+    'Gondola': ['Sede','Inchope'],
+    'Guro': ['Sede'],
+    'Macate': ['Sede'],
+    'Machaze': ['Sede'],
+    'Manica': ['Sede','Machipanda'],
+    'Mossurize': ['Sede','Espungabera'],
+    'Sussundenga': ['Sede'],
+    'Tambara': ['Sede'],
+    'Vanduzi': ['Sede']
+  },
+  'Tete': {
+    'Tete': ['Sede','Matundo','Mpadue','Degue','Muthemba'],
+    'Angónia': ['Sede','Ulongwe','Domwe'],
+    'Cahora-Bassa': ['Sede','Songo'],
+    'Changara': ['Sede','Fingoe'],
+    'Chiuta': ['Sede'],
+    'Macanga': ['Sede'],
+    'Magoe': ['Sede'],
+    'Marávia': ['Sede'],
+    'Moatize': ['Sede','Benga','Mualadzi'],
+    'Mutarara': ['Sede','Sena'],
+    'Tsangano': ['Sede'],
+    'Zumbo': ['Sede']
+  },
+  'Zambézia (Quelimane)': {
+    'Quelimane': ['Sede','Micajune','Coalane','Sangariveira','Estação','Manhaua'],
+    'Alto Molócuè': ['Sede'],
+    'Chinde': ['Sede'],
+    'Derre': ['Sede'],
+    'Gilé': ['Sede'],
+    'Gurué': ['Sede','Lioma'],
+    'Ile': ['Sede'],
+    'Inhassunge': ['Sede'],
+    'Luabo': ['Sede'],
+    'Lugela': ['Sede'],
+    'Maganja da Costa': ['Sede'],
+    'Milange': ['Sede'],
+    'Mocuba': ['Sede'],
+    'Mocubela': ['Sede'],
+    'Molumbo': ['Sede'],
+    'Mopeia': ['Sede'],
+    'Morrumbala': ['Sede'],
+    'Namacurra': ['Sede'],
+    'Namarrói': ['Sede'],
+    'Nicoadala': ['Sede'],
+    'Pebane': ['Sede']
+  },
+  'Nampula': {
+    'Nampula': ['Sede','Murrupula','Napipine','Mutauanha','Muhala','Natikiri','Carrupeia'],
+    'Angoche': ['Sede','Matibane'],
+    'Eráti': ['Sede','Namapa'],
+    'Lalaua': ['Sede'],
+    'Larde': ['Sede'],
+    'Liúpo': ['Sede'],
+    'Malema': ['Sede'],
+    'Meconta': ['Sede'],
+    'Mecubúri': ['Sede'],
+    'Memba': ['Sede'],
+    'Mogincual': ['Sede'],
+    'Mogovolas': ['Sede','Nacala-a-Velha'],
+    'Moma': ['Sede'],
+    'Monapo': ['Sede'],
+    'Mossuril': ['Sede','Ilha de Moçambique'],
+    'Muecate': ['Sede'],
+    'Murrupula': ['Sede'],
+    'Nacala-Porto': ['Sede','Nacala-Porto Centro','Muatala','Natikiri Nacala','Namige','Nacala Velha','Napala'],
+    'Nacarôa': ['Sede'],
+    'Ilha de Moçambique': ['Sede','Stone Town','Museu'],
+    'Ribaué': ['Sede']
+  },
+  'Cabo Delgado': {
+    'Pemba': ['Sede','Paquitequete','Wimbe','Ingonane','Cariacó'],
+    'Ancuabe': ['Sede'],
+    'Balama': ['Sede'],
+    'Chiúre': ['Sede'],
+    'Ibo': ['Sede'],
+    'Macomia': ['Sede'],
+    'Mecúfi': ['Sede'],
+    'Meluco': ['Sede'],
+    'Metuge': ['Sede'],
+    'Mocímboa da Praia': ['Sede'],
+    'Montepuez': ['Sede'],
+    'Mueda': ['Sede'],
+    'Muidumbe': ['Sede'],
+    'Namuno': ['Sede'],
+    'Nangade': ['Sede'],
+    'Palma': ['Sede'],
+    'Quissanga': ['Sede']
+  },
+  'Niassa': {
+    'Lichinga': ['Sede','Mitande','Namacula'],
+    'Chimbonila': ['Sede'],
+    'Cuamba': ['Sede'],
+    'Lago': ['Sede','Metangula'],
+    'Lichinga': ['Sede'],
+    'Majune': ['Sede'],
+    'Mandimba': ['Sede'],
+    'Marrupa': ['Sede'],
+    'Maúa': ['Sede'],
+    'Mavago': ['Sede'],
+    'Mecanhelas': ['Sede'],
+    'Mecula': ['Sede'],
+    'Metarica': ['Sede'],
+    'Muembe': ['Sede'],
+    'N\'gauma': ['Sede'],
+    'Nipepe': ['Sede'],
+    'Sanga': ['Sede']
+  }
+};
+
+function iniciarSelects() {
+  var provIds = ['r-prov','rt-prov','p-prov'];
+  provIds.forEach(function(id) {
+    var sel = document.getElementById(id);
+    if (!sel) return;
+    sel.innerHTML = '<option value="">📍 Selecciona a província</option>';
+    Object.keys(LOCALIZACAO).forEach(function(prov) {
+      var opt = document.createElement('option');
+      opt.value = prov; opt.textContent = prov;
+      sel.appendChild(opt);
+    });
+  });
+}
+
+function carregarDistritos(provId, distId, bairroId) {
+  var prov = document.getElementById(provId).value;
+  var distSel = document.getElementById(distId);
+  var bairroSel = document.getElementById(bairroId);
+  if (!distSel) return;
+  if (!prov) { distSel.style.display='none'; if(bairroSel) bairroSel.style.display='none'; return; }
+  var distritos = LOCALIZACAO[prov];
+  distSel.innerHTML = '<option value="">🏙️ Selecciona o distrito</option>';
+  Object.keys(distritos).forEach(function(dist) {
+    var opt = document.createElement('option');
+    opt.value = dist; opt.textContent = dist;
+    distSel.appendChild(opt);
+  });
+  distSel.style.display = 'block';
+  if (bairroSel) { bairroSel.innerHTML = '<option value="">🏘️ Selecciona o bairro</option>'; bairroSel.style.display='none'; }
+}
+
+function carregarBairros(distId, bairroId) {
+  var distSel = document.getElementById(distId);
+  var bairroSel = document.getElementById(bairroId);
+  if (!distSel || !bairroSel) return;
+  var provId = distId.replace('dist','prov');
+  var prov = document.getElementById(provId) ? document.getElementById(provId).value : '';
+  var dist = distSel.value;
+  if (!dist || !prov) { bairroSel.style.display='none'; return; }
+  var bairros = (LOCALIZACAO[prov] && LOCALIZACAO[prov][dist]) ? LOCALIZACAO[prov][dist] : [];
+  bairroSel.innerHTML = '<option value="">🏘️ Selecciona o bairro</option>';
+  bairros.forEach(function(b) {
+    var opt = document.createElement('option');
+    opt.value = b; opt.textContent = b;
+    bairroSel.appendChild(opt);
+  });
+  bairroSel.style.display = bairros.length > 0 ? 'block' : 'none';
+}
+
+async function mudarSenha() {
+  var nova = document.getElementById('s-nova').value;
+  var conf = document.getElementById('s-conf').value;
+  if (!nova||!conf) { toast('⚠️ Preenche os campos!', 1); return; }
+  if (nova !== conf) { toast('⚠️ Senhas não coincidem!', 1); return; }
+  if (nova.length < 6) { toast('⚠️ Mínimo 6 caracteres!', 1); return; }
+  loading(1);
+  var res = await db.auth.updateUser({ password:nova });
+  loading(0);
+  if (res.error) toast('Erro ao mudar senha.', 1);
+  else { toast('✅ Senha alterada!'); mostrar('t-senha-ok'); }
 }
 
 // PEDIDOS
-async function pedidoEnviado() {
-  if (!APP.user) { mostrarToast('⚠️ Faz login primeiro!','erro'); mostrarLogin(); return; }
-  const nome=document.getElementById('pedido-nome').value.trim();
-  const tel=document.getElementById('pedido-tel').value.trim();
-  const prov=document.getElementById('provincia-pedido').value;
-  const bairro=document.getElementById('pedido-bairro').value.trim();
-  const desc=document.getElementById('pedido-descricao').value.trim();
-  const urg=document.getElementById('pedido-urgencia').value;
-  if (!nome||!tel||!prov) { mostrarToast('⚠️ Preenche nome, telefone e província!','erro'); return; }
-  mostrarLoading(true);
-  const { error } = await sb.from('pedidos').insert({ cliente_uid:APP.user.id, cliente_nome:nome, cliente_tel:tel, provincia:prov, bairro, descricao:desc, urgencia:urg, servico:APP.servicoEscolhido, status:'pendente', criado_em:new Date().toISOString() });
-  mostrarLoading(false);
-  if (error) mostrarToast('Erro: '+error.message,'erro');
-  else { mostrarToast('✅ Pedido enviado!'); mostrarTela('tela-sucesso'); }
+function pedido(servico) {
+  if (!A.user) { toast('⚠️ Faz login para pedir!', 1); mostrar('t-login'); return; }
+  A.servico = servico;
+  document.getElementById('s-servico').textContent = servico;
+  if (A.perfil) {
+    document.getElementById('p-nome').value = A.perfil.nome || '';
+    document.getElementById('p-tel').value = A.perfil.tel || '';
+  }
+  mostrar('t-pedido');
+}
+
+async function enviarPedido() {
+  if (!A.user) { toast('⚠️ Faz login primeiro!', 1); return; }
+  var nome = document.getElementById('p-nome').value.trim();
+  var tel = document.getElementById('p-tel').value.trim();
+  var prov = document.getElementById('p-prov').value;
+  var dist = document.getElementById('p-dist') ? document.getElementById('p-dist').value : '';
+  var bairroSel = document.getElementById('p-bairro-sel') ? document.getElementById('p-bairro-sel').value : '';
+  var bairroText = document.getElementById('p-bairro').value.trim();
+  var bairro = bairroSel || bairroText;
+  var desc = document.getElementById('p-desc').value.trim();
+  var urg = document.getElementById('p-urg').value;
+  if (!nome||!tel||!prov) { toast('⚠️ Preenche nome, telefone e província!', 1); return; }
+  loading(1);
+  var res = await db.from('pedidos').insert({
+    cliente_uid:A.user.id, cliente_nome:nome, cliente_tel:tel,
+    provincia:prov, distrito:dist, bairro:bairro, descricao:desc, urgencia:urg,
+    servico:A.servico, status:'pendente', criado_em:new Date().toISOString()
+  });
+  loading(0);
+  if (res.error) toast('Erro: '+res.error.message, 1);
+  else { toast('✅ Pedido enviado!'); mostrar('t-sucesso'); }
+}
+
+async function cancelarPedido(id) {
+  if (!confirm('Cancelar este pedido?')) return;
+  await db.from('pedidos').update({status:'cancelado'}).eq('id', id);
+  toast('Pedido cancelado.');
+  irHist();
 }
 
 async function carregarPedidosTecnico() {
-  if (!APP.perfil) return;
-  const container=document.getElementById('lista-pedidos-tecnico');
-  const { data } = await sb.from('pedidos').select('*').eq('provincia',APP.perfil.provincia).eq('status','pendente').order('criado_em',{ascending:false});
-  if (!data||data.length===0) { container.innerHTML='<div class="pedido-card"><p style="text-align:center;color:var(--texto2);">Nenhum pedido na tua zona. 👍</p></div>'; return; }
-  container.innerHTML='';
-  data.forEach(p => {
-    const uc=p.urgencia==='urgente'?'urgencia-urgente':p.urgencia==='sem-pressa'?'urgencia-sem-pressa':'urgencia-normal';
-    const ul=p.urgencia==='urgente'?'🔴 Urgente':p.urgencia==='sem-pressa'?'🟢 Sem pressa':'🟡 Normal';
-    container.innerHTML+=`<div class="pedido-card"><h3>${p.servico}</h3><p>📍 ${p.provincia}${p.bairro?' · '+p.bairro:''}</p><p>📝 ${p.descricao||'Sem descrição'}</p><p class="${uc}">${ul}</p><p>👤 ${p.cliente_nome}</p><div style="display:flex;gap:8px;margin-top:10px;"><button onclick="aceitarPedido('${p.id}','${p.cliente_tel}','${p.provincia}')" style="margin:0;flex:1;">✅ Aceitar</button><button class="btn-voltar" style="margin:0;flex:1;">❌ Recusar</button></div></div>`;
-  });
-}
-
-async function aceitarPedido(id,tel,prov) {
-  if (!APP.user||!APP.perfil) return;
-  mostrarLoading(true);
-  const { error } = await sb.from('pedidos').update({ status:'aceite', tecnico_uid:APP.user.id, tecnico_nome:APP.perfil.nome, tecnico_tel:APP.perfil.tel, aceito_em:new Date().toISOString() }).eq('id',id);
-  mostrarLoading(false);
-  if (error) { mostrarToast('Erro ao aceitar.','erro'); return; }
-  document.getElementById('tel-cliente-aceite').textContent=tel||'—';
-  document.getElementById('prov-cliente-aceite').textContent=prov||'—';
-  mostrarTela('tela-aceite'); mostrarToast('✅ Pedido aceite!');
-}
-
-async function mostrarHistorico() {
-  mostrarTela('tela-historico'); mostrarMenu('menu-pedidos');
-  if (!APP.user) return;
-  const container=document.getElementById('lista-historico');
-  container.innerHTML='<p style="color:var(--texto2);text-align:center;">A carregar... ⏳</p>';
-  const { data } = await sb.from('pedidos').select('*').eq('cliente_uid',APP.user.id).order('criado_em',{ascending:false});
-  if (!data||data.length===0) { container.innerHTML='<div class="pedido-card"><p style="text-align:center;color:var(--texto2);">Ainda não fizeste nenhum pedido.</p></div>'; return; }
-  container.innerHTML='';
-  data.forEach(p => {
-    const cor=p.status==='concluido'?'#00e676':p.status==='aceite'?'#2979ff':p.status==='cancelado'?'#ff3d00':'#ffab00';
-    const label=p.status==='concluido'?'🟢 Concluído':p.status==='aceite'?'🔵 Aceite':p.status==='cancelado'?'🔴 Cancelado':'🟡 Pendente';
-    const df=p.criado_em?new Date(p.criado_em).toLocaleDateString('pt-PT'):'—';
-    container.innerHTML+=`<div class="pedido-card"><h3>${p.servico}</h3><p>📍 ${p.provincia}</p><p>📅 ${df}${p.tecnico_nome?' · 👷 '+p.tecnico_nome:''}</p><p style="color:${cor};font-weight:600;">${label}</p>${p.status==='pendente'?`<button class="btn-perigo" onclick="cancelarPedidoId('${p.id}')" style="margin-top:10px;width:100%;">❌ Cancelar</button>`:''}${p.status==='aceite'?`<button onclick="mostrarAvaliacaoTela('${p.id}')" style="margin-top:10px;width:100%;">⭐ Avaliar</button>`:''}</div>`;
-  });
-}
-
-async function cancelarPedidoId(id) {
-  if (!confirm('Cancelar este pedido?')) return;
-  await sb.from('pedidos').update({status:'cancelado'}).eq('id',id);
-  mostrarToast('Pedido cancelado.'); mostrarHistorico();
-}
-
-async function confirmarAgendamento() {
-  const data=document.getElementById('data-servico').value;
-  const hora=document.getElementById('hora-servico').value;
-  if (!data) { mostrarToast('⚠️ Selecciona a data!','erro'); return; }
-  if (!APP.user) { mostrarToast('⚠️ Faz login primeiro!','erro'); return; }
-  mostrarLoading(true);
-  const { error } = await sb.from('agendamentos').insert({ cliente_uid:APP.user.id, servico:APP.servicoAgendado, data, hora, criado_em:new Date().toISOString() });
-  mostrarLoading(false);
-  if (error) { mostrarToast('Erro ao agendar.','erro'); return; }
-  const df=new Date(data).toLocaleDateString('pt-PT',{day:'2-digit',month:'2-digit',year:'numeric'});
-  document.getElementById('resumo-agendamento').textContent=`✅ ${APP.servicoAgendado} agendado para ${df} às ${hora}`;
-  mostrarToast('📅 Agendamento confirmado!'); mostrarTela('tela-agendamento-confirmado');
-}
-
-function mostrarAvaliacaoTela(pedidoId) {
-  APP.pedidoAvaliar=pedidoId; APP.notaAvaliacao=0;
-  document.querySelectorAll('#grupo-estrelas .estrela').forEach(e=>e.classList.remove('ativa'));
-  document.getElementById('nota-avaliacao').textContent='Toca nas estrelas para avaliar';
-  document.getElementById('comentario-avaliacao').value='';
-  mostrarTela('tela-avaliacao');
-}
-
-function avaliar(nota) {
-  APP.notaAvaliacao=nota;
-  document.querySelectorAll('#grupo-estrelas .estrela').forEach((e,i)=>e.classList.toggle('ativa',i<nota));
-  const msgs=['','😞 Péssimo','😕 Mau','😐 Razoável','😊 Bom','🤩 Excelente!'];
-  document.getElementById('nota-avaliacao').textContent=msgs[nota];
-}
-
-async function enviarAvaliacao() {
-  if (APP.notaAvaliacao===0) { mostrarToast('⚠️ Selecciona pelo menos 1 estrela!','erro'); return; }
-  const comentario=document.getElementById('comentario-avaliacao').value;
-  mostrarLoading(true);
-  const { error } = await sb.from('avaliacoes').insert({ pedido_id:APP.pedidoAvaliar, cliente_uid:APP.user?.id, nota:APP.notaAvaliacao, comentario, criado_em:new Date().toISOString() });
-  mostrarLoading(false);
-  if (error) mostrarToast('Erro ao enviar avaliação.','erro');
-  else { mostrarToast('⭐ Avaliação enviada!'); mostrarTela('tela-avaliacao-enviada'); }
-}
-
-async function enviarReclamacao() {
-  const nome=document.getElementById('suporte-nome').value.trim();
-  const msg=document.getElementById('suporte-mensagem').value.trim();
-  const tipo=document.getElementById('suporte-tipo').value;
-  if (!nome||!msg) { mostrarToast('⚠️ Preenche nome e mensagem!','erro'); return; }
-  mostrarLoading(true);
-  const { error } = await sb.from('reclamacoes').insert({ nome, tipo, mensagem:msg, cliente_uid:APP.user?.id||null, status:'pendente', criado_em:new Date().toISOString() });
-  mostrarLoading(false);
-  if (error) mostrarToast('Erro ao enviar.','erro');
-  else { mostrarToast('✅ Reclamação enviada!'); mostrarTela('tela-reclamacao-enviada'); }
-}
-
-async function verificarAdmin() {
-  if (!APP.user) { mostrarToast('⚠️ Faz login primeiro!','erro'); return; }
-  const { data } = await sb.from('admins').select('*').eq('uid',APP.user.id).single();
-  if (!data) { mostrarToast('⛔ Sem permissão de admin.','erro'); return; }
-  const [users,pedidos,reclam] = await Promise.all([
-    sb.from('utilizadores').select('tipo'),
-    sb.from('pedidos').select('id').eq('status','pendente'),
-    sb.from('reclamacoes').select('id').eq('status','pendente')
-  ]);
-  const tecnicos=(users.data||[]).filter(u=>u.tipo==='tecnico');
-  document.getElementById('admin-users').textContent=(users.data||[]).length;
-  document.getElementById('admin-tecnicos').textContent=tecnicos.length;
-  document.getElementById('admin-pedidos').textContent=(pedidos.data||[]).length;
-  document.getElementById('admin-reclamacoes').textContent=(reclam.data||[]).length;
-  const { data:porAprovar } = await sb.from('utilizadores').select('*').eq('tipo','tecnico').eq('verificado',false);
-  const lista=document.getElementById('admin-lista-tecnicos');
-  if (!porAprovar||porAprovar.length===0) { lista.innerHTML='<p style="color:var(--texto2)">Nenhum pendente. ✅</p>'; }
-  else { lista.innerHTML=''; porAprovar.forEach(t=>{ lista.innerHTML+=`<div class="pedido-card"><p>👤 ${t.nome}</p><p>📞 ${t.tel} · 📍 ${t.provincia}</p><div style="display:flex;gap:8px;margin-top:8px;"><button onclick="aprovarTecnico('${t.uid}')" style="margin:0;flex:1;background:linear-gradient(135deg,#009900,#006600);">✅ Aprovar</button><button class="btn-perigo" style="margin:0;flex:1;">❌ Rejeitar</button></div></div>`; }); }
-  mostrarTela('tela-admin'); esconderMenu();
-}
-
-async function aprovarTecnico(uid) {
-  await sb.from('utilizadores').update({verificado:true}).eq('uid',uid);
-  mostrarToast('✅ Técnico aprovado!'); verificarAdmin();
-}
-
-function traduzirErro(msg) {
-  if (msg.includes('Invalid login')) return '⚠️ Email ou senha incorrectos.';
-  if (msg.includes('already registered')) return '⚠️ Email já registado.';
-  if (msg.includes('Password')) return '⚠️ Senha com mínimo 6 caracteres.';
-  return '⚠️ '+msg;
-}
-
-// UI
-function mostrarToast(msg,tipo) {
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.className='show'+(tipo==='erro'?' erro':'');
-  clearTimeout(window._tt); window._tt=setTimeout(()=>{t.className='';},3500);
-}
-function mostrarLoading(show) { document.getElementById('loading-overlay').classList.toggle('show',show); }
-function mostrarTela(id) { document.querySelectorAll('[id^="tela-"]').forEach(t=>t.style.display='none'); const el=document.getElementById(id); if(el){el.style.display='block';window.scrollTo(0,0);} }
-function mostrarMenu(ativoId) { document.getElementById('menu-nav').style.display='flex'; document.querySelectorAll('#menu-nav button').forEach(b=>b.classList.remove('ativo')); if(ativoId){const b=document.getElementById(ativoId);if(b)b.classList.add('ativo');} }
-function esconderMenu() { document.getElementById('menu-nav').style.display='none'; }
-function mostrarInicio() { mostrarTela('tela-inicio'); esconderMenu(); }
-function mostrarLogin() { mostrarTela('tela-login'); esconderMenu(); }
-function mostrarRegisto() { mostrarTela('tela-registo'); esconderMenu(); }
-function mostrarTermos() { mostrarTela('tela-termos'); }
-function mostrarPrivacidade() { mostrarTela('tela-privacidade'); }
-function mostrarSobre() { mostrarTela('tela-sobre'); }
-function mostrarMudarSenha() { mostrarTela('tela-mudar-senha'); }
-function mostrarNotificacoes() { mostrarTela('tela-notificacoes'); mostrarMenu('menu-notif'); }
-function mostrarSuporte() { mostrarTela('tela-suporte'); mostrarMenu('menu-pedidos'); }
-function mostrarChat() { mostrarTela('tela-chat'); mostrarMenu('menu-chat'); }
-function mostrarHome() { mostrarTela('tela-home'); mostrarMenu('menu-inicio'); atualizarSaudacao(); }
-function mostrarTecnico() { mostrarTela('tela-tecnico'); mostrarMenu('menu-inicio'); }
-function mostrarDefinicoes() { mostrarTela('tela-definicoes'); mostrarMenu('menu-def'); if(APP.user)document.getElementById('def-email').textContent='📧 '+APP.user.email; }
-function mostrarPerfilTecnico() {
-  mostrarTela('tela-perfil-tecnico');
-  if(APP.perfil){const p=APP.perfil;
-    document.getElementById('perfil-nome').textContent=p.nome||'—';
-    document.getElementById('perfil-tel').textContent='📞 '+(p.tel||'—');
-    document.getElementById('perfil-prov').textContent='📍 '+(p.provincia||'—');
-    document.getElementById('perfil-email').textContent='📧 '+(p.email||'—');
-    document.getElementById('perfil-verificado').textContent=p.verificado?'✅ Verificado pelo FixMoç':'⏳ Aguarda verificação';
-    document.getElementById('perfil-avaliacao').textContent=p.avaliacao>0?'⭐ '+Number(p.avaliacao).toFixed(1):'⭐ Sem avaliações ainda';
-    document.getElementById('perfil-servicos').textContent='✅ Serviços feitos: '+(p.total_servicos||0);
-    document.getElementById('perfil-membro').textContent='📅 Membro desde: '+(p.criado_em?new Date(p.criado_em).getFullYear():2026);
+  if (!A.perfil) return;
+  var c = document.getElementById('lista-pedidos');
+  var prov = A.perfil.provincia;
+  var q = db.from('pedidos').select('*').eq('status','pendente').order('criado_em',{ascending:false});
+  if (prov) q = q.eq('provincia', prov);
+  var res = await q;
+  var data = res.data;
+  if (!data||data.length===0) {
+    c.innerHTML = '<div class="card"><p style="text-align:center;color:var(--t2);">Nenhum pedido na tua zona. 👍</p></div>';
+    return;
   }
+  c.innerHTML = '';
+  data.forEach(function(p) {
+    var uc = p.urgencia==='urgente'?'vu':p.urgencia==='sem-pressa'?'vs':'vn';
+    var ul = p.urgencia==='urgente'?'🔴 Urgente':p.urgencia==='sem-pressa'?'🟢 Sem pressa':'🟡 Normal';
+    c.innerHTML += '<div class="card"><h3>'+p.servico+'</h3><p>📍 '+p.provincia+(p.bairro?' · '+p.bairro:'')+'</p><p>📝 '+(p.descricao||'Sem descrição')+'</p><p class="'+uc+'">'+ul+'</p><p>👤 '+p.cliente_nome+'</p><div style="display:flex;gap:8px;margin-top:10px;"><button onclick="aceitarPedido(\''+p.id+'\',\''+p.cliente_tel+'\',\''+p.provincia+'\')" style="margin:0;flex:1;">✅ Aceitar</button><button class="bv" style="margin:0;flex:1;">❌ Recusar</button></div></div>';
+  });
 }
-function atualizarSaudacao() { const el=document.getElementById('saudacao-home'); if(el&&APP.perfil?.nome){const n=APP.perfil.nome.split(' ')[0];el.textContent=`Olá, ${n}! Bem-vindo ao FixMoç 👋`;} }
-function mostrarPedido(servico) { if(!APP.user){mostrarToast('⚠️ Faz login para pedir!','erro');mostrarLogin();return;} APP.servicoEscolhido=servico; document.getElementById('servico-escolhido').textContent=servico; if(APP.perfil){document.getElementById('pedido-nome').value=APP.perfil.nome||'';document.getElementById('pedido-tel').value=APP.perfil.tel||'';} mostrarTela('tela-pedido'); }
-function mostrarAgendamento() { APP.servicoAgendado=APP.servicoEscolhido||'Serviço'; document.getElementById('servico-agendado').textContent=APP.servicoAgendado; mostrarTela('tela-agendamento'); }
-var _sp='';
-function mostrarPagamento(s){_sp=s||'';document.getElementById('servico-pagar').textContent=_sp;document.getElementById('valor-servico').value='';document.getElementById('comissao').textContent='0 MT';mostrarTela('tela-pagamento');}
-function calcularComissao(){const v=parseFloat(document.getElementById('valor-servico').value)||0;document.getElementById('comissao').textContent=(v*0.1).toFixed(0)+' MT';}
-function pagarCom(m){const v=document.getElementById('valor-servico').value;if(!v||parseFloat(v)<=0){mostrarToast('⚠️ Introduz o valor!','erro');return;}const c=(parseFloat(v)*0.1).toFixed(0);document.getElementById('resumo-pagamento').textContent=`💳 ${m} · ${parseFloat(v).toLocaleString('pt-PT')} MT · Comissão: ${c} MT`;mostrarTela('tela-pagamento-confirmado');}
-function enviarMensagem(){const c=document.getElementById('campo-mensagem');const t=c.value.trim();if(!t)return;const cm=document.getElementById('chat-mensagens');const d=document.createElement('div');d.className='mensagem-cliente';d.innerHTML='<p>'+t+'</p>';cm.appendChild(d);c.value='';cm.scrollTop=cm.scrollHeight;setTimeout(()=>{const rs=['Ok, entendido! 👍','Perfeito, confirmo.','Sem problema!','Recebido!'];const r=document.createElement('div');r.className='mensagem-tecnico';r.innerHTML='<p>'+rs[Math.floor(Math.random()*rs.length)]+'</p>';cm.appendChild(r);cm.scrollTop=cm.scrollHeight;},1200);}
-document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('campo-mensagem')===document.activeElement)enviarMensagem();});
+
+async function aceitarPedido(id, tel, prov) {
+  if (!A.user||!A.perfil) return;
+  loading(1);
+  var res = await db.from('pedidos').update({
+    status:'aceite', tecnico_uid:A.user.id,
+    tecnico_nome:A.perfil.nome, tecnico_tel:A.perfil.tel,
+    aceito_em:new Date().toISOString()
+  }).eq('id', id);
+  loading(0);
+  if (res.error) { toast('Erro ao aceitar.', 1); return; }
+  document.getElementById('tel-aceite').textContent = tel || '—';
+  document.getElementById('prov-aceite').textContent = prov || '—';
+  mostrar('t-aceite');
+  toast('✅ Pedido aceite!');
+}
+
+// AGENDAMENTO
+async function confirmarAgendar() {
+  var data = document.getElementById('a-data').value;
+  var hora = document.getElementById('a-hora').value;
+  if (!data) { toast('⚠️ Selecciona a data!', 1); return; }
+  var hoje = new Date().toISOString().split('T')[0];
+  if (data < hoje) { toast('⚠️ Não podes agendar uma data no passado!', 1); return; }
+  if (!A.user) { toast('⚠️ Faz login primeiro!', 1); return; }
+  loading(1);
+  var res = await db.from('agendamentos').insert({
+    cliente_uid:A.user.id, servico:A.servico,
+    data:data, hora:hora, criado_em:new Date().toISOString()
+  });
+  loading(0);
+  if (res.error) { toast('Erro ao agendar: ' + res.error.message, 1); return; }
+  var df = new Date(data+'T12:00:00').toLocaleDateString('pt-PT');
+  document.getElementById('resumo-agendar').textContent = '✅ ' + (A.servico||'Serviço') + ' agendado para ' + df + ' às ' + hora;
+  toast('📅 Agendamento confirmado!');
+  mostrar('t-agendar-ok');
+}
+
+// AVALIAÇÃO
+function aval(nota) {
+  A.notaAval = nota;
+  document.querySelectorAll('.estrela').forEach(function(e,i) { e.classList.toggle('on', i<nota); });
+  var msgs = ['','😞 Péssimo','😕 Mau','😐 Razoável','😊 Bom','🤩 Excelente!'];
+  document.getElementById('nota-aval').textContent = msgs[nota];
+}
+
+async function enviarAval() {
+  if (A.notaAval===0) { toast('⚠️ Selecciona pelo menos 1 estrela!', 1); return; }
+  var com = document.getElementById('comentario').value;
+  loading(1);
+  var res = await db.from('avaliacoes').insert({
+    pedido_id:A.pedidoAval, cliente_uid:A.user?A.user.id:null,
+    nota:A.notaAval, comentario:com, criado_em:new Date().toISOString()
+  });
+  loading(0);
+  if (res.error) toast('Erro ao enviar avaliação.', 1);
+  else { toast('⭐ Avaliação enviada!'); mostrar('t-aval-ok'); }
+}
+
+// SUPORTE
+async function enviarReclam() {
+  var nome = document.getElementById('sup-nome').value.trim();
+  var msg = document.getElementById('sup-msg').value.trim();
+  var tipo = document.getElementById('sup-tipo').value;
+  if (!nome||!msg) { toast('⚠️ Preenche nome e mensagem!', 1); return; }
+  loading(1);
+  await db.from('reclamacoes').insert({
+    nome:nome, tipo:tipo, mensagem:msg,
+    cliente_uid:A.user?A.user.id:null,
+    status:'pendente', criado_em:new Date().toISOString()
+  });
+  loading(0);
+  toast('✅ Reclamação enviada!');
+  mostrar('t-reclam-ok');
+}
+
+// PAGAMENTO
+function calcComissao() {
+  var v = parseFloat(document.getElementById('valor').value) || 0;
+  document.getElementById('comissao').textContent = (v*0.1).toFixed(0) + ' MT';
+}
+
+function pagar(metodo) {
+  var v = document.getElementById('valor').value;
+  if (!v||parseFloat(v)<=0) { toast('⚠️ Introduz o valor!', 1); return; }
+  var c = (parseFloat(v)*0.1).toFixed(0);
+  document.getElementById('resumo-pagar').textContent = '💳 ' + metodo + ' · ' + parseFloat(v).toLocaleString('pt-PT') + ' MT · Comissão: ' + c + ' MT';
+  mostrar('t-pagar-ok');
+}
+
+// ADMIN
+async function aprovar(uid, nome, tel) {
+  loading(1);
+  var res = await db.from('utilizadores').update({verificado:true}).eq('uid', uid);
+  loading(0);
+  if (res.error) { toast('Erro ao aprovar.', 1); return; }
+  toast('✅ ' + (nome||'Técnico') + ' aprovado! Contactar: ' + (tel||'—'));
+  carregarAdmin();
+}
+
+async function rejeitar(uid, nome) {
+  if (!confirm('Rejeitar ' + (nome||'este técnico') + '?')) return;
+  loading(1);
+  var res = await db.from('utilizadores').update({
+    verificado:false, rejeitado:true, rejeitado_em:new Date().toISOString()
+  }).eq('uid', uid);
+  loading(0);
+  if (res.error) { toast('Erro ao rejeitar: ' + res.error.message, 1); return; }
+  toast('❌ ' + (nome||'Técnico') + ' rejeitado.');
+  carregarAdmin();
+}
+
+async function carregarAdmin() {
+  var res = await db.from('admins').select('*').eq('uid', A.user.id).single();
+  if (!res.data) { toast('⛔ Sem permissão de admin.', 1); return; }
+  var us = await db.from('utilizadores').select('tipo');
+  var ped = await db.from('pedidos').select('id').eq('status','pendente');
+  var rec = await db.from('reclamacoes').select('id').eq('status','pendente');
+  var tec = (us.data||[]).filter(function(u){return u.tipo==='tecnico';});
+  document.getElementById('adm-u').textContent = (us.data||[]).length;
+  document.getElementById('adm-t').textContent = tec.length;
+  document.getElementById('adm-p').textContent = (ped.data||[]).length;
+  document.getElementById('adm-r').textContent = (rec.data||[]).length;
+  var apr = await db.from('utilizadores').select('*').eq('tipo','tecnico').eq('verificado',false).is('rejeitado',null).order('criado_em',{ascending:false});
+  var lista = document.getElementById('adm-lista');
+  if (!apr.data||apr.data.length===0) {
+    lista.innerHTML = '<div class="card"><p style="text-align:center;color:var(--t2);">✅ Nenhuma candidatura pendente.</p></div>';
+  } else {
+    lista.innerHTML = '<p style="font-size:12px;color:var(--t2);margin-bottom:8px;">'+apr.data.length+' candidatura(s) por analisar</p>';
+    apr.data.forEach(function(t) {
+      var data = t.criado_em ? new Date(t.criado_em).toLocaleDateString('pt-PT') : '—';
+      var uidS = (t.uid||'').replace(/'/g,"\\'");
+      var nomeS = (t.nome||'').replace(/'/g,"\\'");
+      var telS = (t.tel||'').replace(/'/g,"\\'");
+      lista.innerHTML +=
+        '<div class="card" style="margin-bottom:14px;">' +
+          '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">' +
+            '<div style="width:40px;height:40px;border-radius:50%;background:var(--vd);border:1px solid var(--v);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">👷</div>' +
+            '<div><div style="font-weight:700;font-size:15px;color:#fff;">'+t.nome+'</div>' +
+            '<div style="font-size:11px;color:var(--t3);">Candidatura: '+data+'</div></div>' +
+          '</div>' +
+          '<div class="div" style="margin:8px 0;"></div>' +
+          '<div style="font-size:11px;color:var(--v);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">📋 Dados pessoais</div>' +
+          '<p style="font-size:13px;margin-bottom:2px;">📱 '+t.tel+'</p>' +
+          '<p style="font-size:13px;margin-bottom:2px;">✉️ '+(t.email||'—')+'</p>' +
+          '<p style="font-size:13px;margin-bottom:2px;">📍 '+t.provincia+(t.endereco?' — '+t.endereco:'')+'</p>' +
+          (t.bi?'<p style="font-size:13px;margin-bottom:2px;">🪪 BI: <strong>'+t.bi+'</strong></p>':
+            '<p style="font-size:13px;color:#ff8a80;margin-bottom:2px;">⚠️ BI não fornecido</p>') +
+          (t.data_nascimento?'<p style="font-size:12px;color:var(--t2);margin-bottom:2px;">Nasc.: '+new Date(t.data_nascimento).toLocaleDateString('pt-PT')+'</p>':'') +
+          '<div class="div" style="margin:8px 0;"></div>' +
+          '<div style="font-size:11px;color:var(--t2);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">🔧 Perfil profissional</div>' +
+          '<p style="font-size:13px;margin-bottom:2px;"><strong>Serviços:</strong> '+(t.todos_servicos||t.especialidade||'—')+'</p>' +
+          '<p style="font-size:13px;margin-bottom:2px;">📍 '+t.provincia+(t.raio?' ('+t.raio+')':'')+'</p>' +
+          '<p style="font-size:13px;margin-bottom:2px;">📊 Experiência: '+(t.experiencia||'—')+'</p>' +
+          '<p style="font-size:13px;margin-bottom:2px;">⏱️ Disponibilidade: '+(t.disponibilidade||'—')+'</p>' +
+          (t.preco_hora?'<p style="font-size:13px;margin-bottom:2px;">💰 '+t.preco_hora+' MT/hora</p>':'') +
+          (t.historial?'<div style="margin:6px 0;padding:8px;background:var(--f4);border-radius:8px;border-left:3px solid var(--t3);"><div style="font-size:11px;color:var(--t3);margin-bottom:3px;">HISTORIAL</div><p style="font-size:12px;color:var(--t);">'+t.historial+'</p></div>':'') +
+          (t.certificacoes?'<p style="font-size:12px;color:var(--t2);margin-top:4px;">🎓 '+t.certificacoes+'</p>':'') +
+          (t.referencia_nome?
+            '<div class="div" style="margin:8px 0;"></div>' +
+            '<div style="font-size:11px;color:var(--t2);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">👥 Referência profissional</div>' +
+            '<p style="font-size:13px;margin-bottom:2px;">'+t.referencia_nome+(t.referencia_relacao?' ('+t.referencia_relacao+')':'')+'</p>' +
+            (t.referencia_tel?'<p style="font-size:13px;">📱 '+t.referencia_tel+'</p>':'')
+          :'') +
+          '<div class="div" style="margin:8px 0;"></div>' +
+          '<div style="font-size:11px;color:var(--t2);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">✍️ Carta de motivação</div>' +
+          '<div style="padding:10px;background:var(--f4);border-radius:8px;border-left:3px solid var(--v);margin-bottom:12px;"><p style="font-size:13px;font-style:italic;color:var(--t);">"'+(t.bio||'Sem carta de motivação')+'"</p></div>' +
+          '<div style="display:flex;gap:8px;">' +
+            '<button onclick="aprovar(\''+uidS+'\',\''+nomeS+'\',\''+telS+'\')" style="margin:0;flex:1;background:linear-gradient(135deg,#009900,#006600);padding:12px;">✅ Aprovar</button>' +
+            '<button class="bp" onclick="rejeitar(\''+uidS+'\',\''+nomeS+'\')" style="margin:0;flex:1;padding:12px;">❌ Rejeitar</button>' +
+          '</div>' +
+        '</div>';
+    });
+  }
+  mostrar('t-admin');
+  menuHide();
+}
+
+// CHAT
+function enviarMsg() {
+  var inp = document.getElementById('chat-inp');
+  var txt = inp.value.trim();
+  if (!txt) return;
+  var cm = document.getElementById('chat-msgs');
+  var d = document.createElement('div');
+  d.className = 'mc'; d.textContent = txt;
+  cm.appendChild(d);
+  inp.value = ''; cm.scrollTop = cm.scrollHeight;
+  setTimeout(function() {
+    var rs = ['Ok, entendido! 👍','Perfeito, confirmo.','Sem problema!','Recebido!'];
+    var r = document.createElement('div');
+    r.className = 'mt'; r.textContent = rs[Math.floor(Math.random()*rs.length)];
+    cm.appendChild(r); cm.scrollTop = cm.scrollHeight;
+  }, 1200);
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key==='Enter'&&document.getElementById('chat-inp')===document.activeElement) enviarMsg();
+});
+
+// WIZARD — 5 PASSOS
+function toggleServ(el) {
+  var v = el.getAttribute('data-v');
+  var idx = wizServicos.indexOf(v);
+  if (idx > -1) { wizServicos.splice(idx,1); el.classList.remove('sel'); }
+  else { wizServicos.push(v); el.classList.add('sel'); }
+}
+
+function wizVoltarOuSair() {
+  if (wizPasso === 1) ir('t-inicio');
+  else wizBack(wizPasso - 1);
+}
+
+function wizNext(passo) {
+  if (passo === 2) {
+    if (wizServicos.length === 0) { toast('⚠️ Escolhe pelo menos 1 serviço!', 1); return; }
+    if (!document.getElementById('rt-prov').value) { toast('⚠️ Selecciona a província de actuação!', 1); return; }
+    if (!document.getElementById('rt-dist').value) { toast('⚠️ Selecciona o distrito!', 1); return; }
+  }
+  if (passo === 3) {
+    var nome = document.getElementById('rt-nome').value.trim();
+    var tel = document.getElementById('rt-tel').value.trim();
+    var email = document.getElementById('rt-email').value.trim();
+    var senha = document.getElementById('rt-senha').value;
+    var nasc = document.getElementById('rt-nasc').value;
+    if (!nome) { toast('⚠️ Preenche o nome completo!', 1); return; }
+    if (!tel) { toast('⚠️ Preenche o número de telefone!', 1); return; }
+    if (!email) { toast('⚠️ Preenche o email!', 1); return; }
+    if (!senha||senha.length<6) { toast('⚠️ Senha com mínimo 6 caracteres!', 1); return; }
+    if (nasc) {
+      var hoje = new Date();
+      var nascDate = new Date(nasc);
+      var idade = hoje.getFullYear() - nascDate.getFullYear();
+      var m = hoje.getMonth() < nascDate.getMonth() || (hoje.getMonth()===nascDate.getMonth()&&hoje.getDate()<nascDate.getDate());
+      if (m) idade--;
+      if (idade < 18) { toast('⚠️ Tens de ter mais de 18 anos!', 1); return; }
+    } else { toast('⚠️ Data de nascimento obrigatória!', 1); return; }
+  }
+  if (passo === 4) {
+    if (!document.getElementById('rt-exp').value) { toast('⚠️ Selecciona os anos de experiência!', 1); return; }
+    if (!document.getElementById('rt-disp').value) { toast('⚠️ Selecciona a disponibilidade!', 1); return; }
+    var hist = document.getElementById('rt-historial').value.trim();
+    if (!hist||hist.length<20) { toast('⚠️ Descreve a tua experiência anterior (mínimo 20 caracteres).', 1); return; }
+  }
+  if (passo === 5) {
+    var bi = document.getElementById('rt-bi').value.trim();
+    var end = document.getElementById('rt-endereco').value.trim();
+    var bio = document.getElementById('rt-bio').value.trim();
+    if (!bi) { toast('⚠️ O número do BI é obrigatório!', 1); return; }
+    if (!end) { toast('⚠️ Indica o teu bairro/endereço!', 1); return; }
+    if (!bio||bio.length<50) { toast('⚠️ A carta de motivação deve ter pelo menos 50 caracteres.', 1); return; }
+    var nome = document.getElementById('rt-nome').value.trim();
+    var tel = document.getElementById('rt-tel').value.trim();
+    var email = document.getElementById('rt-email').value.trim();
+    var prov = document.getElementById('rt-prov').value;
+    var exp = document.getElementById('rt-exp').value;
+    var disp = document.getElementById('rt-disp').value;
+    var preco = document.getElementById('rt-preco').value;
+    var ref1 = document.getElementById('rt-ref1').value.trim();
+    document.getElementById('wiz-resumo').innerHTML =
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">' +
+        '<div style="width:44px;height:44px;border-radius:50%;background:var(--vd);border:2px solid var(--v);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">👷</div>' +
+        '<div><div style="font-size:16px;font-weight:700;color:#fff;">'+nome+'</div><div style="font-size:12px;color:var(--v);">Candidato a Técnico FixMoç</div></div>' +
+      '</div>' +
+      '<div class="div"></div>' +
+      '<p style="font-size:12px;margin-bottom:3px;">📱 '+tel+'&nbsp;&nbsp;✉️ '+email+'</p>' +
+      '<p style="font-size:12px;margin-bottom:3px;">📍 '+prov+' — '+end+'</p>' +
+      '<p style="font-size:12px;margin-bottom:3px;">🔧 <strong>'+wizServicos.join(', ')+'</strong></p>' +
+      '<p style="font-size:12px;margin-bottom:3px;">⏱️ '+exp+' de exp. &nbsp;|&nbsp; '+disp+'</p>' +
+      (preco?'<p style="font-size:12px;margin-bottom:3px;">💰 '+preco+' MT/hora</p>':'')+
+      (ref1?'<p style="font-size:12px;margin-bottom:3px;">👥 Ref: '+ref1+'</p>':'')+
+      '<div class="div"></div>' +
+      '<p style="font-size:12px;font-style:italic;color:var(--t2);">"'+bio.substring(0,120)+(bio.length>120?'...':'')+'"</p>';
+  }
+  wizIrPasso(passo);
+}
+
+function wizBack(passo) { wizIrPasso(passo); }
+
+function wizIrPasso(passo) {
+  wizPasso = passo;
+  for (var i=1;i<=5;i++) {
+    var p = document.getElementById('wiz-p'+i);
+    if (p) p.style.display = (i===passo)?'block':'none';
+    var ws = document.getElementById('ws'+i);
+    if (ws) {
+      ws.classList.remove('on','done');
+      if (i===passo) ws.classList.add('on');
+      else if (i<passo) ws.classList.add('done');
+    }
+    var wl = document.getElementById('wl'+i);
+    if (wl) { wl.classList.remove('done'); if (i<passo) wl.classList.add('done'); }
+  }
+  document.getElementById('wiz-label').textContent = 'Passo '+passo+' de 5';
+  window.scrollTo(0,0);
+}
+
+async function registarTecnico() {
+  var nome = document.getElementById('rt-nome').value.trim();
+  var tel = document.getElementById('rt-tel').value.trim();
+  var email = document.getElementById('rt-email').value.trim();
+  var senha = document.getElementById('rt-senha').value;
+  var prov = document.getElementById('rt-prov').value;
+  var bio = document.getElementById('rt-bio').value.trim();
+  var bi = document.getElementById('rt-bi').value.trim();
+  var disp = document.getElementById('rt-disp').value;
+  var preco = document.getElementById('rt-preco').value;
+  var raio = document.getElementById('rt-raio').value;
+  var cert = document.getElementById('rt-cert').value.trim();
+  var hist = document.getElementById('rt-historial').value.trim();
+  var end = document.getElementById('rt-endereco').value.trim();
+  var refNome = document.getElementById('rt-ref1').value.trim();
+  var refRel = document.getElementById('rt-refrel').value;
+  var refTel = document.getElementById('rt-ref1tel').value.trim();
+  var exp = document.getElementById('rt-exp').value;
+  var nasc = document.getElementById('rt-nasc').value;
+  var genero = document.getElementById('rt-genero').value;
+  var espec = wizServicos.length > 0 ? wizServicos[0] : '';
+  var todosServicos = wizServicos.join(', ');
+  loading(1);
+  var res = await db.auth.signUp({ email:email, password:senha });
+  if (res.error) { loading(0); toast(tradErr(res.error.message), 1); return; }
+  if (res.data.user) {
+    var ins = await db.from('utilizadores').insert({
+      uid:res.data.user.id, nome:nome, tel:tel, email:email,
+      tipo:'tecnico', provincia:prov, verificado:false,
+      especialidade:espec, todos_servicos:todosServicos,
+      experiencia:exp, bio:bio, historial:hist,
+      bi:bi, endereco:end,
+      disponibilidade:disp, preco_hora:preco?parseInt(preco):null,
+      raio:raio, certificacoes:cert||null,
+      data_nascimento:nasc||null, genero:genero||null,
+      referencia_nome:refNome||null, referencia_relacao:refRel||null,
+      referencia_tel:refTel||null,
+      avaliacao:0, total_servicos:0,
+      criado_em:new Date().toISOString()
+    });
+    if (ins.error) { loading(0); toast('Erro ao guardar perfil: ' + (ins.error.message||'tente novamente'), 1); return; }
+  }
+  loading(0);
+  mostrar('t-reg-t-ok');
+  toast('🚀 Candidatura enviada com sucesso!');
+}
+
+// UTILS
+function tradErr(msg) {
+  if (msg.indexOf('Invalid login')>-1) return '⚠️ Email ou senha incorrectos.';
+  if (msg.indexOf('already registered')>-1) return '⚠️ Email já registado.';
+  if (msg.indexOf('Password')>-1) return '⚠️ Senha com mínimo 6 caracteres.';
+  if (msg.indexOf('email')>-1) return '⚠️ Email inválido.';
+  return '⚠️ ' + msg;
+}
+
+function toast(msg, err) {
+  var t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'on'+(err?' err':'');
+  clearTimeout(window._tt);
+  window._tt = setTimeout(function(){t.className='';}, 3500);
+}
+
+function loading(show) {
+  document.getElementById('ov').className = show ? 'on' : '';
+}
 </script>
 </body>
 </html>
