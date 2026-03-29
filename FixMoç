@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>FixMoç - Serviços Técnicos em Moçambique</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{--v:#00e676;--ve:#00b050;--vd:rgba(0,230,118,0.12);--az:#2979ff;--vm:#ff3d00;--f:#080c0e;--f2:#0f1518;--f3:#161d21;--f4:#1e272d;--b:#1f2c33;--t:#e8f0f4;--t2:#8fa3ad;--t3:#4d6672}
@@ -94,8 +94,9 @@ textarea{resize:vertical;min-height:80px}
   <p class="sub">Conectamos técnicos e clientes<br>em todo o país</p>
   <div class="bts">
     <button class="bc" onclick="escolher('cliente')">👤 Sou Cliente</button>
-    <button class="bt" onclick="escolher('tecnico')">🔧 Sou Técnico</button>
+    <button class="bt" onclick="escolher('tecnico')">🔧 Quero ser Técnico</button>
   </div>
+  <p style="font-size:11px;color:var(--t3);margin-top:12px;">Técnico? Regista-te e aguarda aprovação em 48h</p>
   <p style="font-size:10px;margin-top:30px;"><a href="#" onclick="irAdmin()">v2.0</a></p>
 </div>
 
@@ -411,7 +412,7 @@ textarea{resize:vertical;min-height:80px}
     <div class="card carda" style="width:100%;text-align:left;">
       <p style="font-size:13px;font-weight:600;margin-bottom:4px;">📞 Próximos passos</p>
       <p style="font-size:13px;">Serás contactado pelo número:</p>
-      <p style="color:var(--v);font-weight:700;font-size:16px;margin-top:4px;">87 479 3972</p>
+      <p style="color:var(--v);font-weight:700;font-size:16px;margin-top:4px;" id="reg-t-tel">87 479 3972</p>
     </div>
     <button onclick="ir('t-inicio')" style="margin-top:18px;width:100%;">🏠 Voltar ao início</button>
   </div>
@@ -494,7 +495,7 @@ textarea{resize:vertical;min-height:80px}
   </div>
   <div class="card">
     <h3>🏠 Tipo de imóvel</h3>
-    <select><option>🏠 Casa</option><option>🏢 Apartamento</option><option>🏪 Loja</option><option>💼 Escritório</option></select>
+    <select id="a-imovel"><option value="casa">🏠 Casa</option><option value="apartamento">🏢 Apartamento</option><option value="loja">🏪 Loja</option><option value="escritorio">💼 Escritório</option></select>
   </div>
   <button onclick="confirmarAgendar()">✅ Confirmar</button>
   <button class="bv" onclick="irHome()">← Voltar</button>
@@ -767,7 +768,7 @@ textarea{resize:vertical;min-height:80px}
     <p>4. O FixMoç não se responsabiliza por danos causados pelos técnicos.</p>
     <p>5. Contacto: 87 479 3972</p>
   </div>
-  <button class="bv" onclick="ir('t-def')">← Voltar</button>
+  <button class="bv" onclick="history.back ? window.history.back() : irHome()">← Voltar</button>
 </div>
 
 <!-- PRIVACIDADE -->
@@ -780,7 +781,7 @@ textarea{resize:vertical;min-height:80px}
     <p>4. Podes eliminar a conta a qualquer momento.</p>
     <p>5. Contacto: isacjazznur1 @ gmail.com</p>
   </div>
-  <button class="bv" onclick="ir('t-def')">← Voltar</button>
+  <button class="bv" onclick="history.back ? window.history.back() : irHome()">← Voltar</button>
 </div>
 
 <!-- SOBRE -->
@@ -869,7 +870,23 @@ function menuOn(id) {
   var b = document.getElementById(id); if (b) b.classList.add('on');
 }
 
-function ir(id) { mostrar(id); }
+// Telas que requerem login obrigatório
+var TELAS_PROTEGIDAS = [
+  't-home','t-pedido','t-sucesso','t-agendar','t-agendar-ok',
+  't-hist','t-aval','t-aval-ok','t-pagar','t-pagar-ok',
+  't-tecnico','t-aceite','t-perfil-t','t-notif','t-chat',
+  't-def','t-senha','t-senha-ok','t-admin','t-suporte',
+  't-reclam-ok'
+];
+
+function ir(id) {
+  if (TELAS_PROTEGIDAS.indexOf(id) > -1 && !A.user) {
+    toast('⚠️ Precisas de fazer login primeiro!', 1);
+    mostrar('t-login');
+    return;
+  }
+  mostrar(id);
+}
 
 function escolher(tipo) { A.tipo=tipo; mostrar('t-login'); menuHide(); }
 
@@ -883,6 +900,7 @@ function irRegisto() {
 }
 
 function irHome() {
+  if (!A.user) { mostrar('t-inicio'); return; }
   mostrar('t-home'); menuShow(); menuOn('m-home');
   if (A.perfil && A.perfil.nome) {
     var n = A.perfil.nome.split(' ')[0];
@@ -891,6 +909,7 @@ function irHome() {
 }
 
 function irDef() {
+  if (!A.user) { toast('⚠️ Precisas de fazer login!', 1); mostrar('t-login'); return; }
   mostrar('t-def'); menuShow(); menuOn('m-def');
   if (A.user) document.getElementById('def-email').textContent = '📧 ' + A.user.email;
 }
@@ -903,7 +922,7 @@ function irPerfilTecnico() {
     document.getElementById('pf-espec').textContent = '🔧 Especialidade: ' + (p.especialidade || '—');
     document.getElementById('pf-exp').textContent = '📊 Experiência: ' + (p.experiencia || '—');
     document.getElementById('pf-tel').textContent = '📞 ' + (p.tel || '—');
-    document.getElementById('pf-prov').textContent = '📍 ' + (p.provincia || '—');
+    document.getElementById('pf-prov').textContent = '📍 ' + (p.provincia||'—') + (p.distrito?' › '+p.distrito:'') + (p.bairro?' › '+p.bairro:'');
     document.getElementById('pf-email').textContent = '📧 ' + (p.email || '—');
     document.getElementById('pf-bio').textContent = p.bio || '—';
     document.getElementById('pf-ver').textContent = p.verificado ? '✅ Verificado pelo FixMoç' : '⏳ A aguardar verificação';
@@ -950,13 +969,13 @@ function irPagamento() {
 }
 
 function irAdmin() {
-  if (!A.user) { toast('⚠️ Faz login primeiro!', 1); return; }
+  if (!A.user) { toast('⚠️ Acesso negado!', 1); mostrar('t-login'); return; }
   carregarAdmin();
 }
 
 async function irHist() {
+  if (!A.user) { toast('⚠️ Faz login primeiro!', 1); mostrar('t-login'); return; }
   mostrar('t-hist'); menuShow(); menuOn('m-ped');
-  if (!A.user) return;
   var c = document.getElementById('lista-hist');
   c.innerHTML = '<p style="color:var(--t2);text-align:center;">A carregar... ⏳</p>';
   var res = await db.from('pedidos').select('*').eq('cliente_uid', A.user.id).order('criado_em', {ascending:false});
@@ -970,10 +989,11 @@ async function irHist() {
     var cor = p.status==='concluido'?'#00e676':p.status==='aceite'?'#2979ff':p.status==='cancelado'?'#ff3d00':'#ffab00';
     var lbl = p.status==='concluido'?'🟢 Concluído':p.status==='aceite'?'🔵 Aceite':p.status==='cancelado'?'🔴 Cancelado':'🟡 Pendente';
     var df = p.criado_em ? new Date(p.criado_em).toLocaleDateString('pt-PT') : '—';
+    var loc = p.provincia + (p.distrito?' › '+p.distrito:'') + (p.bairro?' › '+p.bairro:'');
     var extra = '';
     if (p.status === 'pendente') extra = '<button class="bp" onclick="cancelarPedido(\'' + p.id + '\')" style="margin-top:8px;width:100%;">❌ Cancelar</button>';
     if (p.status === 'aceite') extra = '<button onclick="irAvaliar(\'' + p.id + '\')" style="margin-top:8px;width:100%;">⭐ Avaliar</button>';
-    c.innerHTML += '<div class="card"><h3>' + p.servico + '</h3><p>📍 ' + p.provincia + '</p><p>📅 ' + df + (p.tecnico_nome?' · 👷 '+p.tecnico_nome:'') + '</p><p style="color:'+cor+';font-weight:600;">' + lbl + '</p>' + extra + '</div>';
+    c.innerHTML += '<div class="card"><h3>' + p.servico + '</h3><p>📍 ' + loc + '</p><p>📅 ' + df + (p.tecnico_nome?' · 👷 '+p.tecnico_nome:'') + '</p><p style="color:'+cor+';font-weight:600;">' + lbl + '</p>' + extra + '</div>';
   });
 }
 
@@ -983,10 +1003,15 @@ async function login() {
   var senha = document.getElementById('l-senha').value;
   if (!email||!senha) { toast('⚠️ Preenche email e senha!', 1); return; }
   loading(1);
-  var res = await db.auth.signInWithPassword({ email:email, password:senha });
-  loading(0);
-  if (res.error) toast(tradErr(res.error.message), 1);
-  else toast('✅ Bem-vindo de volta!');
+  try {
+    var res = await db.auth.signInWithPassword({ email:email, password:senha });
+    loading(0);
+    if (res.error) toast(tradErr(res.error.message), 1);
+    else toast('✅ Bem-vindo de volta!');
+  } catch(e) {
+    loading(0);
+    toast('⚠️ Sem ligação. Verifica a internet.', 1);
+  }
 }
 
 async function registar() {
@@ -1174,7 +1199,7 @@ var LOCALIZACAO = {
     'Mossuril': ['Sede','Ilha de Moçambique'],
     'Muecate': ['Sede'],
     'Murrupula': ['Sede'],
-    'Nacala-Porto': ['Sede','Nacala-Porto Centro','Muatala','Natikiri Nacala','Namige','Nacala Velha','Napala'],
+    'Nacala-Porto': ['Ontupaia','Triângulo','Cidade Alta','Cidade Baixa','Bairra','Mathapwe','Naherenque','Nauia','1 de Junho','25 de Setembro','Matibane','Cruzamento Nacala Velha','Mocone','Fernão Veloso','Napala'],
     'Nacarôa': ['Sede'],
     'Ilha de Moçambique': ['Sede','Stone Town','Museu'],
     'Ribaué': ['Sede']
@@ -1230,6 +1255,11 @@ function iniciarSelects() {
       opt.value = prov; opt.textContent = prov;
       sel.appendChild(opt);
     });
+  });
+  // Garantir que os selects de distrito e bairro estão escondidos no início
+  ['r-dist','r-bairro','rt-dist','rt-bairro','p-dist','p-bairro-sel'].forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) el.style.display = 'none';
   });
 }
 
@@ -1326,11 +1356,17 @@ async function cancelarPedido(id) {
 async function carregarPedidosTecnico() {
   if (!A.perfil) return;
   var c = document.getElementById('lista-pedidos');
+  c.innerHTML = '<div class="card"><p style="text-align:center;color:var(--t2);">A carregar... ⏳</p></div>';
   var prov = A.perfil.provincia;
+  var dist = A.perfil.distrito;
   var q = db.from('pedidos').select('*').eq('status','pendente').order('criado_em',{ascending:false});
   if (prov) q = q.eq('provincia', prov);
   var res = await q;
   var data = res.data;
+  // Filtrar por distrito se o técnico tiver distrito definido
+  if (data && dist) {
+    data = data.filter(function(p){ return !p.distrito || p.distrito === dist; });
+  }
   if (!data||data.length===0) {
     c.innerHTML = '<div class="card"><p style="text-align:center;color:var(--t2);">Nenhum pedido na tua zona. 👍</p></div>';
     return;
@@ -1339,7 +1375,8 @@ async function carregarPedidosTecnico() {
   data.forEach(function(p) {
     var uc = p.urgencia==='urgente'?'vu':p.urgencia==='sem-pressa'?'vs':'vn';
     var ul = p.urgencia==='urgente'?'🔴 Urgente':p.urgencia==='sem-pressa'?'🟢 Sem pressa':'🟡 Normal';
-    c.innerHTML += '<div class="card"><h3>'+p.servico+'</h3><p>📍 '+p.provincia+(p.bairro?' · '+p.bairro:'')+'</p><p>📝 '+(p.descricao||'Sem descrição')+'</p><p class="'+uc+'">'+ul+'</p><p>👤 '+p.cliente_nome+'</p><div style="display:flex;gap:8px;margin-top:10px;"><button onclick="aceitarPedido(\''+p.id+'\',\''+p.cliente_tel+'\',\''+p.provincia+'\')" style="margin:0;flex:1;">✅ Aceitar</button><button class="bv" style="margin:0;flex:1;">❌ Recusar</button></div></div>';
+    var loc = p.provincia + (p.distrito?' › '+p.distrito:'') + (p.bairro?' › '+p.bairro:'');
+    c.innerHTML += '<div class="card"><h3>'+p.servico+'</h3><p>📍 '+loc+'</p><p>📝 '+(p.descricao||'Sem descrição')+'</p><p class="'+uc+'">'+ul+'</p><p>👤 '+p.cliente_nome+'</p><div style="display:flex;gap:8px;margin-top:10px;"><button onclick="aceitarPedido(\''+p.id+'\',\''+p.cliente_tel+'\',\''+loc+'\')" style="margin:0;flex:1;">✅ Aceitar</button><button class="bv" style="margin:0;flex:1;">❌ Recusar</button></div></div>';
   });
 }
 
@@ -1645,6 +1682,8 @@ async function registarTecnico() {
   var email = document.getElementById('rt-email').value.trim();
   var senha = document.getElementById('rt-senha').value;
   var prov = document.getElementById('rt-prov').value;
+  var dist = document.getElementById('rt-dist') ? document.getElementById('rt-dist').value : '';
+  var bairroT = document.getElementById('rt-bairro') ? document.getElementById('rt-bairro').value : '';
   var bio = document.getElementById('rt-bio').value.trim();
   var bi = document.getElementById('rt-bi').value.trim();
   var disp = document.getElementById('rt-disp').value;
@@ -1667,7 +1706,7 @@ async function registarTecnico() {
   if (res.data.user) {
     var ins = await db.from('utilizadores').insert({
       uid:res.data.user.id, nome:nome, tel:tel, email:email,
-      tipo:'tecnico', provincia:prov, verificado:false,
+      tipo:'tecnico', provincia:prov, distrito:dist, bairro:bairroT, verificado:false,
       especialidade:espec, todos_servicos:todosServicos,
       experiencia:exp, bio:bio, historial:hist,
       bi:bi, endereco:end,
@@ -1683,6 +1722,8 @@ async function registarTecnico() {
   }
   loading(0);
   mostrar('t-reg-t-ok');
+  var telEl = document.getElementById('reg-t-tel');
+  if (telEl) telEl.textContent = tel || '87 479 3972';
   toast('🚀 Candidatura enviada com sucesso!');
 }
 
