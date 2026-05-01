@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt">
-<head>
+<head><!-- PWA -->
+<link rel="manifest" href="/FixMo-/manifest.json">
+<meta name="theme-color" content="#1A56A0">
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/FixMo-/service-worker.js')
+      .then(() => console.log('PWA activa!'))
+      .catch(err => console.log('Erro:', err));
+  }
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>FixMoç - Serviços Técnicos em Moçambique</title>
